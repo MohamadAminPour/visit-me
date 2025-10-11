@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: IRANYekanBold;
+  src: url('/fonts/IRANYekanBold.ttf');
+}
+@font-face {
+  font-family: IRANYekanMedium;
+  src: url('/fonts/IRANYekanMedium.ttf');
+}
+@font-face {
+  font-family: Morabba;
+  src: url('/fonts/Morabba-Medium.ttf');
+}
+@font-face {
+  font-family: Graphik;
+  src: url('/fonts/Graphik-Medium.otf');
+}
+
+@theme{
+  --color-primary:#3490dc;
+  --color-primaryLight:#3490dc80;
+
+    --color-secondry:#00a693;
+  --color-secondryLight:#00a69380;
+}
+
+
+body{
+  font-family: IRANYekanMedium;
+}
+
+.IRANYekanBold{
+  font-family: IRANYekanBold;
+}
+.Morabba{
+  font-family: Morabba;
+}
