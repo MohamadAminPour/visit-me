@@ -36,3 +36,90 @@ body{
 .Morabba{
   font-family: Morabba;
 }
+.Graphik{
+  font-family: Graphik;
+}
+
+/* برای همه جدول‌های کاربران */
+.gridjs-input .gridjs-search-input {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  text-align: right;
+  direction: rtl;
+}
+.gridjs-input:focus {
+  box-shadow: none !important;
+}
+
+.gridjs-th-content,
+.gridjs-td {
+  direction: rtl;
+  text-align: right;
+}
+
+.gridjs-footer {
+  direction: ltr;
+}
+
+.gridjs-head {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.gridjs-table {
+  background-color: white; /* Light mode */
+  border-collapse: none;
+}
+.gridjs-wrapper {
+  border: none;
+}
+.dark .gridjs-table {
+  background-color: #374151; /* Dark mode خاکستری تیره */
+}
+.dark .gridjs-th {
+  background-color: #1f2937; /* Dark mode هدر */
+  color: #f9fafb;
+  border: 1px solid #1f2937;
+}
+.dark .gridjs-th .gridjs-sort {
+  color: #fff;
+  opacity: 1;
+}
+.dark .gridjs-th-content {
+  padding-right: 0.5rem;
+}
+.dark .gridjs-th:hover {
+  background-color: #1f2937; /* Dark mode هدر */
+}
+.dark .gridjs-th:blur {
+  background-color: #1f2937; /* Dark mode هدر */
+}
+.gridjs-td {
+  background-color: white;
+  color: #111827;
+}
+.dark .gridjs-td {
+  background-color: #374151;
+  color: #e5e7eb;
+  border: 1px solid #1f2937;
+}
+.gridjs-tr:hover {
+  background-color: #f3f4f6;
+}
+.dark .gridjs-tr:hover {
+  background-color: #4b5563;
+}
+.dark .gridjs-input {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+.dark .gridjs-footer,
+.dark .gridjs-summary {
+  background-color: #1f2937;
+  color: #fff;
+  border: 1px solid #1f2937;
+}
+.dark .gridjs-input {
+  border: none !important;
+}
