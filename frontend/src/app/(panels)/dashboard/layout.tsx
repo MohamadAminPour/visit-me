@@ -27,7 +27,7 @@ export default function UserInfo({
   return (
     <div className="flex bg-white">
       <SideBar isOpen={isOpen} setIsOpen={setIsOpen} links={ownerLinks} />
-      <div className={`${isOpen ? "w-[80%]" : "w-[100%]"}`}>
+      <div className={`${isOpen ? "w-[100%] ms:w-[80%]" : "w-[100%]"}`}>
         <TopBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className="p-5 text-black">
         {children}
