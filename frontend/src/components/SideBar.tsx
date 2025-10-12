@@ -49,7 +49,7 @@ export default function SideBar({ isOpen, setIsOpen, links }: ISideBarProps) {
       </div>
 
       <ul className="*:mb-2 *:rounded-sm *:hover:bg-primaryLight *:duration-200 **:flex **:items-center **:gap-2 *:w-full  ">
-        {links.map((item: ILinks) => (
+        {links?.map((item: ILinks) => (
           <li key={item.id} onClick={sidebarHandler}>
             <Link
               href={item.link}
