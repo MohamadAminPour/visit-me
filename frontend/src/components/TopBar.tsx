@@ -26,18 +26,15 @@ export default function TopBar({ isOpen, setIsOpen }:any) {
         ) : (
           <img
             src={`/images/images.png`}
-            className="size-[3.5rem] rounded-full object-cover "
+            className="size-[3rem] rounded-full object-cover "
           />
         )}
         <div>
           <div className="flex items-center gap-2 ">
-            <p className="dark:text-white text-black">
-              {(profile.name &&
-                profile.family &&
-                profile.name + " " + profile.family) ||
-                "بدون نام"}
+            <p className="text-[1.1rem]">
+             mohammad
             </p>
-            <div className="flex items-center gap-1 bg-primary/20 rounded-lg px-3 p-1">
+            {/* <div className="flex items-center gap-1 bg-primary/20 rounded-lg px-3 p-1">
               <LuBadgeCheck className="text-[.9rem] text-primary" />
               <p className="text-[.7rem] text-primary">
                 {profile.role === "supervisor"
@@ -50,9 +47,9 @@ export default function TopBar({ isOpen, setIsOpen }:any) {
                   ? "کاربر"
                   : ""}
               </p>
-            </div>
+            </div> */}
           </div>
-          <p className="text-[.9rem] text-zinc-500 ">{profile.email}</p>
+          <p className="text-[.8rem] text-zinc-500 ">maminpour37@gmail.com</p>
         </div>
       </div>
     </div>
