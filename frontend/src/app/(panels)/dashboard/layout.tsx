@@ -2,18 +2,38 @@
 
 import SideBar, { ILinks } from "@/components/SideBar";
 import TopBar from "@/components/TopBar";
+import { Eye } from "lucide-react";
 import { useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
+import { GoShieldCheck } from "react-icons/go";
+import { HiOutlineShieldCheck } from "react-icons/hi";
 import { LiaUserNurseSolid, LiaUserSolid } from "react-icons/lia";
 import { PiFaceMask, PiUser } from "react-icons/pi";
-import { TbNurse } from "react-icons/tb";
+import { TbEyeShare, TbNurse, TbUserShield } from "react-icons/tb";
 
 export const ownerLinks: ILinks[] = [
-  { id: 1, title: "داشبورد", link: "/dashboard" ,icon:<CiGrid41 />},
-  { id: 2, title: "پروفایل من", link: "/dashboard/profile" ,icon:<PiUser  />},
-  { id: 3, title: "دکتر ها", link: "/dashboard/doctors" ,icon:<LiaUserNurseSolid  />},
-  { id: 4, title: "بیماران", link: "/dashboard/sicks",icon:<PiFaceMask  /> },
-  { id: 5, title: "درخواست دکتر", link: "/dashboard/drRequests" ,icon:<TbNurse  />},
+  { id: 1, title: "داشبورد", link: "/dashboard", icon: <CiGrid41 /> },
+  { id: 2, title: "پروفایل من", link: "/dashboard/profile", icon: <PiUser /> },
+  {
+    id: 3,
+    title: "دکتر ها",
+    link: "/dashboard/doctors",
+    icon: <LiaUserNurseSolid />,
+  },
+  { id: 4, title: "بیماران", link: "/dashboard/sicks", icon: <PiFaceMask /> },
+  {
+    id: 5,
+    title: "درخواست دکتر",
+    link: "/dashboard/drRequests",
+    icon: <TbNurse />,
+  },
+  {
+    id: 6,
+    title: "ادمین ها",
+    link: "/dashboard/admins",
+    icon: <HiOutlineShieldCheck   />,
+  },
+  { id: 7, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare  /> },
 ];
 
 export default function UserInfo({
@@ -29,9 +49,7 @@ export default function UserInfo({
       <SideBar isOpen={isOpen} setIsOpen={setIsOpen} links={ownerLinks} />
       <div className={`${isOpen ? "w-[100%] ms:w-[80%]" : "w-[100%]"}`}>
         <TopBar isOpen={isOpen} setIsOpen={setIsOpen} />
-        <div className="p-5 text-black">
-        {children}
-        </div>
+        <div className="p-5 text-black">{children}</div>
       </div>
     </div>
   );

@@ -2,41 +2,40 @@
 
 @font-face {
   font-family: IRANYekanBold;
-  src: url('/fonts/IRANYekanBold.ttf');
+  src: url("/fonts/IRANYekanBold.ttf");
 }
 @font-face {
   font-family: IRANYekanMedium;
-  src: url('/fonts/IRANYekanMedium.ttf');
+  src: url("/fonts/IRANYekanMedium.ttf");
 }
 @font-face {
   font-family: Morabba;
-  src: url('/fonts/Morabba-Medium.ttf');
+  src: url("/fonts/Morabba-Medium.ttf");
 }
 @font-face {
   font-family: Graphik;
-  src: url('/fonts/Graphik-Medium.otf');
+  src: url("/fonts/Graphik-Medium.otf");
 }
 
-@theme{
-  --color-primary:#3490dc;
-  --color-primaryLight:#3490dc80;
+@theme {
+  --color-primary: #3490dc;
+  --color-primaryLight: #3490dc80;
 
-    --color-secondry:#00a693;
-  --color-secondryLight:#00a69380;
+  --color-secondry: #00a693;
+  --color-secondryLight: #00a69380;
 }
 
-
-body{
+body {
   font-family: IRANYekanMedium;
 }
 
-.IRANYekanBold{
+.IRANYekanBold {
   font-family: IRANYekanBold;
 }
-.Morabba{
+.Morabba {
   font-family: Morabba;
 }
-.Graphik{
+.Graphik {
   font-family: Graphik;
 }
 
@@ -122,4 +121,22 @@ body{
 }
 .dark .gridjs-input {
   border: none !important;
+}
+
+
+
+/* رنگ اسکرول‌بار برای مرورگرهای Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0e0e0; /* رنگ بک‌گراند */
+  border-radius: 50rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3490dc; /* رنگ اسکرول */
+  border-radius: 20px;
 }
