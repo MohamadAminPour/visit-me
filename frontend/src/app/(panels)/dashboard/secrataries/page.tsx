@@ -4,28 +4,23 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Trash2, Eye } from "lucide-react";
-import { TbEditCircle } from "react-icons/tb";
+import { Trash2, Eye, Plus } from "lucide-react";
+import { TbEditCircle, TbNurse } from "react-icons/tb";
 
-const admins = [
+const secrataryList = [
   {
     id: 1,
-    name: "",
-    family: "",
-    phone: "",
-  },
-  {
-    id: 2,
-    name: "",
-    family: "",
-    phone: "",
+    name: "زهرا",
+    family: "حبیبی",
+    phone: "0916754343",
+    email: "zhababi@gmail.com",
   },
 ];
 
 import { HiOutlineNewspaper, HiOutlineShieldCheck } from "react-icons/hi";
 
 export default function page() {
-  const [addAdmin, setAddAdmin] = useState(false);
+  const [secratary, setSecratary] = useState(false);
 
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
@@ -38,36 +33,35 @@ export default function page() {
     <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <HiOutlineShieldCheck className="size-7" />
-          <p className="font-IranYekanBold text-[1rem]">
-            لیست ادمین های مجموعه
-          </p>
+          <TbNurse className="size-7" />
+          <p className="font-IranYekanBold text-[1rem]">منشی های مجموعه</p>
         </div>
         {/*buttons*/}
-        {addAdmin ? (
+        {secratary ? (
           <button
             onClick={() => {
-              setAddAdmin(!addAdmin);
+              setSecratary(!secratary);
             }}
-            className="flex items-center justify-center gap-2 bg-red-600 cursor-pointer duration-300 hover:bg-red-500 p-2 px-5 rounded-lg text-white text-[.9rem]"
+            className="flex items-center justify-center gap-2 text-[.8rem] bg-red-600 cursor-pointer duration-300 hover:bg-red-500 p-2 px-5 rounded-lg text-white"
           >
-            بستن 
+            بستن
           </button>
         ) : (
           <button
             onClick={() => {
-              setAddAdmin(!addAdmin);
+              setSecratary(!secratary);
             }}
-            className="flex items-center justify-center gap-2 bg-green-600 cursor-pointer duration-300 hover:bg-green-500 p-2 px-5 rounded-lg text-white text-[.9rem]"
+            className="flex items-center justify-center gap-2 text-[.8rem] bg-green-600 cursor-pointer duration-300 hover:bg-green-500 p-2 px-4 rounded-lg text-white"
           >
-            ادمین جدید
+            منشی جدید
+            <Plus className="size-[1rem]" />
           </button>
         )}
       </div>
 
       <div className="text-right">
         {/*form*/}
-        {addAdmin ? (
+        {secratary ? (
           <form>
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3">
               <div className="flex items-start flex-col mt-5">
@@ -106,16 +100,18 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={admins.map((a) => [
-              a.name,
-              a.family,
-              a.phone,
-              a.id,
+            data={secrataryList?.map((s) => [
+              s.name,
+              s.family,
+              s.phone,
+              s.email,
+              s.id,
             ])}
             columns={[
               "نام",
               "نام خانوادگی",
               "شماره تلفن",
+              "ایمیل",
               {
                 name: "عملیات",
                 formatter: (_, row) => {
