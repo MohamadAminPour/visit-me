@@ -12,7 +12,7 @@ import { TbNurse } from "react-icons/tb";
 
 export default function UserInfo() {
   return (
-    <div className="flex flex-col bg-white py-6 px-10 gap-7 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
+    <div className="flex flex-col bg-white py-6 px-3 gap-7 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-1">
         <CiGrid41 className="size-7" />
         <p className="font-IranYekanBold text-[1rem]">داشبورد</p>
@@ -32,7 +32,7 @@ export default function UserInfo() {
               </p>
             </div>
             <Link
-              href=""
+              href="/dashboard/sicks"
               className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 absolute bottom-3 left-3 border-1 border-zinc-200 px-3 py-1 rounded-full"
             >
               مشاهده
@@ -50,7 +50,7 @@ export default function UserInfo() {
               </p>
             </div>
             <Link
-              href=""
+              href="/dashboard/doctors"
               className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 absolute bottom-3 left-3 border-1 border-zinc-200 px-3 py-1 rounded-full"
             >
               مشاهده
@@ -68,7 +68,7 @@ export default function UserInfo() {
               </p>
             </div>
             <Link
-              href=""
+              href="/dashboard/admins"
               className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 absolute bottom-3 left-3 border-1 border-zinc-200 px-3 py-1 rounded-full"
             >
               مشاهده
@@ -86,7 +86,7 @@ export default function UserInfo() {
               </p>
             </div>
             <Link
-              href=""
+              href="/dashboard/views"
               className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 absolute bottom-3 left-3 border-1 border-zinc-200 px-3 py-1 rounded-full"
             >
               مشاهده
@@ -94,13 +94,13 @@ export default function UserInfo() {
           </li>
         </ul>
         {/*last doctors and sicks*/}
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/*sicks*/}
           <div className="p-3 rounded-lg shadow-xl shadow-zinc-200 border-1 border-zinc-200">
             <div className="flex items-center justify-between">
               <p>بیماران اخیر</p>
               <Link
-                href=""
+                href="/dashboard/sicks"
                 className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 border-1 border-zinc-200 px-3 py-1 rounded-full"
               >
                 مشاهده بیشتر
@@ -242,7 +242,7 @@ export default function UserInfo() {
             <div className="flex items-center justify-between">
               <p>دکتر های اخیر</p>
               <Link
-                href=""
+                href="/dashboard/doctors"
                 className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 border-1 border-zinc-200 px-3 py-1 rounded-full"
               >
                 مشاهده بیشتر
@@ -386,23 +386,23 @@ export default function UserInfo() {
             <div className="flex items-center justify-between">
               <p>فعالیت های اخیر</p>
               <Link
-                href=""
+                href="/dashboard/activities"
                 className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 border-1 border-zinc-200 px-3 py-1 rounded-full"
               >
                 مشاهده بیشتر
               </Link>
             </div>
-            <ul className="*:mb-3 *:flex *:items-end *:justify-between mt-3 h-[20rem] overflow-y-scroll *:pl-2 ">
+            <ul className="*:mb-5 *:flex md:*:items-end *:items-start *:justify-between *:flex-col md:*:flex-row *:gap-2 mt-3 h-[20rem] overflow-y-scroll *:pl-2 ">
               <li>
                 <div className="flex items-center gap-2">
                   <HiOutlineShieldCheck className="bg-red-500 size-[2rem] p-2 rounded-md text-white " />
                   <div className="flex items-center gap-1">
-                    <p>محمد امین پور</p>
+                    <p className="text-[.9rem] md:text-[1rem] ">محمد امین پور</p>
                     <p>:</p>
-                    <p className="text-[.9rem] text-zinc-500">
+                    <p className="text-[.9rem] md:text-[1rem] text-zinc-500">
                       ادمین جدیدی اضافه کرد
                     </p>
-                    <span className="text-[1rem] text-black">
+                    <span className="text-[.8rem] md:text-[1rem] text-black">
                       (علی حسینی) .
                     </span>
                   </div>
