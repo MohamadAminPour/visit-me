@@ -5,6 +5,7 @@ import TopBar from "@/components/TopBar";
 import { Eye } from "lucide-react";
 import { useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
+import { FaRegChartBar } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { LiaUserNurseSolid, LiaUserSolid } from "react-icons/lia";
@@ -31,9 +32,15 @@ export const ownerLinks: ILinks[] = [
     id: 6,
     title: "ادمین ها",
     link: "/dashboard/admins",
-    icon: <HiOutlineShieldCheck   />,
+    icon: <HiOutlineShieldCheck />,
   },
-  { id: 7, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare  /> },
+  { id: 7, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare /> },
+  {
+    id: 8,
+    title: "فعالیت ها",
+    link: "/dashboard/activities",
+    icon: <FaRegChartBar />,
+  },
 ];
 
 export default function UserInfo({
