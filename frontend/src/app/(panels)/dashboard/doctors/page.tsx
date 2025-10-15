@@ -12,6 +12,7 @@ const doctors = [
     id: 1,
     name: "",
     family: "",
+    email: "",
     phone: "",
     meli_code: "",
     gender: "",
@@ -23,6 +24,7 @@ const doctors = [
     id: 2,
     name: "",
     family: "",
+    email: "",
     phone: "",
     meli_code: "",
     gender: "",
@@ -47,7 +49,7 @@ export default function page() {
     <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-1">
         <LiaUserNurseSolid className="size-7" />
-        <p className="font-IranYekanBold text-[1rem]">لیست دکتر های مجموعه</p>
+        <p className="font-IranYekanBold text-[1rem]">دکتر های مجموعه</p>
       </div>
 
       <div className="text-right">
@@ -56,6 +58,7 @@ export default function page() {
             a.name,
             a.family,
             a.phone,
+            a.email,
             a.meli_code,
             a.gender,
             a.expertise,
@@ -67,6 +70,7 @@ export default function page() {
             "نام",
             "نام خانوادگی",
             "شماره تلفن",
+            "ایمیل",
             "کدملی",
             "جنسیت",
             "تخصص",

@@ -28,9 +28,9 @@ export default function page() {
           <div className="text-center w-full">
             <h2 className="text-[2rem] Morabba">ورود به ویزیت می</h2>
             <p className="text-zinc-500 text-[.9rem]">
-              حسابی برای ورود ندارید؟
-              <Link href="/DrRegister" className="text-primary mr-1">
-                ثبت نام
+              منشی این مجموعه هستید؟
+              <Link href="/SecrataryLogin" className="text-primary mr-1">
+                 ورود
               </Link>
             </p>
             <div className="flex items-start flex-col mt-5">

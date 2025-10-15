@@ -23,16 +23,10 @@ export const ownerLinks: ILinks[] = [
   },
   { id: 4, title: "بیماران", link: "/dashboard/sicks", icon: <PiFaceMask /> },
   {
-    id: 5,
-    title: "درخواست دکتر",
-    link: "/dashboard/drRequests",
-    icon: <TbNurse />,
-  },
-  {
     id: 6,
-    title: "ادمین ها",
-    link: "/dashboard/admins",
-    icon: <HiOutlineShieldCheck />,
+    title: "منشی ها",
+    link: "/dashboard/secratary",
+    icon: <TbNurse  />,
   },
   { id: 7, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare /> },
   {

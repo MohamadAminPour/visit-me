@@ -38,9 +38,7 @@ export default function page() {
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <FaRegChartBar className="size-7" />
-          <p className="font-IranYekanBold text-[1rem]">
-            لیست فعالیت های مجموعه
-          </p>
+          <p className="font-IranYekanBold text-[1rem]">فعالیت های مجموعه</p>
         </div>
       </div>
 

@@ -13,18 +13,20 @@ const sicks = [
     name: "",
     family: "",
     phone: "",
+    email: "",
     meli_code: "",
-    gender:"",
-    birth_date:""
+    gender: "",
+    birth_date: "",
   },
   {
     id: 2,
     name: "",
     family: "",
     phone: "",
+    email: "",
     meli_code: "",
-    gender:"",
-    birth_date:""
+    gender: "",
+    birth_date: "",
   },
 ];
 
@@ -36,16 +38,15 @@ export default function page() {
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
-
-  function handleShowVisits(id:number){
-    alert(id)
+  function handleShowVisits(id: number) {
+    alert(id);
   }
 
   return (
     <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-2">
         <PiFaceMask className="size-7" />
-        <p className="font-IranYekanBold text-[1rem]">لیست بیماران های مجموعه</p>
+        <p className="font-IranYekanBold text-[1rem]">بیماران های مجموعه</p>
       </div>
 
       <div className="text-right">
@@ -55,6 +56,7 @@ export default function page() {
             a.family,
             a.meli_code,
             a.phone,
+            a.email,
             a.gender,
             a.birth_date,
             a.id,
@@ -64,6 +66,7 @@ export default function page() {
             "نام خانوادگی",
             "کدملی",
             "شماره تلفن",
+            "ایمیل",
             "جنسیت",
             "تاریخ تولد",
             {
@@ -99,12 +102,12 @@ export default function page() {
                       },
                     })
                   ),
-                   h(
+                  h(
                     "button",
                     {
                       className:
                         "p-2 rounded cursor-pointer text-[.8rem] bg-blue-500 text-white hover:bg-blue-600",
-                       onClick: () => handleShowVisits(id),
+                      onClick: () => handleShowVisits(id),
                       title: "ویزیت ها",
                     },
                     h("span", {
