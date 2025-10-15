@@ -28,7 +28,7 @@ export default function page() {
           <div className="text-center w-full">
             <h2 className="text-[2rem] Morabba">عضویت در ویزیت می</h2>
             <p className="text-zinc-500 text-[.9rem]">
-              قبلا ثبت نام کردید؟
+            دکتر این مجموعه هستید؟
               <Link href="/DrLogin" className="text-primary mr-1">
                 ورود
               </Link>
@@ -53,7 +53,7 @@ export default function page() {
               />
             </div> */}
             <button className="w-full flex items-center justify-center gap-2 hover:bg-primary hover:text-white bg-primaryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
-              <p className="text-[.9rem]">عضویت دکتر</p>
+              <p className="text-[.9rem]">ورود منشی</p>
               <BiArrowBack className="mt-[.1rem]" />
             </button>
             <div className="flex items-center justify-center gap-3 my-4">
@@ -62,7 +62,7 @@ export default function page() {
               <p className="w-full h-[.1rem] bg-zinc-200"></p>
             </div>
             <button className="w-full flex items-center justify-center gap-3 border-1 border-zinc-200 cursor-pointer py-2 hover:bg-zinc-200 mt-3 rounded-sm duration-300 ">
-              <p className="text-[.9rem]">عضویت با حساب گوگل</p>
+              <p className="text-[.9rem]">ورود با حساب گوگل</p>
               <img src="/images/Google.png" alt="" className="w-[1.8rem]" />
             </button>
           </div>
