@@ -4,34 +4,34 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Check, X } from "lucide-react";
+import { Check, Eye, X } from "lucide-react";
 
-const doctors = [
+const visitHistory = [
   {
     id: 1,
-    nameFamily: "",
-    phone: "",
-    meli_code: "",
-    visit_number: "",
-    doctor: "",
+    nameFamily: "علی کریمانی",
+    visit_number: "40901010",
+    doctor: "1",
+    reason: "ویزیت شده",
+    status: "1",
     create_at: "1404/07/23",
   },
   {
     id: 2,
-    nameFamily: "",
-    phone: "",
-    meli_code: "",
-    visit_number: "",
-    doctor: "",
+    nameFamily: "زهرا رضوی",
+    visit_number: "40901011",
+    doctor: "2",
+    reason: "ویزیت شده",
+    status: "1",
     create_at: "1404/07/24",
   },
-   {
+  {
     id: 3,
-    nameFamily: "",
-    phone: "",
-    meli_code: "",
-    visit_number: "",
-    doctor: "",
+    nameFamily: "بهرام نعیمی",
+    visit_number: "40901012",
+    doctor: "2",
+    reason: "حضور نداشتند",
+    status: "0",
     create_at: "1404/06/24",
   },
 ];
@@ -50,18 +50,19 @@ export default function page() {
     <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-1">
         <HiOutlineNewspaper className="size-7" />
-        <p className="font-IranYekanBold text-[1rem]">نوبت های مجموعه</p>
+        <p className="font-IranYekanBold text-[1rem]">
+          تاریخچه نوبت های مجموعه
+        </p>
       </div>
 
       <div className="text-right">
         <Grid
-          data={doctors.map((a) => [
+          data={visitHistory.map((a) => [
             a.id,
             a.nameFamily,
             a.visit_number,
             a.doctor,
-            a.phone,
-            a.meli_code,
+            a.status,
             a.create_at,
             a.id,
           ])}
@@ -70,8 +71,7 @@ export default function page() {
             "نام و نام خانوادگی",
             "شماره نوبت",
             "نام دکتر",
-            "کدملی",
-            "شماره تلفن",
+            "وضعیت",
             "تاریخ نوبت",
             {
               name: "عملیات",
@@ -82,27 +82,14 @@ export default function page() {
                     "button",
                     {
                       className:
-                        "p-2 rounded cursor-pointer text-[.8rem] bg-green-500 text-white hover:bg-green-600",
-                      //  onClick: () => handleUpdateArticle(id),
-                      title: "ویزیت شد",
+                        "p-2 rounded cursor-pointer text-[.8rem] bg-primary/80 text-white hover:bg-primary",
+                      //    onClick: () => handleUpdateArticle(id),
+                      onClick: () => alert(visitHistory[id - 1].reason),
+                      title: "نمایش وضعیت",
                     },
                     h("span", {
                       dangerouslySetInnerHTML: {
-                        __html: renderIcon(Check),
-                      },
-                    })
-                  ),
-                   h(
-                    "button",
-                    {
-                      className:
-                        "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                      //  onClick: () => handleUpdateArticle(id),
-                      title: "رد کردن",
-                    },
-                    h("span", {
-                      dangerouslySetInnerHTML: {
-                        __html: renderIcon(X),
+                        __html: renderIcon(Eye),
                       },
                     })
                   ),

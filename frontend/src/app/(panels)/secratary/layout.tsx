@@ -6,6 +6,7 @@ import { useState } from "react";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { ImLab } from "react-icons/im";
 import { LiaUserNurseSolid } from "react-icons/lia";
+import { TbHistory } from "react-icons/tb";
 
 export const secrataryLinks: ILinks[] = [
   {
@@ -25,6 +26,12 @@ export const secrataryLinks: ILinks[] = [
     title: "تخصص ها",
     link: "/secratary/expertise",
     icon: <ImLab/>,
+  },
+    {
+    id: 4,
+    title: "تاریخچه نوبت ها",
+    link: "/secratary/visitHistory",
+    icon: <TbHistory/>,
   },
 ];
 
