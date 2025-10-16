@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapPin, Calendar, Clock } from "lucide-react";
 
 interface Schedule {
@@ -36,13 +36,28 @@ export default function DoctorDetailsPage() {
     address: "تهران، خیابان ولیعصر، نرسیده به ونک",
     visitPrice: 300000,
     schedules: [
-      { day: "شنبه", times: ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30"] },
+      {
+        day: "شنبه",
+        times: ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30"],
+      },
       { day: "یکشنبه", times: ["14:00", "14:30", "15:00", "15:30"] },
       { day: "سه‌شنبه", times: ["16:00", "16:30", "17:00"] },
     ],
   };
 
-  const [selectedTime, setSelectedTime] = useState<string>("");
+  interface ISelectedTime {
+    time: string;
+    day: string;
+  }
+
+  const [selectedTime, setSelectedTime] = useState<ISelectedTime>({
+    time: "",
+    day: "",
+  });
+
+  function handleChangeTime() {
+    alert(selectedTime.day + " : " + selectedTime.time);
+  }
 
   return (
     <div className="mx-auto min-h-screen">
@@ -85,9 +100,9 @@ export default function DoctorDetailsPage() {
                 {day.times.map((time) => (
                   <button
                     key={time}
-                    onClick={() => setSelectedTime(time)}
+                    onClick={() => setSelectedTime({ time, day: day.day })}
                     className={`px-4 py-2 cursor-pointer rounded-md border flex items-center justify-center gap-1 text-sm transition ${
-                      selectedTime === time
+                      selectedTime?.time === time
                         ? "bg-primary text-white border-primary"
                         : "bg-gray-50 hover:bg-blue-50 text-gray-700 border-gray-200"
                     }`}
@@ -112,7 +127,7 @@ export default function DoctorDetailsPage() {
           <div className="flex items-center gap-1">
             {selectedTime && (
               <button
-                onClick={() => setSelectedTime("")}
+                onClick={() => setSelectedTime({ time: "", day: "" })}
                 className={`px-6 py-2 text-[.8rem] rounded-lg cursor-pointer text-white transition bg-gray-400 
                     `}
               >
@@ -120,6 +135,7 @@ export default function DoctorDetailsPage() {
               </button>
             )}
             <button
+              onClick={handleChangeTime}
               disabled={!selectedTime}
               className={`px-6 py-2 text-[.8rem] rounded-lg  text-white transition ${
                 selectedTime
