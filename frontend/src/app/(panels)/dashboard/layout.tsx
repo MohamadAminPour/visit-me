@@ -25,7 +25,7 @@ export const ownerLinks: ILinks[] = [
   {
     id: 6,
     title: "منشی ها",
-    link: "/dashboard/secratary",
+    link: "/dashboard/secrataries",
     icon: <TbNurse  />,
   },
   { id: 7, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare /> },
