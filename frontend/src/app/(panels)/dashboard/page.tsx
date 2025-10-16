@@ -12,7 +12,7 @@ import { TbNurse } from "react-icons/tb";
 
 export default function UserInfo() {
   return (
-    <div className="flex flex-col bg-white py-6 px-3 gap-7 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
+    <div className="flex flex-col bg-white p-4 gap-7 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-1">
         <CiGrid41 className="size-7" />
         <p className="font-IranYekanBold text-[1rem]">داشبورد</p>

@@ -36,7 +36,7 @@ export default function page() {
   }
 
   return (
-    <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
+    <div className="flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <ImLab  className="size-5" />

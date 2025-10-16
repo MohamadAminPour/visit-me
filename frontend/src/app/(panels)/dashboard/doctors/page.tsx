@@ -10,8 +10,7 @@ import { TbEditCircle } from "react-icons/tb";
 const doctors = [
   {
     id: 1,
-    name: "",
-    family: "",
+    nameFamily: "",
     email: "",
     phone: "",
     meli_code: "",
@@ -22,8 +21,7 @@ const doctors = [
   },
   {
     id: 2,
-    name: "",
-    family: "",
+    nameFamily: "",
     email: "",
     phone: "",
     meli_code: "",
@@ -46,7 +44,7 @@ export default function page() {
   }
 
   return (
-    <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
+    <div className="flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-1">
         <LiaUserNurseSolid className="size-7" />
         <p className="font-IranYekanBold text-[1rem]">دکتر های مجموعه</p>
@@ -55,27 +53,17 @@ export default function page() {
       <div className="text-right">
         <Grid
           data={doctors.map((a) => [
-            a.name,
-            a.family,
+            a.id,
+            a.nameFamily,
             a.phone,
-            a.email,
-            a.meli_code,
-            a.gender,
             a.expertise,
-            a.place_name,
-            a.place_address,
             a.id,
           ])}
           columns={[
-            "نام",
-            "نام خانوادگی",
+            "ردیف",
+            "نام و نام خانوادگی",
             "شماره تلفن",
-            "ایمیل",
-            "کدملی",
-            "جنسیت",
             "تخصص",
-            "نام مطب",
-            "آدرس مطب",
             {
               name: "عملیات",
               formatter: (_, row) => {

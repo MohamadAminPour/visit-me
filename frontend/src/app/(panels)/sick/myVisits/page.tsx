@@ -44,7 +44,7 @@ export default function page() {
   return (
     <AnimatedContainer>
       <div className="w-full">
-        <div className="flex flex-col bg-white py-6 px-10 gap-2 rounded-xl shadow-xl shadow-zinc-200/30 border-1 border-zinc-200 ">
+        <div className="flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-xl shadow-zinc-200/30 border-1 border-zinc-200 ">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <HiOutlineNewspaper className="size-7" />
