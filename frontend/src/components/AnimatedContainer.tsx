@@ -7,7 +7,7 @@ export default function AnimatedContainer({ children }: any) {
       initial={{ opacity: 0,  }}
       animate={{ opacity: 1, }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="flex items-center justify-center flex-col h-screen px-[1rem] md:mx-0"
+      className="flex items-center justify-center flex-col px-[1rem] md:px-0"
     >
       {children}
     </motion.div>
