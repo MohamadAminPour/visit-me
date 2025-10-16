@@ -4,7 +4,7 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Trash2, Eye, Plus } from "lucide-react";
+import { Trash2, Eye, Plus, X } from "lucide-react";
 import { TbEditCircle, TbNurse } from "react-icons/tb";
 
 const secrataryList = [
@@ -45,13 +45,14 @@ export default function page() {
             className="flex items-center justify-center gap-2 text-[.8rem] bg-red-600 cursor-pointer duration-300 hover:bg-red-500 p-2 px-5 rounded-lg text-white"
           >
             بستن
+            <X className="size-[1rem]" />
           </button>
         ) : (
           <button
             onClick={() => {
               setSecratary(!secratary);
             }}
-            className="flex items-center justify-center gap-2 text-[.8rem] bg-green-600 cursor-pointer duration-300 hover:bg-green-500 p-2 px-4 rounded-lg text-white"
+            className="flex items-center justify-center gap-2 text-[.8rem] bg-primary/80 cursor-pointer duration-300 hover:bg-primary p-2 px-4 rounded-lg text-white"
           >
             منشی جدید
             <Plus className="size-[1rem]" />
@@ -93,7 +94,7 @@ export default function page() {
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <button className="flex items-center justify-center gap-2 bg-green-600 cursor-pointer duration-300 hover:bg-green-500 p-2 px-5 rounded-lg text-white text-[.9rem] mt-5 ">
+              <button className="flex items-center justify-center gap-2 bg-primary/80 cursor-pointer duration-300 hover:bg-primary p-2 px-5 rounded-lg text-white text-[.9rem] mt-5 ">
                 ایجاد
               </button>
             </div>
