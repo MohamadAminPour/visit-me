@@ -24,27 +24,28 @@ export default function page() {
         خروج
       </Link>
       <AnimatedContainer>
-        <form className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white">
-          <div className="text-center w-full">
-            <h2 className="text-[2rem] Morabba">عضویت در ویزیت می</h2>
-            <p className="text-zinc-500 text-[.9rem]">
-              قبلا ثبت نام کردید؟
-              <Link href="/SickLogin" className="text-secondry mr-1">
-                ورود
-              </Link>
-            </p>
-            <div className="flex items-start flex-col mt-5">
-              <label htmlFor="">شماره تلفن</label>
-              <input
-                type="tel"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                style={{ direction: "rtl" }}
-                className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
-                placeholder="شماره تلفن خود را وارد کنید..."
-              />
-            </div>
-            {/* <div className="flex items-start flex-col mt-2">
+        <div className="h-screen flex items-center justify-center flex-col ">
+          <form className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white">
+            <div className="text-center w-full">
+              <h2 className="text-[2rem] Morabba">عضویت در ویزیت می</h2>
+              <p className="text-zinc-500 text-[.9rem]">
+                قبلا ثبت نام کردید؟
+                <Link href="/SickLogin" className="text-secondry mr-1">
+                  ورود
+                </Link>
+              </p>
+              <div className="flex items-start flex-col mt-5">
+                <label htmlFor="">شماره تلفن</label>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  style={{ direction: "rtl" }}
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                  placeholder="شماره تلفن خود را وارد کنید..."
+                />
+              </div>
+              {/* <div className="flex items-start flex-col mt-2">
               <label htmlFor="">رمز عبور</label>
               <input
                 type="password"
@@ -52,21 +53,22 @@ export default function page() {
                 placeholder="رمز عبور خود را وارد کنید..."
               />
             </div> */}
-            <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
-              <p className="text-[.9rem]">عضویت بیمار</p>
-              <BiArrowBack className="mt-[.1rem]" />
-            </button>
-            <div className="flex items-center justify-center gap-3 my-4">
-              <p className="w-full h-[.1rem] bg-zinc-200"></p>
-              <p>یا</p>
-              <p className="w-full h-[.1rem] bg-zinc-200"></p>
+              <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+                <p className="text-[.9rem]">عضویت بیمار</p>
+                <BiArrowBack className="mt-[.1rem]" />
+              </button>
+              <div className="flex items-center justify-center gap-3 my-4">
+                <p className="w-full h-[.1rem] bg-zinc-200"></p>
+                <p>یا</p>
+                <p className="w-full h-[.1rem] bg-zinc-200"></p>
+              </div>
+              <button className="w-full flex items-center justify-center gap-3 border-1 border-zinc-200 cursor-pointer py-2 hover:bg-zinc-200 mt-3 rounded-sm duration-300 ">
+                <p className="text-[.9rem]">عضویت با حساب گوگل</p>
+                <img src="/images/Google.png" alt="" className="w-[1.8rem]" />
+              </button>
             </div>
-            <button className="w-full flex items-center justify-center gap-3 border-1 border-zinc-200 cursor-pointer py-2 hover:bg-zinc-200 mt-3 rounded-sm duration-300 ">
-              <p className="text-[.9rem]">عضویت با حساب گوگل</p>
-              <img src="/images/Google.png" alt="" className="w-[1.8rem]" />
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </AnimatedContainer>
       <svg
         xmlns="http://www.w3.org/2000/svg"
