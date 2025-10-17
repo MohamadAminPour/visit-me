@@ -4,7 +4,7 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Check, Clock, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 const doctors = [
   {
@@ -37,7 +37,6 @@ const doctors = [
 ];
 
 import { HiOutlineNewspaper } from "react-icons/hi";
-import { LiaUserNurseSolid } from "react-icons/lia";
 
 export default function page() {
   const renderIcon = (Icon: any) =>
@@ -83,27 +82,13 @@ export default function page() {
                     "button",
                     {
                       className:
-                        "p-2 rounded cursor-pointer text-[.8rem] bg-primary/80 text-white hover:bg-primary",
+                        "p-2 rounded cursor-pointer text-[.8rem] bg-green-500 text-white hover:bg-green-600",
                       //  onClick: () => handleUpdateArticle(id),
-                      title: "فرستادن پیش دکتر",
+                      title: "ویزیت شد",
                     },
                     h("span", {
                       dangerouslySetInnerHTML: {
-                        __html: renderIcon(LiaUserNurseSolid),
-                      },
-                    })
-                  ),
-                  h(
-                    "button",
-                    {
-                      className:
-                        "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                      //  onClick: () => handleUpdateArticle(id),
-                      title: "رد کردن",
-                    },
-                    h("span", {
-                      dangerouslySetInnerHTML: {
-                        __html: renderIcon(X),
+                        __html: renderIcon(Check),
                       },
                     })
                   ),
