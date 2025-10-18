@@ -3,11 +3,12 @@ import { NextRequest } from "next/server";
 interface ISick {
   id: string;
   phone: string;
+  role: string;
 }
 
 const sicks: ISick[] = [
-  { id: "jfs89fhsfsf", phone: "0917653333434" },
-  { id: "ofihdf8ghdf", phone: "0917653333431" },
+  { id: "1", phone: "09153333333", role: "sick" },
+  { id: "2", phone: "09154444444", role: "sick" },
 ];
 
 export async function POST(req: NextRequest) {
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     } else {
-      sicks.push({ id: crypto.randomUUID(), phone });
+      sicks.push({ id: crypto.randomUUID(), phone, role: "sick" });
       return Response.json(
         { message: "Sick is registred", mainSick, token },
         { status: 201 }
