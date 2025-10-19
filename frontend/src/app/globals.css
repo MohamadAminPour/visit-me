@@ -76,6 +76,9 @@ body {
 .dark .gridjs-table {
   background-color: #374151; /* Dark mode خاکستری تیره */
 }
+.gridjs-th:nth-child(1){
+  max-width: 1rem;
+}
 .dark .gridjs-th {
   background-color: #1f2937; /* Dark mode هدر */
   color: #f9fafb;
@@ -139,4 +142,35 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: #3490dc; /* رنگ اسکرول */
   border-radius: 20px;
+}
+
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+}
+.loader::before,
+.loader::after {    
+  content:"";
+  grid-area: 1/1;
+  --c:no-repeat radial-gradient(farthest-side,#3490dc 92%,#0000);
+  background: 
+    var(--c) 50%  0, 
+    var(--c) 50%  100%, 
+    var(--c) 100% 50%, 
+    var(--c) 0    50%;
+  background-size: 12px 12px;
+  animation: l12 1s infinite;
+}
+.loader::before {
+  margin: 4px;
+  filter: hue-rotate(45deg);
+  background-size: 8px 8px;
+  animation-timing-function: linear
+}
+
+@keyframes l12 { 
+  100%{transform: rotate(.5turn)}
 }
