@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-interface IDoctors {
+export interface IDoctor {
   id: string;
   nameFamily: string;
   bith_date: string;
@@ -14,12 +14,12 @@ interface IDoctors {
   created_at: string;
 }
 
-const doctors: IDoctors[] = [
+const doctors: IDoctor[] = [
   {
-    id: "m7fmggmfdfg",
+    id: "1",
     nameFamily: "سارا رحمانی",
     bith_date: "1372/12/08",
-    expertise: "hs79ghusdggs",
+    expertise: "پوست و مو",
     experience: "10",
     phone: "09159764310",
     meli_code: "09276551456",
@@ -29,10 +29,10 @@ const doctors: IDoctors[] = [
     created_at: "1404/07/25",
   },
   {
-    id: "n7s89gfgbsdgsg",
+    id: "2",
     nameFamily: "فرید خلج",
     bith_date: "1355/01/14",
-    expertise: "n978ghdfdghdfh",
+    expertise: "چشم پزشک",
     experience: "18",
     phone: "09159764310",
     meli_code: "09276551456",
@@ -42,10 +42,10 @@ const doctors: IDoctors[] = [
     created_at: "1404/07/25",
   },
   {
-    id: "mjs7dghs9d7fgsdg",
+    id: "3",
     nameFamily: "کامران ترابی",
     bith_date: "1360/06/16",
-    expertise: "js9dyf979d9g",
+    expertise: "دندان پزشک",
     experience: "12",
     phone: "09159764310",
     meli_code: "09276551456",

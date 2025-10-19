@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-interface ISecratary {
+export interface ISecratary {
   id: number;
   nameFamily: string;
   phone: string;

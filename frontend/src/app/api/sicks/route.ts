@@ -1,11 +1,12 @@
 import { NextRequest } from "next/server";
 
-interface ISick {
+export interface ISick {
   id: number;
   nameFamily: string;
   phone: string;
   meli_code: string;
   insurance: string;
+  birth_date: string;
   created_at: string;
 }
 
@@ -16,14 +17,16 @@ const sicks: ISick[] = [
     phone: "09159875066",
     meli_code: "09276551456",
     insurance: "تامین اجتماعی",
+    birth_date:"1384/12/01",
     created_at: "1404/07/25",
   },
   {
     id: 2,
     nameFamily: "علی رضایی",
-    phone: "09157624331",
-    meli_code: "09276551456",
-    insurance: "تامین اجتماعی",
+    phone: "09027653801",
+    meli_code: "09865443630",
+    insurance: "آزاد",
+    birth_date:"1384/12/01",
     created_at: "1404/07/25",
   },
 ];
