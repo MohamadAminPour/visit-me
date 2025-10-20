@@ -1,46 +1,32 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Trash2, Eye } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
-
-const doctors = [
-  {
-    id: 1,
-    nameFamily: "",
-    email: "",
-    phone: "",
-    meli_code: "",
-    gender: "",
-    expertise: "",
-    place_name: "",
-    place_address: "",
-  },
-  {
-    id: 2,
-    nameFamily: "",
-    email: "",
-    phone: "",
-    meli_code: "",
-    gender: "",
-    expertise: "",
-    place_name: "",
-    place_address: "",
-  },
-];
-
 import { LiaUserNurseSolid } from "react-icons/lia";
 import { HiOutlineNewspaper } from "react-icons/hi";
+import Loader from "@/components/Loader";
+import { IDoctor } from "@/app/api/doctors/route";
+import { useQuery } from "@tanstack/react-query";
+import { getDoctors } from "@/hooks/useDoctors";
 
 export default function page() {
+ const { data, isPending } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getDoctors
+  });
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {
     alert(id);
+  }
+
+  if (isPending) {
+    return <Loader />;
   }
 
   return (
@@ -52,11 +38,14 @@ export default function page() {
 
       <div className="text-right">
         <Grid
-          data={doctors.map((a) => [
+          data={data?.map((a:IDoctor) => [
             a.id,
             a.nameFamily,
             a.phone,
             a.expertise,
+            a.experience,
+            a.bith_date,
+            a.image,
             a.id,
           ])}
           columns={[
@@ -64,6 +53,9 @@ export default function page() {
             "نام و نام خانوادگی",
             "شماره تلفن",
             "تخصص",
+            "سابقه کار",
+            "تاریخ تولد",
+            "عکس",
             {
               name: "عملیات",
               formatter: (_, row) => {
