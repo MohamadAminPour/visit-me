@@ -4,42 +4,30 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Trash2, Eye } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
-
-const sicks = [
-  {
-    id: 1,
-    name: "",
-    family: "",
-    phone: "",
-    email: "",
-    meli_code: "",
-    gender: "",
-    birth_date: "",
-  },
-  {
-    id: 2,
-    name: "",
-    family: "",
-    phone: "",
-    email: "",
-    meli_code: "",
-    gender: "",
-    birth_date: "",
-  },
-];
-
-import { LiaUserNurseSolid } from "react-icons/lia";
 import { PiFaceMask } from "react-icons/pi";
 import { HiOutlineNewspaper } from "react-icons/hi";
+import { ISick } from "@/app/api/sicks/route";
+import Loader from "@/components/Loader";
+import { useQuery } from "@tanstack/react-query";
+import { getSicks } from "@/hooks/useSicks";
 
 export default function page() {
+  const { data, isPending } = useQuery({
+    queryKey: ["sicks"],
+    queryFn: getSicks
+  });
+
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {
     alert(id);
+  }
+
+  if (isPending) {
+    return <Loader />;
   }
 
   return (
@@ -51,43 +39,27 @@ export default function page() {
 
       <div className="text-right">
         <Grid
-          data={sicks.map((a) => [
-            a.name,
-            a.family,
-            a.meli_code,
+          data={data?.map((a: ISick) => [
+            a.id,
+            a.nameFamily,
             a.phone,
-            a.email,
-            a.gender,
+            a.meli_code,
+            a.insurance,
             a.birth_date,
             a.id,
           ])}
           columns={[
-            "نام",
-            "نام خانوادگی",
-            "کدملی",
+            "ردیف",
+            "نام و نام خانوادگی",
             "شماره تلفن",
-            "ایمیل",
-            "جنسیت",
+            "کدملی",
+            "بیمه",
             "تاریخ تولد",
             {
               name: "عملیات",
               formatter: (_, row) => {
                 const id = row.cells[0].data as number; // ستون id برای عملیات
                 return h("div", { className: "flex gap-2" }, [
-                  h(
-                    "button",
-                    {
-                      className:
-                        "p-2 rounded cursor-pointer text-[.8rem] bg-yellow-500 text-white hover:bg-yellow-600",
-                      //  onClick: () => handleUpdateArticle(id),
-                      title: "ویرایش",
-                    },
-                    h("span", {
-                      dangerouslySetInnerHTML: {
-                        __html: renderIcon(TbEditCircle),
-                      },
-                    })
-                  ),
                   h(
                     "button",
                     {
