@@ -1,32 +1,32 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Trash2, Eye, Plus, X } from "lucide-react";
+import { Trash2, Plus, X } from "lucide-react";
 import { TbEditCircle, TbNurse } from "react-icons/tb";
-
-const secrataryList = [
-  {
-    id: 1,
-    name: "زهرا",
-    family: "حبیبی",
-    phone: "0916754343",
-    email: "zhababi@gmail.com",
-  },
-];
-
-import { HiOutlineNewspaper, HiOutlineShieldCheck } from "react-icons/hi";
+import Loader from "@/components/Loader";
+import { useQuery } from "@tanstack/react-query";
+import { getSecrataries } from "@/hooks/useSecrataries";
+import { ISecratary } from "@/app/api/secrataries/route";
 
 export default function page() {
-  const [secratary, setSecratary] = useState(false);
+  const [addSecratary, setAddSecratary] = useState(false);
 
+ const { data, isPending } = useQuery({
+    queryKey: ["secratary"],
+    queryFn: getSecrataries
+  });
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {
     alert(id);
+  }
+
+  if (isPending) {
+    return <Loader />;
   }
 
   return (
@@ -37,10 +37,10 @@ export default function page() {
           <p className="font-IranYekanBold text-[1rem]">منشی های مجموعه</p>
         </div>
         {/*buttons*/}
-        {secratary ? (
+        {addSecratary ? (
           <button
             onClick={() => {
-              setSecratary(!secratary);
+              setAddSecratary(!addSecratary);
             }}
             className="flex items-center justify-center gap-2 text-[.8rem] bg-red-600 cursor-pointer duration-300 hover:bg-red-500 p-2 px-5 rounded-lg text-white"
           >
@@ -50,7 +50,7 @@ export default function page() {
         ) : (
           <button
             onClick={() => {
-              setSecratary(!secratary);
+              setAddSecratary(!addSecratary);
             }}
             className="flex items-center justify-center gap-2 text-[.8rem] bg-primary/80 cursor-pointer duration-300 hover:bg-primary p-2 px-4 rounded-lg text-white"
           >
@@ -62,7 +62,7 @@ export default function page() {
 
       <div className="text-right">
         {/*form*/}
-        {secratary ? (
+        {addSecratary ? (
           <form>
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3">
               <div className="flex items-start flex-col mt-5">
@@ -101,18 +101,20 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={secrataryList?.map((s) => [
-              s.name,
-              s.family,
+            data={data?.map((s:ISecratary) => [
+              s.id,
+              s.nameFamily,
               s.phone,
               s.email,
+              s.meli_code,
               s.id,
             ])}
             columns={[
               "نام",
-              "نام خانوادگی",
+              "نام و نام خانوادگی",
               "شماره تلفن",
               "ایمیل",
+              "کدملی",
               {
                 name: "عملیات",
                 formatter: (_, row) => {
@@ -143,20 +145,6 @@ export default function page() {
                       h("span", {
                         dangerouslySetInnerHTML: {
                           __html: renderIcon(Trash2),
-                        },
-                      })
-                    ),
-                    h(
-                      "button",
-                      {
-                        className:
-                          "p-2 rounded cursor-pointer text-[.8rem] bg-blue-500 text-white hover:bg-blue-600",
-                        onClick: () => handleShowVisits(id),
-                        title: "ویزیت ها",
-                      },
-                      h("span", {
-                        dangerouslySetInnerHTML: {
-                          __html: renderIcon(HiOutlineNewspaper),
                         },
                       })
                     ),
