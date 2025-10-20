@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import CrispChatWithStatus from "@/components/CrispChat";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -9,7 +8,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const client: QueryClient = new QueryClient({});
 
   return (
     <html lang="fa" dir="rtl">
