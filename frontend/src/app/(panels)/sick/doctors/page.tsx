@@ -6,6 +6,7 @@ import AnimatedContainer from "@/components/AnimatedContainer";
 import { useQuery } from "@tanstack/react-query";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
+import Loader from "@/components/Loader";
 
 
 
@@ -26,6 +27,10 @@ export default function DoctorsList() {
 
   const specialties = ["همه", "دندان پزشک", "چشم‌ پزشک", "پوست و مو"];
   console.log(filter)
+
+  if(isPending){
+    return <Loader/>
+  }
 
   return (
     <AnimatedContainer>
