@@ -54,7 +54,7 @@ export default function SideBar({ isOpen, setIsOpen, links }: ISideBarProps) {
             <Link
               href={item.link}
               className={`${
-                path === item.link && path.includes(item.link) && "bg-primary text-white"
+                 path.includes(item.link) && "bg-primary text-white"
               } p-2 rounded-md text-[.9rem] w-full flex items-center gap-2`}
             >
               <div className="text-xl">{item.icon}</div>
