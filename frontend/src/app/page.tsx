@@ -1,7 +1,15 @@
 import Link from "next/link";
 import AnimatedContainer from "../components/AnimatedContainer";
 
-export default function Home() {
+export default async function Home() {
+
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const res = await fetch(`${API}/views`);
+  const views = await res.json()
+
+  console.log(views)
+
   return (
     <AnimatedContainer>
       <div className="h-screen flex items-center justify-center flex-col ">
@@ -21,7 +29,7 @@ export default function Home() {
             />
             <p>بیمار هستم</p>
             <Link
-              href="/SickLogin"
+              href="/sickLogin"
               className="bg-secondryLight hover:bg-secondry hover:text-white duration-300 mt-2 w-full text-center px-5 py-2 rounded-lg text-[.8rem] "
             >
               انتخاب
@@ -35,7 +43,7 @@ export default function Home() {
             />
             <p>دکتر هستم</p>
             <Link
-              href="/DrLogin"
+              href="/drLogin"
               className="bg-primaryLight hover:bg-primary hover:text-white duration-300 mt-2 w-full text-center px-5 py-2 rounded-lg text-[.8rem] "
             >
               انتخاب
