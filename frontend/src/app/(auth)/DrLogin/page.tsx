@@ -30,7 +30,7 @@ export default function page() {
               <h2 className="text-[2rem] Morabba">ورود به ویزیت می</h2>
               <p className="text-zinc-500 text-[.9rem]">
                 منشی این مجموعه هستید؟
-                <Link href="/SecrataryLogin" className="text-primary mr-1">
+                <Link href="/secrataryLogin" className="text-primary mr-1">
                   ورود
                 </Link>
               </p>

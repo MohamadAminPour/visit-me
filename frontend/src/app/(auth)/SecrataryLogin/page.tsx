@@ -30,7 +30,7 @@ export default function page() {
               <h2 className="text-[2rem] Morabba">عضویت در ویزیت می</h2>
               <p className="text-zinc-500 text-[.9rem]">
                 دکتر این مجموعه هستید؟
-                <Link href="/DrLogin" className="text-primary mr-1">
+                <Link href="/drLogin" className="text-primary mr-1">
                   ورود
                 </Link>
               </p>
