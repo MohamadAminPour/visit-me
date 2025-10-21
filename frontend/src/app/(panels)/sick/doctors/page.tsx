@@ -3,61 +3,29 @@ import { useState } from "react";
 import { Search, Filter } from "lucide-react";
 import Link from "next/link";
 import AnimatedContainer from "@/components/AnimatedContainer";
+import { useQuery } from "@tanstack/react-query";
+import { getDoctors } from "@/hooks/useDoctors";
+import { IDoctor } from "@/app/api/doctors/route";
 
-const doctorsData = [
-  {
-    id: 1,
-    name: "دکتر علی رضایی",
-    specialty: "دندان پزشک",
-    medicalCode: "12345",
-    price: 250000,
-    image: "/images/doctor1.jpg",
-  },
-  {
-    id: 2,
-    name: "دکتر سارا محمدی",
-    specialty: "چشم‌ پزشک",
-    medicalCode: "67890",
-    price: 300000,
-    image: "/images/doctor2.jpg",
-  },
-  {
-    id: 3,
-    name: "دکتر حمید قربانی",
-    specialty: "پوست و مو",
-    medicalCode: "11223",
-    price: 200000,
-    image: "/images/doctor3.jpg",
-  },
-  {
-    id: 4,
-    name: "دکتر فرید ترابی",
-    specialty: "پوست و مو",
-    medicalCode: "11223",
-    price: 200000,
-    image: "/images/doctor4.jpg",
-  },
-  {
-    id: 5,
-    name: "دکتر مائده عالمی",
-    specialty: "چشم‌ پزشک",
-    medicalCode: "11223",
-    price: 200000,
-    image: "/images/doctor5.jpg",
-  },
-];
+
 
 export default function DoctorsList() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("همه");
 
-  const filteredDoctors = doctorsData.filter((doctor) => {
-    const matchesSearch = doctor.name.includes(search);
-    const matchesFilter = filter === "همه" || doctor.specialty === filter;
+   const { data, isPending } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getDoctors
+  });
+
+  const filteredDoctors = data?.filter((doctor:IDoctor) => {
+    const matchesSearch = doctor.nameFamily.includes(search);
+    const matchesFilter = filter === "همه" || doctor.expertise === filter;
     return matchesSearch && matchesFilter;
   });
 
   const specialties = ["همه", "دندان پزشک", "چشم‌ پزشک", "پوست و مو"];
+  console.log(filter)
 
   return (
     <AnimatedContainer>
@@ -92,25 +60,25 @@ export default function DoctorsList() {
 
         {/* Doctor Cards */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {filteredDoctors.map((doctor) => (
+          {filteredDoctors?.map((doctor:IDoctor) => (
             <div
               key={doctor.id}
               className="bg-white rounded-2xl shadow-xl shadow-zinc-200/30 border-1 border-zinc-200 transition p-5 flex flex-col items-center text-center"
             >
               <img
                 src={doctor.image}
-                alt={doctor.name}
+                alt={doctor.nameFamily}
                 className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-blue-100"
               />
               <h2 className="text-lg font-semibold text-slate-800">
-                {doctor.name}
+                {doctor.nameFamily}
               </h2>
-              <p className="text-sm text-slate-500 mt-1">{doctor.specialty}</p>
+              <p className="text-sm text-slate-500 mt-1">{doctor.expertise}</p>
               <p className="text-xs text-gray-400 mt-1">
-                کد نظام پزشکی: {doctor.medicalCode}
+                سابقه کاری : {doctor.experience} سال
               </p>
               <p className="text-sm font-medium text-primary mt-2">
-                هزینه ویزیت: {doctor.price} تومان
+               هزینه ویزیت : {doctor.visit_price.toLocaleString()} تومان
               </p>
               <Link
                 href={`/sick/doctors/${doctor.id}`}
@@ -122,7 +90,7 @@ export default function DoctorsList() {
           ))}
         </div>
 
-        {filteredDoctors.length === 0 && (
+        {filteredDoctors?.length === 0 && (
           <p className="text-center text-gray-400 mt-8">
             پزشکی با این مشخصات یافت نشد.
           </p>
