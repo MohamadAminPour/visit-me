@@ -27,12 +27,19 @@ export async function POST(req: NextRequest) {
       }
     );
 
+    if (!phone || phone.length < 11 || phone.length > 11) {
+      return Response.json(
+        { message: "Please enter any phone" },
+        { status: 409 }
+      );
+    }
     if (mainSick) {
       return Response.json(
         { message: "Your info", mainSick, token: token },
         { status: 200 }
       );
-    } else {
+    }
+    if (!mainSick) {
       return Response.json({ message: "Sick not found !" }, { status: 404 });
     }
   } catch (error) {

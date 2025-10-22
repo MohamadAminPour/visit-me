@@ -1,9 +1,41 @@
+"use client";
+import sickLoginAction from "@/actions/sickLoginAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
+import { Toast } from "@/components/Toast";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useActionState, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function page() {
+  const router = useRouter();
+  const [state, formAction] = useActionState(sickLoginAction, {
+    status: 0,
+    token: "",
+  });
+
+  useEffect(() => {
+    if (state?.status === 200) {
+      Toast.fire({
+        icon: "success",
+        title: "ورود موفقیت آمیز بود !",
+      });
+      router.push("/sick/profile");
+      localStorage.setItem("tokan", state.token);
+    }
+    if (state?.status === 409) {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا یک شماره تلفن صحیح وارد کنید !",
+      });
+    }
+    if (state?.status === 404) {
+      Toast.fire({
+        icon: "error",
+        title: "همچین شماره تلفنی ورود ندارد !",
+      });
+    }
+  }, [state]);
   return (
     <>
       <svg
@@ -25,7 +57,10 @@ export default function page() {
       </Link>
       <AnimatedContainer>
         <div className="h-screen flex items-center justify-center flex-col ">
-          <form className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white">
+          <form
+            action={formAction}
+            className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white"
+          >
             <div className="text-center w-full">
               <h2 className="text-[2rem] Morabba">ورود به ویزیت می</h2>
               <p className="text-zinc-500 text-[.9rem]">
@@ -38,6 +73,7 @@ export default function page() {
                 <label htmlFor="">شماره تلفن</label>
                 <input
                   type="tel"
+                  name="phone"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   style={{ direction: "rtl" }}
