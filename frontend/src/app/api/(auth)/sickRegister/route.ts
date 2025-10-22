@@ -26,7 +26,12 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    if (mainSick) {
+    if (!phone || phone.length < 11 || phone.length > 11) {
+      return Response.json(
+        { message: "Please enter any phone" },
+        { status: 404 }
+      );
+    } else if (mainSick) {
       return Response.json(
         { message: "Sick with this phone has already exists" },
         { status: 409 }

@@ -1,9 +1,44 @@
+"use client";
+
+import sickRegisterAction from "@/actions/sickRegisterAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
+import { Toast } from "@/components/Toast";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function page() {
+  const router = useRouter();
+  const [state, formAction] = useActionState(sickRegisterAction, {
+    status: 0,
+    token: "",
+  });
+
+  useEffect(() => {
+    if (state.status === 201) {
+      Toast.fire({
+        icon: "success",
+        title: "ثبت نام موفقیت آمیز بود !",
+      });
+      router.push("/sick/profile");
+      localStorage.setItem("tokan",state.token)
+    }
+    if (state.status === 404) {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا یک شماره تلفن صحیح وارد کنید !",
+      });
+    }
+    if (state.status === 409) {
+      Toast.fire({
+        icon: "error",
+        title: "این شماره قبلا ثبت شده است !",
+      });
+    }
+  }, [state]);
+
   return (
     <>
       <svg
@@ -25,7 +60,10 @@ export default function page() {
       </Link>
       <AnimatedContainer>
         <div className="h-screen flex items-center justify-center flex-col ">
-          <form className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white">
+          <form
+            action={formAction}
+            className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white"
+          >
             <div className="text-center w-full">
               <h2 className="text-[2rem] Morabba">عضویت در ویزیت می</h2>
               <p className="text-zinc-500 text-[.9rem]">
@@ -38,6 +76,7 @@ export default function page() {
                 <label htmlFor="">شماره تلفن</label>
                 <input
                   type="tel"
+                  name="phone"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   style={{ direction: "rtl" }}
@@ -45,18 +84,7 @@ export default function page() {
                   placeholder="شماره تلفن خود را وارد کنید..."
                 />
               </div>
-              {/* <div className="flex items-start flex-col mt-2">
-              <label htmlFor="">رمز عبور</label>
-              <input
-                type="password"
-                className="border-1 w-full mt-2 outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
-                placeholder="رمز عبور خود را وارد کنید..."
-              />
-            </div> */}
-              <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
-                <p className="text-[.9rem]">عضویت بیمار</p>
-                <BiArrowBack className="mt-[.1rem]" />
-              </button>
+              <Button />
               <div className="flex items-center justify-center gap-3 my-4">
                 <p className="w-full h-[.1rem] bg-zinc-200"></p>
                 <p>یا</p>
@@ -82,5 +110,21 @@ export default function page() {
         ></path>
       </svg>
     </>
+  );
+}
+
+export function Button() {
+  const { pending } = useFormStatus();
+  return (
+    <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+      {pending ? (
+        <p className="text-[.9rem]">صبر کنید...</p>
+      ) : (
+        <>
+          <p className="text-[.9rem]">ثبت نام بیمار</p>
+          <BiArrowBack className="mt-[.1rem]" />
+        </>
+      )}
+    </button>
   );
 }
