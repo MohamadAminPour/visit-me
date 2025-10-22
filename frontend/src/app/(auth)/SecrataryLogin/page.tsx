@@ -22,7 +22,7 @@ export default function page() {
          icon: "success",
          title: "ورود موفقیت آمیز بود !",
        });
-       router.push("/doctor/profile");
+       router.push("/secratary/visits");
        localStorage.setItem("tokan", state.token);
      }
      if (state?.status === 409) {
