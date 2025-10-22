@@ -5,6 +5,7 @@ import { Toast } from "@/components/Toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function page() {
@@ -81,18 +82,7 @@ export default function page() {
                   placeholder="شماره تلفن خود را وارد کنید..."
                 />
               </div>
-              {/* <div className="flex items-start flex-col mt-2">
-              <label htmlFor="">رمز عبور</label>
-              <input
-                type="password"
-                className="border-1 w-full mt-2 outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
-                placeholder="رمز عبور خود را وارد کنید..."
-              />
-            </div> */}
-              <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
-                <p className="text-[.9rem]">ورود بیمار</p>
-                <BiArrowBack className="mt-[.1rem]" />
-              </button>
+            <Button/>
               <div className="flex items-center justify-center gap-3 my-4">
                 <p className="w-full h-[.1rem] bg-zinc-200"></p>
                 <p>یا</p>
@@ -118,5 +108,21 @@ export default function page() {
         ></path>
       </svg>
     </>
+  );
+}
+
+export function Button() {
+  const { pending } = useFormStatus();
+  return (
+    <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+      {pending ? (
+        <p className="text-[.9rem]">صبر کنید...</p>
+      ) : (
+        <>
+          <p className="text-[.9rem]">ورود بیمار</p>
+          <BiArrowBack className="mt-[.1rem]" />
+        </>
+      )}
+    </button>
   );
 }
