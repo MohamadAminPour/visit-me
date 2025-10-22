@@ -59,28 +59,28 @@ export default function page() {
         خروج
       </Link>
       <AnimatedContainer>
-        <div className="h-screen flex items-center justify-center flex-col ">
+        <div className="h-screen flex items-center justify-center flex-col w-full">
           <form
             action={formAction}
-            className="rounded-2xl py-8 px-10 border-1 border-zinc-200 w-[27rem] shadow-xl shadow-zinc-200 z-20 bg-white"
+            className="rounded-2xl py-8 px-5 sm:px-10 w-[90%] sm:w-[27rem]  border-1 border-zinc-200 shadow-xl shadow-zinc-200 z-20 bg-white"
           >
             <div className="text-center w-full">
-              <h2 className="text-[2rem] Morabba">عضویت در ویزیت می</h2>
-              <p className="text-zinc-500 text-[.9rem]">
+              <h2 className="text-[1.5rem] sm:text-[2rem] Morabba">عضویت در ویزیت می</h2>
+              <p className="text-zinc-500 text-[.8rem] sm:text-[.9rem]">
                 قبلا ثبت نام کردید؟
                 <Link href="/sickLogin" className="text-secondry mr-1">
                   ورود
                 </Link>
               </p>
               <div className="flex items-start flex-col mt-5">
-                <label htmlFor="">شماره تلفن</label>
+                <label htmlFor="" className="text-[.8rem] sm:text-[.9rem]">شماره تلفن</label>
                 <input
                   type="tel"
                   name="phone"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   style={{ direction: "rtl" }}
-                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.7rem] sm:placeholder:text-[.8rem]"
                   placeholder="شماره تلفن خود را وارد کنید..."
                 />
               </div>
@@ -91,8 +91,8 @@ export default function page() {
                 <p className="w-full h-[.1rem] bg-zinc-200"></p>
               </div>
               <button className="w-full flex items-center justify-center gap-3 border-1 border-zinc-200 cursor-pointer py-2 hover:bg-zinc-200 mt-3 rounded-sm duration-300 ">
-                <p className="text-[.9rem]">عضویت با حساب گوگل</p>
-                <img src="/images/Google.png" alt="" className="w-[1.8rem]" />
+                <p className="text-[.8rem] sm:text-[.9rem]">عضویت با حساب گوگل</p>
+                <img src="/images/Google.png" alt="" className="w-[1.3rem] sm:w-[1.8rem]" />
               </button>
             </div>
           </form>
@@ -118,10 +118,10 @@ export function Button() {
   return (
     <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
       {pending ? (
-        <p className="text-[.9rem]">صبر کنید...</p>
+        <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
       ) : (
         <>
-          <p className="text-[.9rem]">ثبت نام بیمار</p>
+          <p className="text-[.8rem] sm:text-[.9rem]">ثبت نام بیمار</p>
           <BiArrowBack className="mt-[.1rem]" />
         </>
       )}
