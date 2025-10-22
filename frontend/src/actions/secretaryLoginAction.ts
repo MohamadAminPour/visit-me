@@ -1,13 +1,13 @@
 "use server";
 
-export default async function doctorLoginAction(
+export default async function secretaryLoginAction(
   prevState: any,
   formData: FormData
 ) {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const phone = formData.get("phone");
 
-  const res = await fetch(`${API}/drLogin`, {
+  const res = await fetch(`${API}/secrataryLogin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ phone }),
