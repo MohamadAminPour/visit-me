@@ -12,12 +12,12 @@ export interface ISecratary {
 const secrataries: ISecratary[] = [
   {
     id: 1,
-    nameFamily: "مهناز بهرامی",
+    nameFamily: "زهرا ملکی",
     phone: "09159764310",
     meli_code: "09276551456",
-    email: "mhnazbahrami@gmail.com",
+    email: "zahraMaleki@gmail.com",
     created_at: "1404/07/25",
-  }
+  },
 ];
 
 export async function GET() {
