@@ -6,45 +6,31 @@ import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
 import { Check, Clock, X } from "lucide-react";
 
-const doctors = [
-  {
-    id: 1,
-    nameFamily: "",
-    phone: "",
-    meli_code: "",
-    visit_number: "",
-    doctor: "",
-    create_at: "1404/07/23",
-  },
-  {
-    id: 2,
-    nameFamily: "",
-    phone: "",
-    meli_code: "",
-    visit_number: "",
-    doctor: "",
-    create_at: "1404/07/24",
-  },
-  {
-    id: 3,
-    nameFamily: "",
-    phone: "",
-    meli_code: "",
-    visit_number: "",
-    doctor: "",
-    create_at: "1404/06/24",
-  },
-];
 
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { LiaUserNurseSolid } from "react-icons/lia";
+import { useQuery } from "@tanstack/react-query";
+import { getSecrataries } from "@/hooks/useSecrataries";
+import Loader from "@/components/Loader";
+import { ISecratary } from "@/app/api/secrataries/route";
+import { getVisits } from "@/hooks/useVisits";
+import { IVisits } from "@/app/api/visits/route";
 
 export default function page() {
+  const { data, isPending } = useQuery({
+    queryKey: ["visits"],
+    queryFn: getVisits
+  });
+
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {
     alert(id);
+  }
+
+  if (isPending) {
+    return <Loader />;
   }
 
   return (
@@ -56,14 +42,14 @@ export default function page() {
 
       <div className="text-right">
         <Grid
-          data={doctors.map((a) => [
+          data={data.map((a:IVisits) => [
             a.id,
             a.nameFamily,
             a.visit_number,
             a.doctor,
             a.phone,
             a.meli_code,
-            a.create_at,
+            a.created_at,
             a.id,
           ])}
           columns={[
