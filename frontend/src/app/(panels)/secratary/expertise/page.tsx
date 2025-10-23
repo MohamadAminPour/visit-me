@@ -10,17 +10,33 @@ import { useQuery } from "@tanstack/react-query";
 import { getExperiencies } from "@/hooks/useExperiencies";
 import Loader from "@/components/Loader";
 import { IExperiencies } from "@/app/api/experiencies/route";
+import { queryClient } from "@/lib/queryClient";
 
 export default function page() {
   const [addExpertise, setAddExpertise] = useState(false);
-
-  const { data, isPending } = useQuery({
-    queryKey: ["experiencies"],
-    queryFn: getExperiencies
-  });
+  const [expertiseName, setExpertiseName] = useState("");
 
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
+
+  const { data, isPending } = useQuery({
+    queryKey: ["experiencies"],
+    queryFn: getExperiencies,
+  });
+
+  async function handleAddExpertise(e: any) {
+    e.preventDefault();
+
+    await fetch(`http://localhost:3000/api/experiencies`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({ name: expertiseName }),
+    });
+    await queryClient.invalidateQueries({ queryKey: ["experiencies"] });
+    setAddExpertise(false);
+  }
 
   function handleShowVisits(id: number) {
     alert(id);
@@ -34,7 +50,7 @@ export default function page() {
     <div className="flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <ImLab  className="size-5" />
+          <ImLab className="size-5" />
           <p className="font-IranYekanBold text-[1rem]">تخصص های دکتر</p>
         </div>
         {/*buttons*/}
@@ -63,11 +79,13 @@ export default function page() {
 
       <div className="text-right">
         {addExpertise ? (
-          <form>
+          <form onSubmit={handleAddExpertise}>
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3">
               <div className="flex items-start flex-col mt-5">
                 <label htmlFor="">نام تخصص</label>
                 <input
+                  value={expertiseName}
+                  onChange={(e) => setExpertiseName(e.target.value)}
                   type="text"
                   className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
                   placeholder="نام تخصص را وارد کنید..."
@@ -82,11 +100,7 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={data.map((a:IExperiencies) => [
-              a.id,
-              a.name,
-              a.id,
-            ])}
+            data={data.map((a: IExperiencies) => [a.id, a.name, a.id])}
             columns={[
               "ردیف",
               "نام تخصص",
