@@ -1,38 +1,33 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Trash2, Eye, Plus, X } from "lucide-react";
-import { TbEditCircle } from "react-icons/tb";
-
-const expertise = [
-  {
-    id: 1,
-    title: "پوست و مو",
-  },
-  {
-    id: 2,
-    title: "چشم پزشک",
-  },
-  {
-    id: 3,
-    title: "قلب و عروق",
-  },
-];
-
-import { LiaUserNurseSolid } from "react-icons/lia";
+import { Trash2, Plus, X } from "lucide-react";
 import { ImLab } from "react-icons/im";
+import { useQuery } from "@tanstack/react-query";
+import { getExperiencies } from "@/hooks/useExperiencies";
+import Loader from "@/components/Loader";
+import { IExperiencies } from "@/app/api/experiencies/route";
 
 export default function page() {
   const [addExpertise, setAddExpertise] = useState(false);
+
+  const { data, isPending } = useQuery({
+    queryKey: ["experiencies"],
+    queryFn: getExperiencies
+  });
 
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {
     alert(id);
+  }
+
+  if (isPending) {
+    return <Loader />;
   }
 
   return (
@@ -87,9 +82,9 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={expertise.map((a) => [
+            data={data.map((a:IExperiencies) => [
               a.id,
-              a.title,
+              a.name,
               a.id,
             ])}
             columns={[

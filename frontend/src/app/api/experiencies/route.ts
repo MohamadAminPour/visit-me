@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-interface IExperiencies {
+export interface IExperiencies {
   id: number;
   name: string;
   created_at: string;
@@ -20,6 +20,11 @@ const experiencies: IExperiencies[] = [
   {
     id: 3,
     name: "پوست و مو",
+    created_at: "1404/07/25",
+  },
+   {
+    id: 4,
+    name: "قلب و عروق",
     created_at: "1404/07/25",
   },
 ];
