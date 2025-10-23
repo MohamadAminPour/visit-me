@@ -7,44 +7,32 @@ import ReactDOMServer from "react-dom/server";
 import { Trash2, Eye, Plus, X } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
 
-const doctors = [
-  {
-    id: 1,
-    name: "",
-    family: "",
-    email: "",
-    phone: "",
-    meli_code: "",
-    gender: "",
-    expertise: "",
-    place_name: "",
-    place_address: "",
-  },
-  {
-    id: 2,
-    name: "",
-    family: "",
-    email: "",
-    phone: "",
-    meli_code: "",
-    gender: "",
-    expertise: "",
-    place_name: "",
-    place_address: "",
-  },
-];
 
 import { LiaUserNurseSolid } from "react-icons/lia";
 import { HiOutlineNewspaper } from "react-icons/hi";
+import { useQuery } from "@tanstack/react-query";
+import { getDoctor } from "@/hooks/useDoctor";
+import Loader from "@/components/Loader";
+import { getDoctors } from "@/hooks/useDoctors";
+import { IDoctor } from "@/app/api/doctors/route";
 
 export default function page() {
   const [addDoctor, setAddDoctor] = useState(false);
+
+ const { data, isPending } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getDoctors
+  });
 
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {
     alert(id);
+  }
+
+  if (isPending) {
+    return <Loader />;
   }
 
   return (
@@ -118,10 +106,9 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={doctors.map((a) => [
+            data={data.map((a:IDoctor) => [
               a.id,
-              a.name,
-              a.family,
+              a.nameFamily,
               a.phone,
               a.email,
               a.meli_code,
@@ -130,8 +117,7 @@ export default function page() {
             ])}
             columns={[
               "ردیف",
-              "نام",
-              "نام خانوادگی",
+              "نام و نام خانوادگی",
               "شماره تلفن",
               "ایمیل",
               "کدملی",
