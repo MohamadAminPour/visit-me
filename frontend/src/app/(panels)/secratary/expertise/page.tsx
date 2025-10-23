@@ -7,10 +7,10 @@ import ReactDOMServer from "react-dom/server";
 import { Trash2, Plus, X } from "lucide-react";
 import { ImLab } from "react-icons/im";
 import { useQuery } from "@tanstack/react-query";
-import { getExperiencies } from "@/hooks/useExperiencies";
 import Loader from "@/components/Loader";
-import { IExperiencies } from "@/app/api/experiencies/route";
 import { queryClient } from "@/lib/queryClient";
+import { IExpertisies } from "@/app/api/expertisies/route";
+import { getuseExpertise } from "@/hooks/useExpertise";
 
 export default function page() {
   const [addExpertise, setAddExpertise] = useState(false);
@@ -20,21 +20,21 @@ export default function page() {
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   const { data, isPending } = useQuery({
-    queryKey: ["experiencies"],
-    queryFn: getExperiencies,
+    queryKey: ["expertisies"],
+    queryFn: getuseExpertise,
   });
 
   async function handleAddExpertise(e: any) {
     e.preventDefault();
 
-    await fetch(`http://localhost:3000/api/experiencies`, {
+    await fetch(`http://localhost:3000/api/expertisies`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
       body: JSON.stringify({ name: expertiseName }),
     });
-    await queryClient.invalidateQueries({ queryKey: ["experiencies"] });
+    await queryClient.invalidateQueries({ queryKey: ["expertisies"] });
     setAddExpertise(false);
   }
 
@@ -100,7 +100,7 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={data.map((a: IExperiencies) => [a.id, a.name, a.id])}
+            data={data?.map((a: IExpertisies) => [a.id, a.name, a.id])}
             columns={[
               "ردیف",
               "نام تخصص",
