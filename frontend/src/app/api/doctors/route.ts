@@ -1,4 +1,6 @@
 import { NextRequest } from "next/server";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
 
 export interface ISelectedTime {
   times: string[];
@@ -6,10 +8,9 @@ export interface ISelectedTime {
 }
 
 export interface IDoctor {
-  id: string;
+  id: number;
   nameFamily: string;
-  bith_date: string;
-  expertise: string;
+  expertise_id: number;
   experience: string;
   phone: string;
   visit_price: number;
@@ -21,12 +22,11 @@ export interface IDoctor {
   created_at: string;
 }
 
- export const doctors: IDoctor[] = [
+export const doctors: IDoctor[] = [
   {
-    id: "1",
+    id: 1,
     nameFamily: "سارا رحمانی",
-    bith_date: "1372/12/08",
-    expertise: "پوست و مو",
+    expertise_id: 1,
     experience: "10",
     phone: "09159764310",
     visit_price: 310000,
@@ -45,10 +45,9 @@ export interface IDoctor {
     created_at: "1404/07/25",
   },
   {
-    id: "2",
+    id: 2,
     nameFamily: "فرید خلج",
-    bith_date: "1355/01/14",
-    expertise: "چشم‌ پزشک",
+    expertise_id: 2,
     experience: "18",
     phone: "09159764310",
     visit_price: 150000,
@@ -67,10 +66,9 @@ export interface IDoctor {
     created_at: "1404/07/25",
   },
   {
-    id: "3",
+    id: 3,
     nameFamily: "کامران ترابی",
-    bith_date: "1360/06/16",
-    expertise: "دندان پزشک",
+    expertise_id: 3,
     experience: "12",
     phone: "09159764310",
     visit_price: 200000,
@@ -94,6 +92,66 @@ export async function GET() {
   try {
     return Response.json(doctors, { status: 200 });
   } catch (error) {
+    return Response.json({ message: "Server error" }, { status: 500 });
+  }
+}
+
+
+
+export async function POST(req: NextRequest) {
+  try {
+    const formData = await req.formData();
+
+    // 🟢 خواندن فیلدهای متنی
+    const nameFamily = formData.get("nameFamily") as string;
+    const expertise_id = Number(formData.get("expertise_id"));
+    const experience = formData.get("experience") as string;
+    const phone = formData.get("phone") as string;
+    const visit_price = Number(formData.get("visit_price"));
+    const meli_code = formData.get("meli_code") as string;
+    const email = formData.get("email") as string;
+    const about = formData.get("about") as string;
+
+    // 🟢 خواندن فایل عکس
+    const file = formData.get("image") as File;
+    let imagePath = "";
+
+    if (file) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const uploadDir = path.join(process.cwd(), "public", "uploads", "doctors");
+
+      // ساخت پوشه در صورت نیاز
+      await mkdir(uploadDir, { recursive: true });
+
+      const fileName = `${Date.now()}-${file.name}`;
+      const filePath = path.join(uploadDir, fileName);
+
+      await writeFile(filePath, buffer);
+
+      imagePath = `/uploads/doctors/${fileName}`;
+    }
+
+    const newDoctor: IDoctor = {
+      id: doctors.length+1,
+      nameFamily,
+      expertise_id,
+      experience,
+      phone,
+      visit_price,
+      meli_code,
+      email,
+      image: imagePath,
+      about,
+      schedules: [],
+      created_at: new Date().toLocaleDateString("fa-IR"),
+    };
+
+    doctors.push(newDoctor);
+
+    return Response.json({ message: "Doctor added successfully", doctor: newDoctor }, { status: 201 });
+  } catch (error) {
+    console.error(error);
     return Response.json({ message: "Server error" }, { status: 500 });
   }
 }

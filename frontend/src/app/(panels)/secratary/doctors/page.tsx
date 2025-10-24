@@ -7,32 +7,109 @@ import ReactDOMServer from "react-dom/server";
 import { Trash2, Eye, Plus, X } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
 
-
 import { LiaUserNurseSolid } from "react-icons/lia";
-import { HiOutlineNewspaper } from "react-icons/hi";
 import { useQuery } from "@tanstack/react-query";
-import { getDoctor } from "@/hooks/useDoctor";
 import Loader from "@/components/Loader";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
+import { queryClient } from "@/lib/queryClient";
+import { getuseExpertise } from "@/hooks/useExpertise";
+import { IExpertisies } from "@/app/api/expertisies/route";
+import { Toast } from "@/components/Toast";
 
 export default function page() {
   const [addDoctor, setAddDoctor] = useState(false);
-
- const { data, isPending } = useQuery({
-    queryKey: ["doctors"],
-    queryFn: getDoctors
+  const [formData, setFormData] = useState({
+    nameFamily: "",
+    expertise_id: 0,
+    experience: "",
+    phone: "",
+    visit_price: 0,
+    meli_code: "",
+    email: "",
+    image: "",
+    about: "",
   });
 
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
+  //getDoctors
+  const { data: doctorData, isPending: doctorPending } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getDoctors,
+  });
+
   function handleShowVisits(id: number) {
     alert(id);
   }
 
-  if (isPending) {
+  //getuseExpertise
+  const { data: expertiseData, isPending: ExpertisePending } = useQuery({
+    queryKey: ["expertise"],
+    queryFn: getuseExpertise,
+  });
+
+  //handleAddDoctor
+  async function handleAddDoctor(e: any) {
+    e.preventDefault();
+
+    const fd = new FormData();
+    for (const key in formData) {
+      // @ts-ignore
+      fd.append(key, formData[key]);
+    }
+
+    // اگر عکس انتخاب شده
+    const fileInput = document.querySelector(
+      'input[name="image"]'
+    ) as HTMLInputElement;
+    if (fileInput?.files?.[0]) {
+      fd.set("image", fileInput.files[0]);
+    }
+
+    await fetch(`/api/doctors`, {
+      method: "POST",
+      body: fd,
+    });
+
+    //check inputs
+    const allFilled = Object.values(formData).every((value) => value);
+
+    if (allFilled) {
+      Toast.fire({
+        icon: "success",
+        title: "دکتر با موفقیت ایجاد شد",
+      });
+      await queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      setAddDoctor(false);
+      reserFormHandle();
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا تمام فیلدها را پر کنید",
+      });
+    }
+  }
+
+  //Loader
+  if (doctorPending) {
     return <Loader />;
+  }
+
+  //reserFormHandle
+  function reserFormHandle() {
+    setFormData({
+      nameFamily: "",
+      expertise_id: 0,
+      experience: "",
+      phone: "",
+      visit_price: 0,
+      meli_code: "",
+      email: "",
+      image: "",
+      about: "",
+    });
   }
 
   return (
@@ -47,6 +124,7 @@ export default function page() {
           <button
             onClick={() => {
               setAddDoctor(!addDoctor);
+              reserFormHandle();
             }}
             className="flex items-center justify-center gap-2 text-[.8rem] bg-red-600 cursor-pointer duration-300 hover:bg-red-500 p-2 px-5 rounded-lg text-white"
           >
@@ -68,35 +146,170 @@ export default function page() {
 
       <div className="text-right">
         {addDoctor ? (
-          <form>
-            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3">
+          <form onSubmit={handleAddDoctor}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               <div className="flex items-start flex-col mt-5">
-                <label htmlFor="">نام</label>
+                <label htmlFor="">نام و نام خانوادگی</label>
                 <input
                   type="text"
+                  name="nameFamily"
+                  value={formData.nameFamily}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
                   className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
-                  placeholder="نام خود را وارد کنید..."
+                  placeholder="نام خانوادگی دکتر را وارد کنید..."
                 />
               </div>
               <div className="flex items-start flex-col mt-5">
-                <label htmlFor="">نام خانوادگی</label>
-                <input
-                  type="text"
+                <label htmlFor="">تخصص</label>
+                <select
+                  name="expertise_id"
+                  value={formData.expertise_id}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: Number(e.target.value),
+                    })
+                  }
                   className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
-                  placeholder="نام خانوادگی خود را وارد کنید..."
+                >
+                  <option value="0">انتخاب کنید</option>
+                  {expertiseData.map((exp: IExpertisies) => (
+                    <option value={exp.id} key={exp.id}>
+                      {exp.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-start flex-col mt-5">
+                <label htmlFor="">سابقه کار</label>
+                <input
+                  type="tel"
+                  name="experience"
+                  value={formData.experience}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  style={{ direction: "rtl" }}
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                  placeholder="سابقه کار دکتر را وارد کنید..."
                 />
               </div>
               <div className="flex items-start flex-col mt-5">
                 <label htmlFor="">شماره تلفن</label>
                 <input
                   type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
                   inputMode="numeric"
                   pattern="[0-9]*"
                   style={{ direction: "rtl" }}
                   className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
-                  placeholder="شماره تلفن خود را وارد کنید..."
+                  placeholder="شماره تلفن دکتر را وارد کنید..."
                 />
               </div>
+              <div className="flex items-start flex-col mt-5">
+                <label htmlFor="">قیمت ویزیت (تومان)</label>
+                <input
+                  type="tel"
+                  name="visit_price"
+                  value={formData.visit_price}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  style={{ direction: "rtl" }}
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                  placeholder="قیمت ویزیت دکتر را وارد کنید..."
+                />
+              </div>
+              <div className="flex items-start flex-col mt-5">
+                <label htmlFor="">کدملی</label>
+                <input
+                  type="tel"
+                  name="meli_code"
+                  value={formData.meli_code}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  style={{ direction: "rtl" }}
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                  placeholder="کدملی دکتر را وارد کنید..."
+                />
+              </div>
+              <div className="flex items-start flex-col mt-5">
+                <label htmlFor="">ایمیل</label>
+                <input
+                  name="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  type="text"
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                  placeholder="ایمیل دکتر را وارد کنید..."
+                />
+              </div>
+              <div className="flex items-start flex-col mt-5">
+                <label htmlFor="">عکس پروفایل</label>
+                <input
+                  name="image"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.files
+                        ? e.target.files[0]
+                        : null,
+                    })
+                  }
+                  type="file"
+                  className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+                />
+              </div>
+            </div>
+            <div className="flex items-start flex-col mt-5">
+              <label htmlFor="">توضیحات</label>
+              <textarea
+                name="about"
+                value={formData.about}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+                id=""
+                cols={30}
+                rows={5}
+                className="border-1 w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem]"
+              ></textarea>
             </div>
             <div className="flex items-center gap-1">
               <button className="flex items-center justify-center gap-2 bg-primary/80 cursor-pointer duration-300 hover:bg-primary p-2 px-5 rounded-lg text-white text-[.9rem] mt-5 ">
@@ -106,13 +319,13 @@ export default function page() {
           </form>
         ) : (
           <Grid
-            data={data.map((a:IDoctor) => [
+            data={doctorData.map((a: IDoctor) => [
               a.id,
               a.nameFamily,
               a.phone,
               a.email,
               a.meli_code,
-              a.expertise,
+              a.expertise_id,
               a.id,
             ])}
             columns={[
