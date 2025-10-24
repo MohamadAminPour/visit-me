@@ -7,29 +7,35 @@ import { useQuery } from "@tanstack/react-query";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
 import Loader from "@/components/Loader";
-
-
+import { getuseExpertise } from "@/hooks/useExpertise";
+import { IExpertisies } from "@/app/api/expertisies/route";
 
 export default function DoctorsList() {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("همه");
+  const [filter, setFilter] = useState("0");
 
-   const { data, isPending } = useQuery({
+  //getDoctors
+  const { data: doctorData, isPending: doctorPending } = useQuery({
     queryKey: ["doctors"],
-    queryFn: getDoctors
+    queryFn: getDoctors,
+  });
+  //getuseExpertise
+  const { data: expertiseData, isPending: ExpertisePending } = useQuery({
+    queryKey: ["expertise"],
+    queryFn: getuseExpertise,
   });
 
-  const filteredDoctors = data?.filter((doctor:IDoctor) => {
+  const filteredDoctors = doctorData?.filter((doctor: IDoctor) => {
     const matchesSearch = doctor.nameFamily.includes(search);
-    const matchesFilter = filter === "همه" || doctor.expertise === filter;
+    const matchesFilter =
+      filter === "0" || String(doctor.expertise_id) === filter;
     return matchesSearch && matchesFilter;
   });
 
-  const specialties = ["همه", "دندان پزشک", "چشم‌ پزشک", "پوست و مو"];
-  console.log(filter)
+  console.log(filter);
 
-  if(isPending){
-    return <Loader/>
+  if (doctorPending) {
+    return <Loader />;
   }
 
   return (
@@ -56,8 +62,11 @@ export default function DoctorsList() {
               onChange={(e) => setFilter(e.target.value)}
               className="text-[.9rem] px-3 py-2 outline-0"
             >
-              {specialties.map((sp) => (
-                <option key={sp}>{sp}</option>
+              <option value="0">تخصص دکتر را انتخاب کنید</option>
+              {expertiseData?.map((exp: IExpertisies) => (
+                <option key={exp.id} value={exp.id}>
+                  {exp.name}
+                </option>
               ))}
             </select>
           </div>
@@ -65,7 +74,7 @@ export default function DoctorsList() {
 
         {/* Doctor Cards */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {filteredDoctors?.map((doctor:IDoctor) => (
+          {filteredDoctors?.map((doctor: IDoctor) => (
             <div
               key={doctor.id}
               className="bg-white rounded-2xl shadow-xl shadow-zinc-200/30 border-1 border-zinc-200 transition p-5 flex flex-col items-center text-center"
@@ -78,16 +87,22 @@ export default function DoctorsList() {
               <h2 className="text-lg font-semibold text-slate-800">
                 {doctor.nameFamily}
               </h2>
-              <p className="text-sm text-slate-500 mt-1">{doctor.expertise}</p>
+              <p className="text-sm text-slate-500 mt-1">تخصص : {/* */}
+                {
+                  expertiseData?.find(
+                    (exp: IExpertisies) => exp.id === doctor.expertise_id
+                  )?.name
+                }
+              </p>
               <p className="text-xs text-gray-400 mt-1">
                 سابقه کاری : {doctor.experience} سال
               </p>
               <p className="text-sm font-medium text-primary mt-2">
-               هزینه ویزیت : {doctor.visit_price.toLocaleString()} تومان
+                هزینه ویزیت : {doctor.visit_price.toLocaleString()} تومان
               </p>
               <Link
                 href={`/sick/doctors/${doctor.id}`}
-                className="mt-4 bg-primary text-[.8rem] text-white px-4 py-2 rounded-lg hover:primary transition"
+                className="mt-4 w-full bg-primary/80 hover:bg-primary duration-300 text-[.8rem] text-white px-4 py-2 rounded-lg hover:primary transition"
               >
                 مشاهده جزئیات
               </Link>
