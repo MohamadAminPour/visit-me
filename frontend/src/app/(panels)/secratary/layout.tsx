@@ -2,6 +2,7 @@
 
 import SideBar, { ILinks } from "@/components/SideBar";
 import TopBar from "@/components/TopBar";
+import { Timer } from "lucide-react";
 import { useState } from "react";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { ImLab } from "react-icons/im";
@@ -21,17 +22,23 @@ export const secrataryLinks: ILinks[] = [
     link: "/secratary/doctors",
     icon: <LiaUserNurseSolid />,
   },
-   {
+  {
     id: 3,
+    title: "نوبت های دکتر",
+    link: "/secratary/doctorVisits",
+    icon: <Timer />,
+  },
+  {
+    id: 4,
     title: "تخصص ها",
     link: "/secratary/expertise",
-    icon: <ImLab/>,
+    icon: <ImLab />,
   },
-    {
-    id: 4,
+  {
+    id: 5,
     title: "تاریخچه نوبت ها",
     link: "/secratary/visitHistory",
-    icon: <TbHistory/>,
+    icon: <TbHistory />,
   },
 ];
 
