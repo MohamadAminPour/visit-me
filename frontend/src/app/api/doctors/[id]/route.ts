@@ -7,8 +7,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    const doctor = doctors.find((d: IDoctor) => d.id === id);
+    const id = params.id as string;
+    const doctor = doctors.find((d: IDoctor) => String(d.id) === id);
 
     if (!doctor) {
       return NextResponse.json({ message: "دکتر پیدا نشد" }, { status: 404 });

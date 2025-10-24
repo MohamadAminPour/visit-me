@@ -7,6 +7,8 @@ import { getDoctor } from "@/hooks/useDoctor";
 import Loader from "@/components/Loader";
 import { useParams } from "next/navigation";
 import AnimatedContainer from "@/components/AnimatedContainer";
+import { getuseExpertise } from "@/hooks/useExpertise";
+import { IExpertisies } from "@/app/api/expertisies/route";
 
 interface Schedule {
   day: string;
@@ -15,11 +17,16 @@ interface Schedule {
 
 export default function DoctorDetailsPage() {
   const id = useParams().id as string;
-  console.log(id);
 
-  const { data, isPending } = useQuery({
-    queryKey: ["doctors", id],
+  //getDoctors
+  const { data: doctorData, isPending: doctorPending } = useQuery({
+    queryKey: ["doctors"],
     queryFn: () => getDoctor(id),
+  });
+  //getuseExpertise
+  const { data: expertiseData, isPending: ExpertisePending } = useQuery({
+    queryKey: ["expertise"],
+    queryFn: getuseExpertise,
   });
 
   interface ISelectedTime {
@@ -36,7 +43,7 @@ export default function DoctorDetailsPage() {
     alert(selectedTime.day + " : " + selectedTime.time);
   }
 
-  if (isPending) {
+  if (doctorPending && ExpertisePending) {
     return <Loader />;
   }
 
@@ -45,28 +52,34 @@ export default function DoctorDetailsPage() {
       <div className="w-full">
         <div className="mx-auto min-h-screen">
           {/* Doctor Info */}
-          <div className="bg-white shadow-xl shadow-zinc-200/30 border-1 border-zinc-200  rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
+          <div className="bg-white shadow-xl shadow-zinc-200/30 border-1 border-zinc-200  rounded-2xl p-6 flex flex-col md:flex-row items-start gap-6">
             <img
-              src={data?.image}
-              alt={data?.nameFamily}
+              src={doctorData?.image}
+              alt={doctorData?.nameFamily}
               className="w-32 h-32 rounded-full object-cover border-4 border-blue-100"
             />
             <div className="flex-1 text-right">
               <h1 className="text-2xl font-bold text-slate-800">
-                {data?.nameFamily}
+                {doctorData?.nameFamily}
               </h1>
-              <p className="text-primary text-sm mt-1">{data?.expertise}</p>
-              <p className="text-gray-500 text-sm mt-1">
-                شماره نظام پزشکی: {data?.medicalCode || "767624"}
+              <p className="text-primary text-sm mt-1">
+                {doctorData?.expertise}
               </p>
               <p className="text-gray-500 text-sm mt-1">
-                سابقه: {data?.experience} سال
+                {
+                  expertiseData?.find(
+                    (exp: IExpertisies) => exp.id === doctorData?.expertise_id
+                  )?.name
+                }
               </p>
-              <p className="text-gray-700 text-sm mt-2">{data?.about}</p>
-              <div className="flex items-center gap-2 mt-3 text-sm text-gray-500">
+              <p className="text-gray-500 text-sm mt-1">
+                سابقه: {doctorData?.experience} سال
+              </p>
+              <p className="text-gray-700 text-sm mt-2">{doctorData?.about}</p>
+              {/* <div className="flex items-center gap-2 mt-3 text-sm text-gray-500">
                 <MapPin className="w-4 h-4 text-primary" />
-                {data?.address}
-              </div>
+                {doctorData?.address}
+              </div> */}
             </div>
           </div>
 
@@ -78,7 +91,7 @@ export default function DoctorDetailsPage() {
             </h2>
 
             <div className="space-y-5">
-              {data?.schedules.map((schedule: any, i: number) => (
+              {doctorData?.schedules?.map((schedule: any, i: number) => (
                 <div key={i}>
                   <p className="font-medium text-slate-700 mb-2">
                     {schedule.day}
@@ -110,7 +123,7 @@ export default function DoctorDetailsPage() {
               <p className="text-gray-700">
                 هزینه ویزیت : {/* */}
                 <span className="text-primary font-semibold">
-                  {data?.visit_price.toLocaleString()} تومان
+                  {doctorData?.visit_price.toLocaleString()} تومان
                 </span>
               </p>
               <div className="flex items-center gap-1">
