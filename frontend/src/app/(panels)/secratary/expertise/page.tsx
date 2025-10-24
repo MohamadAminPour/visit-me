@@ -11,6 +11,7 @@ import Loader from "@/components/Loader";
 import { queryClient } from "@/lib/queryClient";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { getuseExpertise } from "@/hooks/useExpertise";
+import { Toast } from "@/components/Toast";
 
 export default function page() {
   const [addExpertise, setAddExpertise] = useState(false);
@@ -27,6 +28,21 @@ export default function page() {
   async function handleAddExpertise(e: any) {
     e.preventDefault();
 
+    if (expertiseName) {
+      Toast.fire({
+        icon: "success",
+        title: "تخصص با موفقیت ایجاد شد",
+      });
+      await queryClient.invalidateQueries({ queryKey: ["expertisies"] });
+      setAddExpertise(false);
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا تمام فیلدها را پر کنید",
+      });
+      return
+    }
+
     await fetch(`http://localhost:3000/api/expertisies`, {
       method: "POST",
       headers: {
@@ -34,8 +50,6 @@ export default function page() {
       },
       body: JSON.stringify({ name: expertiseName }),
     });
-    await queryClient.invalidateQueries({ queryKey: ["expertisies"] });
-    setAddExpertise(false);
   }
 
   function handleShowVisits(id: number) {
