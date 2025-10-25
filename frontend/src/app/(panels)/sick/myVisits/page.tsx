@@ -23,7 +23,6 @@ export default function page() {
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   const [token, setToken] = useState<string | null>(null);
-  const [counter, setCounter] = useState<string>();
 
   useEffect(() => {
     const t = localStorage.getItem("tokan");
@@ -35,7 +34,6 @@ export default function page() {
     queryKey: ["doctors"],
     queryFn: getDoctors,
   });
-  
 
   //getMyProfile
   const { data: profileData, isPending: profileDataIsPending } = useQuery({
@@ -52,10 +50,6 @@ export default function page() {
     enabled: !!token,
   });
   console.log("sickVisitsData : ", sickVisitsData);
-
-  function handleShowVisits(id: number) {
-    alert(id);
-  }
 
   if (profileDataIsPending || sickVisitsIsPending || doctorIsPending) {
     return <Loader />;
@@ -88,8 +82,9 @@ export default function page() {
                 s.time,
                 s.status,
                 s.status_text,
-                s.created_at,
-                s.id,
+                new Intl.DateTimeFormat("fa-IR").format(
+                    new Date(s.created_at)
+                  ),
               ])}
               columns={[
                 {
@@ -135,37 +130,8 @@ export default function page() {
                     return h("span", { className: bg }, text);
                   },
                 },
-
                 "علت وضعیت",
                 "تاریخ ویزیت",
-                {
-                  name: "عملیات",
-                  formatter: (_, row) => {
-                    const id = row.cells[6].data as number;
-                    const status = row.cells[3].data as number;
-                    if (status === 1) {
-                      return h("div", { className: "flex gap-2" }, [
-                        h(
-                          "button",
-                          {
-                            className:
-                              "p-2 flex items-center gap-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                            title: "لغو نوبت",
-                            // onClick: () => handleCancelVisit(id),
-                          },
-                          [
-                            h("span", { innerText: "لغو" }),
-                            h("span", {
-                              dangerouslySetInnerHTML: {
-                                __html: renderIcon(Trash2),
-                              },
-                            }),
-                          ]
-                        ),
-                      ]);
-                    }
-                  },
-                },
               ]}
               search={true}
               pagination={{ limit: 5 }}

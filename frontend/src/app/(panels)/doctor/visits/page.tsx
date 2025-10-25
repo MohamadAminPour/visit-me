@@ -62,7 +62,7 @@ export default function page() {
             a.doctor,
             a.phone,
             a.meli_code,
-            a.create_at,
+             new Intl.DateTimeFormat("fa-IR").format(new Date(a.create_at)),
             a.id,
           ])}
           columns={[

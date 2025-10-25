@@ -5,17 +5,19 @@ import { Calendar, Clock } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getDoctor } from "@/hooks/useDoctor";
 import Loader from "@/components/Loader";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { getuseExpertise } from "@/hooks/useExpertise";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { Toast } from "@/components/Toast";
 import { getMyProfile } from "@/hooks/useMyProfile";
+import { queryClient } from "@/lib/queryClient";
 
 export default function DoctorDetailsPage() {
   const id = useParams().id as string;
   const API = process.env.NEXT_PUBLIC_API_URL;
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const t = localStorage.getItem("tokan");
@@ -28,7 +30,6 @@ export default function DoctorDetailsPage() {
     queryFn: () => getDoctor(id),
     enabled: !!id, // فقط وقتی id وجود دارد
   });
-
 
   //getMyProfile
   const { data: profileData, isPending: profileDataIsPending } = useQuery({
@@ -53,7 +54,7 @@ export default function DoctorDetailsPage() {
     day: "",
   });
 
-  console.log(profileData)
+  console.log(profileData);
 
   async function handleChangeTime(e: any) {
     e.preventDefault();
@@ -61,9 +62,11 @@ export default function DoctorDetailsPage() {
     if (selectedTime.day && selectedTime.time) {
       Toast.fire({
         icon: "success",
-        title: "نوبت با موفقیت ثبت شد، لطفا سر موقع تشریف بیاورید و حتما همراه خود کارت ملی یا شناسنامه و کارت بانکی بیاورید .",
+        timer:7000,
+        title:
+          "نوبت با موفقیت ثبت شد، لطفا سر موقع تشریف بیاورید و حتما همراه خود کارت ملی یا شناسنامه و کارت بانکی بیاورید .",
       });
-      const res= await fetch(`${API}/visits`, {
+      await fetch(`${API}/visits`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
@@ -74,14 +77,15 @@ export default function DoctorDetailsPage() {
           week: selectedTime.day,
           time: selectedTime.time,
         }),
-      })
-      console.log("res : ",res)
-      const data = await res.json()
-      console.log(data)
+      });
+      await queryClient.invalidateQueries({ queryKey: ["sickVisits"] });
+     setTimeout(() => {
+       router.push("/sick/myVisits");
+     }, 2000);
     } else {
       Toast.fire({
         icon: "error",
-        title: "لطفا تمام فیلدها را پر کنید",
+        title: "لطفا یک نوبت را انتخاب کنید",
       });
       return;
     }

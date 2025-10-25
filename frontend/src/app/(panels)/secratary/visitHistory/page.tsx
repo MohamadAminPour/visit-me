@@ -58,16 +58,14 @@ export default function page() {
       <div className="text-right">
         <Grid
           data={visitHistory.map((a) => [
-            a.id,
             a.nameFamily,
             a.visit_number,
             a.doctor,
             a.status,
-            a.create_at,
+            new Intl.DateTimeFormat("fa-IR").format(new Date(a.create_at)),
             a.id,
           ])}
           columns={[
-            "ردیف",
             "نام و نام خانوادگی",
             "شماره نوبت",
             "نام دکتر",
@@ -76,7 +74,7 @@ export default function page() {
             {
               name: "عملیات",
               formatter: (_, row) => {
-                const id = row.cells[0].data as number; // ستون id برای عملیات
+                const id = row.cells[5].data as number; // ستون id برای عملیات
                 return h("div", { className: "flex gap-2" }, [
                   h(
                     "button",

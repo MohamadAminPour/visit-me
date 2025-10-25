@@ -22,7 +22,7 @@ const weeksName = [
   "شنبه",
   "یکشنبه",
   "دوشنبه",
-  "سهشنبه",
+  "سه شنبه",
   "چهارشنبه",
   "پنجشنبه",
   "جمعه",
@@ -146,36 +146,29 @@ export default function page() {
         {showVisits ? (
           <Grid
             data={(doctorVisitsData ?? [])?.map((a: IDoctorVisits) => [
-              a.id,
               a.doctor_id,
               a.week,
               a.time,
               a.id,
             ])}
             columns={[
-              "ردیف",
               {
                 name: "نام دکتر",
                 formatter: (_, row) => {
-                  const doctor_id = Number(row.cells[1].data);
+                  const doctor_id = Number(row.cells[0].data);
                   const doctor = doctorData?.find(
                     (d: IDoctor) => d.id === doctor_id
                   );
 
-                  return h(
-                    "span",
-                    {},
-                    doctor && doctor.nameFamily 
-                  );
+                  return h("span", {}, doctor && doctor.nameFamily);
                 },
               },
-
               "روز هفته",
               "ساعت",
               {
                 name: "عملیات",
                 formatter: (_, row) => {
-                  const id = row.cells[0].data as number; // ستون id برای عملیات
+                  const id = row.cells[3].data as number; // ستون id برای عملیات
                   return h("div", { className: "flex gap-2" }, [
                     h(
                       "button",
@@ -285,34 +278,18 @@ export default function page() {
             ) : doctorData?.length ? (
               <Grid
                 data={doctorData?.map((a: IDoctor) => [
-                  a.id,
                   a.nameFamily,
                   a.phone,
                   a.id,
                 ])}
                 columns={[
-                  "ردیف",
                   "نام دکتر",
                   "شماره تلفن",
                   {
                     name: "عملیات",
                     formatter: (_, row) => {
-                      const id = row.cells[0].data as number; // ستون id برای عملیات
+                      const id = row.cells[2].data as number; // ستون id برای عملیات
                       return h("div", { className: "flex gap-2" }, [
-                        h(
-                          "button",
-                          {
-                            className:
-                              "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                            //  onClick: () => handleDeleteArticle(id),
-                            title: "حذف",
-                          },
-                          h("span", {
-                            dangerouslySetInnerHTML: {
-                              __html: renderIcon(Trash2),
-                            },
-                          })
-                        ),
                         h(
                           "button",
                           {

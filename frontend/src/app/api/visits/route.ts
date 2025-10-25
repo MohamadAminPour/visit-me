@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
       week,
       time,
       status: 1,
-      status_text:"",
+      status_text:"هنوز نیامده",
       created_at: date,
     });
 

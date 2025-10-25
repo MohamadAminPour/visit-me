@@ -320,7 +320,6 @@ export default function page() {
         ) : (
           <Grid
             data={doctorData.map((a: IDoctor) => [
-              a.id,
               a.nameFamily,
               a.phone,
               a.email,
@@ -329,16 +328,24 @@ export default function page() {
               a.id,
             ])}
             columns={[
-              "ردیف",
               "نام و نام خانوادگی",
               "شماره تلفن",
               "ایمیل",
               "کدملی",
-              "تخصص",
+              {
+                name: "تخصص",
+                formatter: (_, row) => {
+                  const expertisy_id = Number(row.cells[4].data);
+                  const expertisyName =
+                    expertiseData?.find((e: IExpertisies) => e.id === expertisy_id)
+                      ?.name ?? "ناشناس";
+                  return h("span", {}, expertisyName); // مقدار رشته‌ای
+                },
+              },
               {
                 name: "عملیات",
                 formatter: (_, row) => {
-                  const id = row.cells[0].data as number; // ستون id برای عملیات
+                  const id = row.cells[5].data as number; // ستون id برای عملیات
                   return h("div", { className: "flex gap-2" }, [
                     h(
                       "button",

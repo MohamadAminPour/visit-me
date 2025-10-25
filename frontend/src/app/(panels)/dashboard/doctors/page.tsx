@@ -42,9 +42,8 @@ export default function page() {
             a.id,
             a.nameFamily,
             a.phone,
-            a.expertise,
+            a.expertise_id,
             a.experience,
-            a.bith_date,
             a.image,
             a.id,
           ])}
@@ -54,7 +53,6 @@ export default function page() {
             "شماره تلفن",
             "تخصص",
             "سابقه کار",
-            "تاریخ تولد",
             "عکس",
             {
               name: "عملیات",

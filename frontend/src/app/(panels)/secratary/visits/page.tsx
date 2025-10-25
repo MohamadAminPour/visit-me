@@ -77,7 +77,7 @@ export default function page() {
               a.doctor_id,
               a.week,
               a.time,
-              a.created_at,
+              new Intl.DateTimeFormat("fa-IR").format(new Date(a.created_at)),
               a.id,
             ])}
             columns={[
