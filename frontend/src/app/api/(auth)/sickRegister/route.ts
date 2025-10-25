@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
 import { NextRequest } from "next/server";
 interface ISick {
-  id: string;
+  id: number;
   phone: string;
   role: string;
 }
 
 const sicks: ISick[] = [
-  { id: "1", phone: "09153333333", role: "sick" },
-  { id: "2", phone: "09154444444", role: "sick" },
+  { id: 1, phone: "09153333333", role: "sick" },
+  { id: 2, phone: "09154444444", role: "sick" },
 ];
 
 export async function POST(req: NextRequest) {
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     } else {
-      sicks.push({ id: crypto.randomUUID(), phone, role: "sick" });
+      sicks.push({ id: sicks.length+1, phone, role: "sick" });
       return Response.json(
         { message: "Sick is registred", mainSick, token },
         { status: 201 }

@@ -2,14 +2,14 @@ import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
 interface ISick {
-  id: string;
+  id: number;
   phone: string;
   role: string;
 }
 
 const sicks: ISick[] = [
-  { id: "1", phone: "09153333333", role: "sick" },
-  { id: "2", phone: "09154444444", role: "sick" },
+  { id: 1, phone: "09153333333", role: "sick" },
+  { id: 2, phone: "09154444444", role: "sick" },
 ];
 
 export async function POST(req: NextRequest) {
