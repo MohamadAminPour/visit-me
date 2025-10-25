@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin, Calendar, Clock } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getDoctor } from "@/hooks/useDoctor";
 import Loader from "@/components/Loader";
@@ -9,21 +9,33 @@ import { useParams } from "next/navigation";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { getuseExpertise } from "@/hooks/useExpertise";
 import { IExpertisies } from "@/app/api/expertisies/route";
-
-interface Schedule {
-  day: string;
-  times: string[];
-}
+import { Toast } from "@/components/Toast";
+import { getMyProfile } from "@/hooks/useMyProfile";
 
 export default function DoctorDetailsPage() {
   const id = useParams().id as string;
+  const API = process.env.NEXT_PUBLIC_API_URL;
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = localStorage.getItem("tokan");
+    setToken(t);
+  }, []);
 
   //getDoctors
- const { data: doctorData, isPending: doctorPending } = useQuery({
-  queryKey: ["doctor", id],
-  queryFn: () => getDoctor(id),
-  enabled: !!id, // فقط وقتی id وجود دارد
-});
+  const { data: doctorData, isPending: doctorPending } = useQuery({
+    queryKey: ["doctor", id],
+    queryFn: () => getDoctor(id),
+    enabled: !!id, // فقط وقتی id وجود دارد
+  });
+
+
+  //getMyProfile
+  const { data: profileData, isPending: profileDataIsPending } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () => getMyProfile(token as string),
+    enabled: !!token,
+  });
 
   //getuseExpertise
   const { data: expertiseData, isPending: ExpertisePending } = useQuery({
@@ -41,8 +53,38 @@ export default function DoctorDetailsPage() {
     day: "",
   });
 
-  function handleChangeTime() {
-    alert(selectedTime.day + " : " + selectedTime.time);
+  console.log(profileData)
+
+  async function handleChangeTime(e: any) {
+    e.preventDefault();
+
+    if (selectedTime.day && selectedTime.time) {
+      Toast.fire({
+        icon: "success",
+        title: "نوبت با موفقیت ثبت شد، لطفا سر موقع تشریف بیاورید و حتما همراه خود کارت ملی یا شناسنامه و کارت بانکی بیاورید .",
+      });
+      const res= await fetch(`${API}/visits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/json",
+        },
+        body: JSON.stringify({
+          user_id: Number(profileData?.user?.id),
+          doctor_id: Number(id),
+          week: selectedTime.day,
+          time: selectedTime.time,
+        }),
+      })
+      console.log("res : ",res)
+      const data = await res.json()
+      console.log(data)
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا تمام فیلدها را پر کنید",
+      });
+      return;
+    }
   }
 
   if (doctorPending) {
@@ -125,7 +167,7 @@ export default function DoctorDetailsPage() {
               <p className="text-gray-700">
                 هزینه ویزیت : {/* */}
                 <span className="text-primary font-semibold">
-                 {(doctorData?.visit_price ?? 0).toLocaleString()} تومان
+                  {(doctorData?.visit_price ?? 0).toLocaleString()} تومان
                 </span>
               </p>
               <div className="flex items-center gap-1">

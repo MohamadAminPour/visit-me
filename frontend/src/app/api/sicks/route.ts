@@ -29,6 +29,15 @@ const sicks: ISick[] = [
     birth_date:"1384/12/01",
     created_at: "1404/07/25",
   },
+   {
+    id: 3,
+    nameFamily: "رها حسین پور",
+    phone: "09027653801",
+    meli_code: "09865443630",
+    insurance: "آزاد",
+    birth_date:"1384/12/01",
+    created_at: "1404/07/25",
+  },
 ];
 
 export async function GET() {
