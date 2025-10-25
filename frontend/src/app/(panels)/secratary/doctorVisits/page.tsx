@@ -20,11 +20,11 @@ import { getDoctorVisits } from "@/hooks/useDoctorVisit";
 
 const weeksName = [
   "شنبه",
-  "یک شنبه",
-  "دو شنبه",
-  "سه شنبه",
-  "چهار شنبه",
-  "پنج شنبه",
+  "یکشنبه",
+  "دوشنبه",
+  "سهشنبه",
+  "چهارشنبه",
+  "پنجشنبه",
   "جمعه",
 ];
 
@@ -32,7 +32,6 @@ export default function page() {
   const [addExpertise, setAddExpertise] = useState(false);
   const [showVisits, setShowVisits] = useState(0);
   const [formData, setFormData] = useState({
-    user_id: 1,
     doctor_id: 0,
     week: "",
     time: "",
