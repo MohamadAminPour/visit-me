@@ -19,10 +19,12 @@ export default function DoctorDetailsPage() {
   const id = useParams().id as string;
 
   //getDoctors
-  const { data: doctorData, isPending: doctorPending } = useQuery({
-    queryKey: ["doctors"],
-    queryFn: () => getDoctor(id),
-  });
+ const { data: doctorData, isPending: doctorPending } = useQuery({
+  queryKey: ["doctor", id],
+  queryFn: () => getDoctor(id),
+  enabled: !!id, // فقط وقتی id وجود دارد
+});
+
   //getuseExpertise
   const { data: expertiseData, isPending: ExpertisePending } = useQuery({
     queryKey: ["expertise"],
@@ -43,7 +45,7 @@ export default function DoctorDetailsPage() {
     alert(selectedTime.day + " : " + selectedTime.time);
   }
 
-  if (doctorPending && ExpertisePending) {
+  if (doctorPending) {
     return <Loader />;
   }
 
@@ -123,7 +125,7 @@ export default function DoctorDetailsPage() {
               <p className="text-gray-700">
                 هزینه ویزیت : {/* */}
                 <span className="text-primary font-semibold">
-                  {doctorData?.visit_price.toLocaleString()} تومان
+                 {(doctorData?.visit_price ?? 0).toLocaleString()} تومان
                 </span>
               </p>
               <div className="flex items-center gap-1">
