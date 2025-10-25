@@ -76,9 +76,6 @@ body {
 .dark .gridjs-table {
   background-color: #374151; /* Dark mode خاکستری تیره */
 }
-.gridjs-th:nth-child(1){
-  max-width: 1rem;
-}
 .dark .gridjs-th {
   background-color: #1f2937; /* Dark mode هدر */
   color: #f9fafb;
