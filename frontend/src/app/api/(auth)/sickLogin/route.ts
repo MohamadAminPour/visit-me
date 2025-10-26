@@ -1,48 +1,30 @@
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-
-interface ISick {
-  id: number;
-  phone: string;
-  role: string;
-}
-
-const sicks: ISick[] = [
-  { id: 1, phone: "09153333333", role: "sick" },
-  { id: 2, phone: "09154444444", role: "sick" },
-];
+import { ISick, sicks } from "../sickRegister/route";
 
 export async function POST(req: NextRequest) {
   try {
     const { phone }: { phone: string } = await req.json();
+    const jwtKey = process.env.SECRET_JWT_TOKEN as string;
 
-    const jswKey = process.env.SECRET_JWT_TOKEN as string;
+    if (!phone || phone.length !== 11) {
+      return Response.json({ message: "شماره موبایل معتبر نیست" }, { status: 409 });
+    }
 
-    const mainSick = sicks.find((sick) => sick.phone === phone);
+    const mainSick = sicks.find((s: ISick) => s.phone === phone);
+
+    if (!mainSick) {
+      return Response.json({ message: "کاربر یافت نشد" }, { status: 404 });
+    }
+
     const token = jwt.sign(
-      { id: mainSick?.id, phone: mainSick?.phone, role: mainSick?.role },
-      jswKey,
-      {
-        expiresIn: "1d",
-      }
+      { id: mainSick.id, phone: mainSick.phone, role: mainSick.role },
+      jwtKey,
+      { expiresIn: "1d" }
     );
 
-    if (!phone || phone.length < 11 || phone.length > 11) {
-      return Response.json(
-        { message: "Please enter any phone" },
-        { status: 409 }
-      );
-    }
-    if (mainSick) {
-      return Response.json(
-        { message: "Your info", mainSick, token: token },
-        { status: 200 }
-      );
-    }
-    if (!mainSick) {
-      return Response.json({ message: "Sick not found !" }, { status: 404 });
-    }
+    return Response.json({ message: "ورود موفق", user: mainSick, token }, { status: 200 });
   } catch (error) {
-    return Response.json({ message: "Server error" }, { status: 500 });
+    return Response.json({ message: "خطای سرور" }, { status: 500 });
   }
 }

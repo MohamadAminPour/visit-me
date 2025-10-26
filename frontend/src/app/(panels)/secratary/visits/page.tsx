@@ -49,6 +49,8 @@ export default function page() {
   function handleShowVisits(id: number) {
     alert(id);
   }
+  
+  console.log(visitsData)
 
   if (visitsIsPending || doctorsIsPending || sicksIsPending) {
     return <Loader />;

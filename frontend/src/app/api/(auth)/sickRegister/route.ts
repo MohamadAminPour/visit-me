@@ -1,49 +1,68 @@
-import jwt from "jsonwebtoken";
 import { NextRequest } from "next/server";
-interface ISick {
+import jwt from "jsonwebtoken";
+
+export interface ISick {
   id: number;
+  nameFamily: string | null;
   phone: string;
   role: string;
+  meli_code: string | null;
+  complete_profile: boolean;
+  created_at: Date;
 }
 
-const sicks: ISick[] = [
-  { id: 1, phone: "09153333333", role: "sick" },
-  { id: 2, phone: "09154444444", role: "sick" },
+export const sicks: ISick[] = [
+  {
+    id: 1,
+    nameFamily: null,
+    phone: "09153333333",
+    meli_code: null,
+    role: "sick",
+    complete_profile: false,
+    created_at: new Date(),
+  },
+  {
+    id: 2,
+    nameFamily: null,
+    phone: "09154444444",
+    meli_code: null,
+    role: "sick",
+    complete_profile: false,
+    created_at: new Date(),
+  },
 ];
 
 export async function POST(req: NextRequest) {
   try {
-    const jswKey = process.env.SECRET_JWT_TOKEN as string;
-
     const { phone }: { phone: string } = await req.json();
-    const mainSick = sicks.find((sick) => sick.phone === phone);
+    const jwtKey = process.env.SECRET_JWT_TOKEN as string;
 
-    const token = jwt.sign(
-      { id: mainSick?.id, phone: mainSick?.phone },
-      jswKey,
-      {
-        expiresIn: "1d",
-      }
-    );
-
-    if (!phone || phone.length < 11 || phone.length > 11) {
-      return Response.json(
-        { message: "Please enter any phone" },
-        { status: 404 }
-      );
-    } else if (mainSick) {
-      return Response.json(
-        { message: "Sick with this phone has already exists" },
-        { status: 409 }
-      );
-    } else {
-      sicks.push({ id: sicks.length+1, phone, role: "sick" });
-      return Response.json(
-        { message: "Sick is registred", mainSick, token },
-        { status: 201 }
-      );
+    if (!phone || phone.length !== 11) {
+      return Response.json({ message: "شماره موبایل معتبر نیست" }, { status: 400 });
     }
+
+    const mainSick = sicks.find((s) => s.phone === phone);
+
+    if (mainSick) {
+      return Response.json({ message: "این شماره قبلاً ثبت شده است" }, { status: 409 });
+    }
+
+    const newSick: ISick = {
+      id: sicks.length + 1,
+      nameFamily: null,
+      phone,
+      meli_code: null,
+      role: "sick",
+      complete_profile: false,
+      created_at: new Date(),
+    };
+
+    sicks.push(newSick);
+
+    const token = jwt.sign({ id: newSick.id, phone }, jwtKey, { expiresIn: "1d" });
+
+    return Response.json({ message: "ثبت‌نام با موفقیت انجام شد", sick: newSick, token }, { status: 201 });
   } catch (error) {
-    return Response.json({ message: "Server error" }, { status: 500 });
+    return Response.json({ message: "خطای سرور" }, { status: 500 });
   }
 }
