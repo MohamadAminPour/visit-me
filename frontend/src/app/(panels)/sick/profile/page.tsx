@@ -43,7 +43,10 @@ export default function Page() {
     e.preventDefault();
 
     if (!formData.nameFamily || !formData.meli_code) {
-      alert("لطفا نام و کد ملی را وارد کنید");
+     Toast.fire({
+        icon: "error",
+        title: "لطفا نام و کد ملی را وارد کنید",
+      });
       return;
     }
 
@@ -78,7 +81,10 @@ export default function Page() {
         },
       }));
     } else {
-      alert(result.message || "خطا در تکمیل پروفایل");
+        Toast.fire({
+        icon: "error",
+        title: "لطفا نام و کد ملی را وارد کنید",
+      });
     }
   }
 
@@ -102,8 +108,8 @@ export default function Page() {
                 onChange={(e) =>
                   setFormData({ ...formData, nameFamily: e.target.value })
                 }
-                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm"
-                placeholder="نام و نام خانوادگی..."
+                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.9rem] "
+                placeholder="نام و نام خانوادگی خود را وارد کنید..."
               />
             </div>
 
@@ -125,8 +131,9 @@ export default function Page() {
                 onChange={(e) =>
                   setFormData({ ...formData, meli_code: e.target.value })
                 }
-                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm"
-                placeholder="کد ملی..."
+                style={{direction:"rtl"}}
+                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.9rem] "
+                placeholder="کد ملی خود را وارد کنید..." 
               />
             </div>
           </div>
@@ -135,14 +142,14 @@ export default function Page() {
             {data?.user?.complete_profile ? (
               <button
                 type="submit"
-                className="bg-yellow-500 hover:bg-yellow-600 p-2 px-5 rounded-lg text-white text-[.9rem] mt-5"
+                className="bg-yellow-500/80 cursor-pointer hover:bg-yellow-500 p-2 duration-300 px-5 rounded-lg text-white text-[.9rem] mt-5"
               >
                 ویرایش
               </button>
             ) : (
               <button
                 type="submit"
-                className="bg-primary hover:bg-primary/90 p-2 px-5 rounded-lg text-white text-[.9rem] mt-5"
+                className="hover:bg-primary cursor-pointer duration-300 bg-primary/80 p-2 px-5 rounded-lg text-white text-[.9rem] mt-5"
               >
                 تکمیل پروفایل
               </button>
