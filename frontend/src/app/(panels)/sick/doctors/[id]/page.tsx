@@ -12,6 +12,7 @@ import { IExpertisies } from "@/app/api/expertisies/route";
 import { Toast } from "@/components/Toast";
 import { getMyProfile } from "@/hooks/useMyProfile";
 import { queryClient } from "@/lib/queryClient";
+import Swal from "sweetalert2";
 
 export default function DoctorDetailsPage() {
   const id = useParams().id as string;
@@ -59,36 +60,76 @@ export default function DoctorDetailsPage() {
   async function handleChangeTime(e: any) {
     e.preventDefault();
 
-    if (selectedTime.day && selectedTime.time) {
-      Toast.fire({
-        icon: "success",
-        timer:7000,
-        title:
-          "نوبت با موفقیت ثبت شد، لطفا سر موقع تشریف بیاورید و حتما همراه خود کارت ملی یا شناسنامه و کارت بانکی بیاورید .",
-      });
-      await fetch(`${API}/visits`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/json",
-        },
-        body: JSON.stringify({
-          user_id: Number(profileData?.user?.id),
-          doctor_id: Number(id),
-          week: selectedTime.day,
-          time: selectedTime.time,
-        }),
-      });
-      await queryClient.invalidateQueries({ queryKey: ["sickVisits"] });
-     setTimeout(() => {
-       router.push("/sick/myVisits");
-     }, 2000);
-    } else {
+    if (!selectedTime.day || !selectedTime.time) {
       Toast.fire({
         icon: "error",
         title: "لطفا یک نوبت را انتخاب کنید",
       });
       return;
     }
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "bg-primary px-4 py-2 cursor-pointer rounded-sm text-white text-[.9rem] mx-1 ",
+        cancelButton: "bg-red-500 px-4 py-2 cursor-pointer rounded-sm text-white text-[.9rem] mx-1 ",
+      },
+      buttonsStyling: false,
+    });
+
+    const result = await swalWithBootstrapButtons.fire({
+      title: `نوبت دکتر ${doctorData.nameFamily}`,
+      text: "از نوبت انتخاب شده مطمئن هستید؟ بعد از انتخاب امکان لغو آن نیست!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله، ثبت کن",
+      cancelButtonText: "خیر، لغو کن",
+    });
+
+    if (result.dismiss === Swal.DismissReason.cancel) {
+      await swalWithBootstrapButtons.fire({
+        title: "نوبت لغو شد",
+        text: "نوبت انتخاب شده با موفقیت لغو شد، شما میتوانید یک نوبت دیگری انتخاب کنید !",
+        icon: "error",
+        confirmButtonText: "باشه",
+      });
+      setSelectedTime({ time: "", day: "" })
+      return; // 🔥 این return جلوی ادامه اجرا را می‌گیرد
+    }
+
+    // ✅ اگر تأیید کرد
+    const response = await fetch(`${API}/visits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({
+        user_id: Number(profileData?.user?.id),
+        doctor_id: Number(id),
+        week: selectedTime.day,
+        time: selectedTime.time,
+      }),
+    });
+
+    if (!response.ok) {
+      Toast.fire({
+        icon: "error",
+        title: "خطا در ثبت نوبت",
+      });
+      return;
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ["sickVisits"] });
+
+    swalWithBootstrapButtons.fire({
+      title: "ثبت شد",
+      text: "نوبت شما با موفقیت ثبت شد، لطفا سر موقع تشریف بیاورید و حتما همراه خود کارت ملی یا شناسنامه و کارت بانکی بیاورید !",
+      icon: "success",
+      confirmButtonText: "باشه",
+    });
+
+    setTimeout(() => {
+      router.push("/sick/myVisits");
+    }, 1500);
   }
 
   if (doctorPending) {
