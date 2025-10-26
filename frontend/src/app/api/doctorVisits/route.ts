@@ -8,7 +8,7 @@ export interface IDoctorVisits {
   created_at: string | Date;
 }
 
-export const doctorVisits: IDoctorVisits[] = [
+export let doctorVisits: IDoctorVisits[] = [
   {
     id: 1,
     doctor_id: 1,
@@ -73,6 +73,19 @@ export async function POST(req: NextRequest) {
       time,
       created_at: date,
     });
+
+    return Response.json(doctorVisits, { status: 200 });
+  } catch (error) {
+    return Response.json({ message: "Server error" }, { status: 500 });
+  }
+}
+
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+
+    doctorVisits = doctorVisits.filter((exp: IDoctorVisits) => exp.id !== id);
 
     return Response.json(doctorVisits, { status: 200 });
   } catch (error) {

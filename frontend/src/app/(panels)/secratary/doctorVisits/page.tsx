@@ -81,17 +81,27 @@ export default function page() {
     {
       queryKey: ["doctorVisits", showVisits],
       queryFn: () => getDoctorVisits(showVisits),
-      enabled: !!showVisits, // فقط وقتی showVisits مقدار دارد، fetch کن
+      enabled: !!showVisits, 
     }
   );
 
-  useEffect(() => {
-    console.log("📊 doctorVisitsData updated:", doctorVisitsData);
-  }, [doctorVisitsData]);
+  //handleDeleteDoctorVisits
+  async function handleDeleteDoctorVisits(id: number) {
+    await fetch(`http://localhost:3000/api/doctorVisits`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
 
-  function handleShowVisits(id: number) {
-    alert(id);
+    Toast.fire({
+      icon: "success",
+      title: "نوبت با موفقیت حذف شد",
+    });
+    await queryClient.invalidateQueries({ queryKey: ["doctorVisits"] });
   }
+
 
   if (doctorIsPending) {
     return <Loader />;
@@ -175,7 +185,7 @@ export default function page() {
                       {
                         className:
                           "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                        //  onClick: () => handleDeleteArticle(id),
+                         onClick: () => handleDeleteDoctorVisits(id),
                         title: "حذف",
                       },
                       h("span", {
