@@ -13,6 +13,18 @@ import { Toast } from "@/components/Toast";
 import { getMyProfile } from "@/hooks/useMyProfile";
 import { queryClient } from "@/lib/queryClient";
 import Swal from "sweetalert2";
+import { getDoctorVisits } from "@/hooks/useDoctorVisit";
+import { IDoctorVisits } from "@/app/api/doctorVisits/route";
+
+const weeksName = [
+  "شنبه",
+  "یکشنبه",
+  "دوشنبه",
+  "سه شنبه",
+  "چهارشنبه",
+  "پنجشنبه",
+  "جمعه",
+];
 
 export default function DoctorDetailsPage() {
   const id = useParams().id as string;
@@ -40,10 +52,18 @@ export default function DoctorDetailsPage() {
   });
 
   //getuseExpertise
-  const { data: expertiseData, isPending: ExpertisePending } = useQuery({
+  const { data: expertiseData, isPending: expertisePending } = useQuery({
     queryKey: ["expertise"],
     queryFn: getuseExpertise,
   });
+
+  const { data: doctorVisitsData, isPending: doctorVisitsPending } = useQuery({
+    queryKey: ["doctorVisits", id], // حتما id در key باشد
+    queryFn: () => getDoctorVisits(Number(id)),
+    enabled: !!id, // فقط وقتی id وجود دارد اجرا شود
+  });
+
+  console.log(doctorVisitsData);
 
   interface ISelectedTime {
     time: string;
@@ -54,8 +74,6 @@ export default function DoctorDetailsPage() {
     time: "",
     day: "",
   });
-
-  console.log(profileData);
 
   async function handleChangeTime(e: any) {
     e.preventDefault();
@@ -70,8 +88,10 @@ export default function DoctorDetailsPage() {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: "bg-primary px-4 py-2 cursor-pointer rounded-sm text-white text-[.9rem] mx-1 ",
-        cancelButton: "bg-red-500 px-4 py-2 cursor-pointer rounded-sm text-white text-[.9rem] mx-1 ",
+        confirmButton:
+          "bg-primary px-4 py-2 cursor-pointer rounded-sm text-white text-[.9rem] mx-1 ",
+        cancelButton:
+          "bg-red-500 px-4 py-2 cursor-pointer rounded-sm text-white text-[.9rem] mx-1 ",
       },
       buttonsStyling: false,
     });
@@ -92,16 +112,14 @@ export default function DoctorDetailsPage() {
         icon: "error",
         confirmButtonText: "باشه",
       });
-      setSelectedTime({ time: "", day: "" })
+      setSelectedTime({ time: "", day: "" });
       return; // 🔥 این return جلوی ادامه اجرا را می‌گیرد
     }
 
     // ✅ اگر تأیید کرد
     const response = await fetch(`${API}/visits`, {
       method: "POST",
-      headers: {
-        "Content-Type": "Application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         user_id: Number(profileData?.user?.id),
         doctor_id: Number(id),
@@ -109,6 +127,9 @@ export default function DoctorDetailsPage() {
         time: selectedTime.time,
       }),
     });
+
+    // invalidate query بعد از ثبت
+    await queryClient.invalidateQueries({ queryKey: ["doctorVisits"] });
 
     if (!response.ok) {
       Toast.fire({
@@ -132,7 +153,21 @@ export default function DoctorDetailsPage() {
     }, 1500);
   }
 
-  if (doctorPending) {
+  const doctorVisits = doctorVisitsData?.filter(
+    (v: IDoctorVisits) => v.doctor_id === Number(id)
+  );
+
+  // استخراج هفته‌های منحصر به‌فرد
+  const uniqueWeeks: string[] = Array.from(
+    new Set(doctorVisits?.map((v: IDoctorVisits) => v.week))
+  );
+
+  if (
+    doctorPending ||
+    profileDataIsPending ||
+    expertisePending ||
+    doctorVisitsPending
+  ) {
     return <Loader />;
   }
 
@@ -180,6 +215,40 @@ export default function DoctorDetailsPage() {
             </h2>
 
             <div className="space-y-5">
+              {uniqueWeeks.map((week: string) => {
+                const times = doctorVisits
+                  .filter((v: IDoctorVisits) => v.week === week)
+                  .map((v: IDoctorVisits) => v.time);
+
+                return (
+                  <div key={`week-${week}`}>
+                    <p className="font-medium text-slate-700 mb-2">
+                      {String(week)}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {times.map((time: string) => (
+                        <button
+                          key={`${week}-${time}`}
+                          onClick={() => setSelectedTime({ time, day: week })}
+                          className={`px-4 py-2 cursor-pointer rounded-md border flex items-center justify-center gap-1 text-sm transition ${
+                            selectedTime.day === week &&
+                            selectedTime.time === time
+                              ? "bg-primary text-white border-primary"
+                              : "bg-gray-50 hover:bg-blue-50 text-gray-700 border-gray-200"
+                          }`}
+                        >
+                          <Clock className="w-4 h-4" />
+                          {String(time)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 
+            <div className="space-y-5">
               {doctorData?.schedules?.map((schedule: any, i: number) => (
                 <div key={i}>
                   <p className="font-medium text-slate-700 mb-2">
@@ -205,7 +274,7 @@ export default function DoctorDetailsPage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Price and Reserve */}
             <div className="mt-8 flex flex-col md:flex-row justify-between items-center border-t border-t-zinc-200 pt-4 gap-4">

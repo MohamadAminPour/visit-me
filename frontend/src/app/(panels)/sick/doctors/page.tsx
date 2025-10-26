@@ -62,7 +62,7 @@ export default function DoctorsList() {
               onChange={(e) => setFilter(e.target.value)}
               className="text-[.9rem] px-3 py-2 outline-0"
             >
-              <option value="0">تخصص دکتر را انتخاب کنید</option>
+              <option value="0">همه تخصص ها</option>
               {expertiseData?.map((exp: IExpertisies) => (
                 <option key={exp.id} value={exp.id}>
                   {exp.name}
