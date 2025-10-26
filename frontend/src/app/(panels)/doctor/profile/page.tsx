@@ -1,17 +1,19 @@
 "use client";
 
+import { getMyProfile } from "@/hooks/useMyProfile";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import Loader from "@/components/Loader";
-import { getMyProfile } from "@/hooks/useMyProfile";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { LiaUserSolid } from "react-icons/lia";
+import { Toast } from "@/components/Toast";
 
 export default function Page() {
   const [token, setToken] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    const t = localStorage.getItem("tokan"); // ✅ اصلاح شد (tokan ❌)
+    const t = localStorage.getItem("tokan"); // ✅ اصلاح شد
     setToken(t);
   }, []);
 
@@ -25,113 +27,125 @@ export default function Page() {
     nameFamily: "",
     phone: "",
     meli_code: "",
-    image: "",
   });
 
-  // ✅ وقتی data لود شد، state رو با اون مقداردهی کن
   useEffect(() => {
     if (data?.user) {
       setFormData({
         nameFamily: data.user.nameFamily || "",
         phone: data.user.phone || "",
         meli_code: data.user.meli_code || "",
-        image: data.user.image || "",
       });
     }
   }, [data]);
 
-  function submitHandle(e: any) {
+  async function handleCompleteProfile(e: any) {
     e.preventDefault();
-    console.log("📤 فرم ارسال شد:", formData);
+
+    if (!formData.nameFamily || !formData.meli_code) {
+     Toast.fire({
+        icon: "error",
+        title: "لطفا نام و کد ملی را وارد کنید",
+      });
+      return;
+    }
+
+    const res = await fetch("http://localhost:3000/api/me", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        nameFamily: formData.nameFamily,
+        meli_code: formData.meli_code,
+      }),
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      Toast.fire({
+        icon: "success",
+        title: "پروفایل با موفقیت تکمیل شد !",
+      });
+
+      // ✅ آپدیت بدون رفرش
+      queryClient.setQueryData(["profile"], (old: any) => ({
+        ...old,
+        user: {
+          ...old.user,
+          nameFamily: formData.nameFamily,
+          meli_code: formData.meli_code,
+        },
+      }));
+    } else {
+        Toast.fire({
+        icon: "error",
+        title: "لطفا نام و کد ملی را وارد کنید",
+      });
+    }
   }
+
+  console.log(data)
 
   if (isPending) return <Loader />;
 
   return (
     <AnimatedContainer>
-      <div className="w-full flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-xl shadow-zinc-200/30 border border-zinc-200">
+      <div className="w-full flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-xl border border-zinc-200">
         <div className="flex items-center gap-1">
           <LiaUserSolid className="size-7" />
           <p className="font-IranYekanBold text-[1rem]">اطلاعات فردی</p>
         </div>
 
-        <form onSubmit={submitHandle}>
+        <form onSubmit={handleCompleteProfile}>
           <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3">
-            {/* نام و نام خانوادگی */}
-            <div className="flex items-start flex-col mt-5">
+            <div className="flex flex-col mt-5">
               <label>نام و نام خانوادگی</label>
               <input
                 type="text"
-                name="nameFamily"
                 value={formData.nameFamily}
                 onChange={(e) =>
                   setFormData({ ...formData, nameFamily: e.target.value })
                 }
-                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem] text-[.9rem]"
+                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.9rem] "
                 placeholder="نام و نام خانوادگی خود را وارد کنید..."
               />
             </div>
 
-            {/* شماره تلفن */}
-            <div className="flex items-start flex-col mt-5">
+            <div className="flex flex-col mt-5">
               <label>شماره تلفن</label>
               <input
                 type="tel"
-                name="phone"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                inputMode="numeric"
-                pattern="[0-9]*"
-                style={{ direction: "rtl" }}
-                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem] text-[.9rem]"
-                placeholder="شماره تلفن خود را وارد کنید..."
+                disabled
+                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm bg-zinc-100"
               />
             </div>
 
-            {/* کدملی */}
-            <div className="flex items-start flex-col mt-5">
+            <div className="flex flex-col mt-5">
               <label>کدملی</label>
               <input
                 type="tel"
-                name="meli_code"
                 value={formData.meli_code}
                 onChange={(e) =>
                   setFormData({ ...formData, meli_code: e.target.value })
                 }
-                inputMode="numeric"
-                pattern="[0-9]*"
-                style={{ direction: "rtl" }}
-                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem] text-[.9rem]"
-                placeholder="کدملی خود را وارد کنید..."
-              />
-            </div>
-
-            {/* عکس پروفایل */}
-            <div className="flex items-start flex-col mt-5">
-              <label>عکس پروفایل</label>
-              <input
-                type="file"
-                name="image"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    image: e.target.files?.[0]?.name || "",
-                  })
-                }
-                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.8rem] text-[.9rem]"
+                style={{direction:"rtl"}}
+                className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.9rem] "
+                placeholder="کد ملی خود را وارد کنید..." 
               />
             </div>
           </div>
 
           <div className="flex items-center gap-1">
-            <button
-              type="submit"
-              className="flex items-center justify-center gap-2 bg-primary/80 cursor-pointer duration-300 hover:bg-primary p-2 px-5 rounded-lg text-white text-[.9rem] mt-5"
-            >
-              ویرایش
-            </button>
+              <button
+                type="submit"
+                className="bg-yellow-500/80 cursor-pointer hover:bg-yellow-500 p-2 duration-300 px-5 rounded-lg text-white text-[.9rem] mt-5"
+              >
+                ویرایش
+              </button>
           </div>
         </form>
       </div>

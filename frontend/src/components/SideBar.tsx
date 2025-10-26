@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { JSX } from "react";
 import { LuLogOut, LuUserRound } from "react-icons/lu";
 
@@ -20,7 +20,7 @@ export interface ILinks {
 
 export default function SideBar({ isOpen, setIsOpen, links }: ISideBarProps) {
   const path = usePathname();
-  console.log(path);
+  const router = useRouter();
 
   function sidebarHandler() {
     if (window.innerWidth <= 766) {
@@ -35,9 +35,9 @@ export default function SideBar({ isOpen, setIsOpen, links }: ISideBarProps) {
       } fixed md:sticky top-0 z-50 p-3 duration-500 bg-[#fff] border-l-2 border-zinc-200 text-black`}
     >
       <div className="flex items-center justify-between mb-3 pb-3 border-b-1 border-b-zinc-200">
-          <p className="text-[1.1rem] md:text-[1.5rem] Morabba text-primary">
-            ویزیت می
-          </p>
+        <p className="text-[1.1rem] md:text-[1.5rem] Morabba text-primary">
+          ویزیت می
+        </p>
         <p
           className="text-2xl cursor-pointer"
           onClick={() => {
@@ -54,7 +54,9 @@ export default function SideBar({ isOpen, setIsOpen, links }: ISideBarProps) {
             <Link
               href={item.link}
               className={`${
-                path === item.link && path.includes(item.link) && "bg-primary text-white"
+                path === item.link &&
+                path.includes(item.link) &&
+                "bg-primary text-white"
               } p-2 rounded-md text-[.9rem] w-full flex items-center gap-2`}
             >
               <div className="text-xl">{item.icon}</div>
@@ -65,7 +67,10 @@ export default function SideBar({ isOpen, setIsOpen, links }: ISideBarProps) {
 
         <li onClick={sidebarHandler}>
           <button
-            // onClick={logoutHandle}
+            onClick={() => {
+              localStorage.removeItem("tokan");
+              router.push("/");
+            }}
             className="p-2 text-[.9rem] w-full cursor-pointer"
           >
             <LuLogOut className="text-xl" />
