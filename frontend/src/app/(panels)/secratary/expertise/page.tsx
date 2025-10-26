@@ -25,6 +25,7 @@ export default function page() {
     queryFn: getuseExpertise,
   });
 
+  //handleAddExpertise
   async function handleAddExpertise(e: any) {
     e.preventDefault();
 
@@ -40,7 +41,7 @@ export default function page() {
         icon: "error",
         title: "لطفا تمام فیلدها را پر کنید",
       });
-      return
+      return;
     }
 
     await fetch(`http://localhost:3000/api/expertisies`, {
@@ -52,8 +53,21 @@ export default function page() {
     });
   }
 
-  function handleShowVisits(id: number) {
-    alert(id);
+  //handleDeleteExpertisies
+  async function handleDeleteExpertisies(id: number) {
+    await fetch(`http://localhost:3000/api/expertisies`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "تخصص با موفقیت حذف شد",
+    });
+    await queryClient.invalidateQueries({ queryKey: ["expertisies"] });
   }
 
   if (isPending) {
@@ -128,7 +142,7 @@ export default function page() {
                       {
                         className:
                           "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                        //  onClick: () => handleDeleteArticle(id),
+                        onClick: () => handleDeleteExpertisies(id),
                         title: "حذف",
                       },
                       h("span", {

@@ -6,7 +6,7 @@ export interface IExpertisies {
   created_at: string | Date;
 }
 
-const expertisies: IExpertisies[] = [
+let expertisies: IExpertisies[] = [
   {
     id: 1,
     name: "چشم پزشک",
@@ -56,6 +56,18 @@ export async function POST(req: NextRequest) {
       });
       return Response.json({ message: name }, { status: 200 });
     }
+  } catch (error) {
+    return Response.json({ message: "Server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+
+    expertisies = expertisies.filter((exp: IExpertisies) => exp.id !== id);
+
+    return Response.json(expertisies, { status: 200 });
   } catch (error) {
     return Response.json({ message: "Server error" }, { status: 500 });
   }
