@@ -135,7 +135,7 @@ export default function page() {
                 {
                   name: "نام دکتر",
                   formatter: (_, row) => {
-                    const doctor_id = Number(row.cells[0].data);
+                    const doctor_id = Number(row.cells[1].data);
                     const doctorName =
                       doctorData?.find((d: IDoctor) => d.id === doctor_id)
                         ?.nameFamily ?? "ناشناس";
