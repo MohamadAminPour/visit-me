@@ -15,8 +15,8 @@ import { getSickVisits } from "@/hooks/useSickVisits";
 import { useQuery } from "@tanstack/react-query";
 import { getMyProfile } from "@/hooks/useMyProfile";
 import Loader from "@/components/Loader";
-import { IVisits } from "@/app/api/visits/route";
 import { IDoctor } from "@/app/api/doctors/route";
+import { IVisits } from "@/app/api/visits/route";
 
 export default function page() {
   const renderIcon = (Icon: any) =>
@@ -45,15 +45,15 @@ export default function page() {
 
   //getSickVisits
   const { data: sickVisitsData, isPending: sickVisitsIsPending } = useQuery({
-    queryKey: ["sickVisits"],
-    queryFn: () => getSickVisits(profileData.user.id),
+    queryKey: ["sickVisits", profileData?.user?.id],
+    queryFn: () => getSickVisits(profileData?.user?.id),
     enabled: !!token,
   });
-  console.log("sickVisitsData : ", sickVisitsData);
-
-  if (profileDataIsPending || sickVisitsIsPending || doctorIsPending) {
+  
+  if (!sickVisitsData||profileDataIsPending || sickVisitsIsPending || doctorIsPending) {
     return <Loader />;
   }
+  console.log("sickVisitsData : ", sickVisitsData);
 
   return (
     <AnimatedContainer>

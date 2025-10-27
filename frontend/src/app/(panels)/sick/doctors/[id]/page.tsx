@@ -14,7 +14,7 @@ import { getMyProfile } from "@/hooks/useMyProfile";
 import { queryClient } from "@/lib/queryClient";
 import Swal from "sweetalert2";
 import { getDoctorVisits } from "@/hooks/useDoctorVisit";
-import { IDoctorVisits } from "@/app/api/visits/route";
+import { IDoctorVisits } from "@/app/api/doctorVisits/route";
 
 const weeksName = [
   "شنبه",
