@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { IVisits, visits } from "../../route";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const visitId = Number(params.id);
 
@@ -13,8 +16,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     // به‌روزرسانی مقادیر
-     mainVisit.status = 3;
-    mainVisit.status_text = "توسط دکتر ویزیت شد";
+    mainVisit.status = 2;
+    mainVisit.status_text = "در اتاق دکتر است";
 
     return NextResponse.json(mainVisit, { status: 200 });
   } catch (error) {

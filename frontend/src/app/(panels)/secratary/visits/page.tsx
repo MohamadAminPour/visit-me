@@ -4,16 +4,13 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Plus, Trash2, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 import { HiOutlineNewspaper } from "react-icons/hi";
 import Link from "next/link";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { getDoctors } from "@/hooks/useDoctors";
-import { getDoctorVisits } from "@/hooks/useDoctorVisit";
-import { getSickVisits } from "@/hooks/useSickVisits";
 import { useQuery } from "@tanstack/react-query";
-import { getMyProfile } from "@/hooks/useMyProfile";
 import Loader from "@/components/Loader";
 import { IDoctor } from "@/app/api/doctors/route";
 import { IVisits } from "@/app/api/visits/route";
@@ -53,14 +50,14 @@ export default function page() {
 
 
   //handleConfirmVisit
-  async function handleConfirmVisit(id: number) {
+  async function handleWentDoctor(id: number) {
     try {
-      await fetch(`http://localhost:3000/api/visits/confirm/${id}`, {
+      await fetch(`http://localhost:3000/api/visits/doctor/${id}`, {
         method: "PUT",
       });
       Toast.fire({
         icon: "success",
-        title: "نوبت با موفقیت تایید شد",
+        title: "بیمار به پیش دکتر رفت",
       });
       await queryClient.invalidateQueries({ queryKey: ["visits"] });
     } catch (error) {
@@ -162,6 +159,11 @@ export default function page() {
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-yellow-500";
                         break;
                       case 2:
+                        text = "پیش دکتر";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-primary";
+                        break;
+                      case 3:
                         text = "تایید";
                         bg =
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-green-500";
@@ -187,7 +189,7 @@ export default function page() {
                         {
                           className:
                             "p-2 rounded cursor-pointer text-[.8rem] bg-primary/80 text-white hover:bg-primary",
-                          onClick: () => handleConfirmVisit(id),
+                          onClick: () => handleWentDoctor(id),
                           title: "تایید",
                         },
                         h("span", {

@@ -1,6 +1,15 @@
 "use client";
 
-import { Trash } from "lucide-react";
+import { ISick } from "@/app/api/(auth)/sickRegister/route";
+import { IDoctor } from "@/app/api/doctors/route";
+import { IExpertisies } from "@/app/api/expertisies/route";
+import Loader from "@/components/Loader";
+import { getDoctors } from "@/hooks/useDoctors";
+import { getuseExpertise } from "@/hooks/useExpertise";
+import { getSecrataries } from "@/hooks/useSecrataries";
+import { getSicks } from "@/hooks/useSicks";
+import { useQuery } from "@tanstack/react-query";
+import { Trash, User } from "lucide-react";
 import Link from "next/link";
 import { CiGrid41 } from "react-icons/ci";
 import { FiEye } from "react-icons/fi";
@@ -11,6 +20,35 @@ import { PiFaceMask } from "react-icons/pi";
 import { TbNurse } from "react-icons/tb";
 
 export default function UserInfo() {
+  //doctorData
+  const { data: doctorsData, isPending: doctorsIsPending } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getDoctors,
+  });
+  //sicksData
+  const { data: sicksData, isPending: sicksIsPending } = useQuery({
+    queryKey: ["sicks"],
+    queryFn: getSicks,
+  });
+  //secratariesData
+  const { data: secratariesData, isPending: secratariesIsPending } = useQuery({
+    queryKey: ["secrataries"],
+    queryFn: getSecrataries,
+  });
+  //expertisiesData
+  const { data: expertisiesData, isPending: expertisiesIsPending } = useQuery({
+    queryKey: ["expertisies"],
+    queryFn: getuseExpertise,
+  });
+
+  if (
+    doctorsIsPending ||
+    sicksIsPending ||
+    secratariesIsPending ||
+    expertisiesIsPending
+  ) {
+    return <Loader />;
+  }
   return (
     <div className="flex flex-col bg-white p-4 gap-7 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
       <div className="flex items-center gap-1">
@@ -25,7 +63,7 @@ export default function UserInfo() {
             <div>
               <p className="text-[1rem] lg:text-[1.1rem]">تعداد بیماران</p>
               <p className="text-[1rem] lg:text-[1.2rem]">
-                1,642{" "}
+                {sicksData?.length}{" "}
                 <span className="text-zinc-500 text-[.8rem] lg:text-[1rem] ">
                   نفر
                 </span>
@@ -43,7 +81,7 @@ export default function UserInfo() {
             <div>
               <p className="text-[1rem] lg:text-[1.1rem]">تعداد دکتر ها</p>
               <p className="text-[1rem] lg:text-[1.2rem]">
-                12{" "}
+                {doctorsData?.length}{" "}
                 <span className="text-zinc-500 text-[.8rem] lg:text-[1rem] ">
                   نفر
                 </span>
@@ -57,18 +95,18 @@ export default function UserInfo() {
             </Link>
           </li>
           <li className="flex items-center justify-start gap-3 relative">
-            <GoShieldCheck className="text-[3rem] bg-red-500 text-white p-3 rounded-md " />
+            <TbNurse className="text-[3rem] bg-red-500 text-white p-3 rounded-md " />
             <div>
-              <p className="text-[1rem] lg:text-[1.1rem]">تعداد ادمین ها</p>
+              <p className="text-[1rem] lg:text-[1.1rem]">تعداد منشی ها</p>
               <p className="text-[1rem] lg:text-[1.2rem]">
-                3{" "}
+                {secratariesData?.length}{" "}
                 <span className="text-zinc-500 text-[.8rem] lg:text-[1rem] ">
                   نفر
                 </span>
               </p>
             </div>
             <Link
-              href="/dashboard/admins"
+              href="/dashboard/secrataries"
               className="text-[.7rem] text-primary hover:bg-primary hover:text-white duration-300 absolute bottom-3 left-3 border-1 border-zinc-200 px-3 py-1 rounded-full"
             >
               مشاهده
@@ -107,134 +145,26 @@ export default function UserInfo() {
               </Link>
             </div>
             <ul className="*:mb-3 *:flex *:items-end *:justify-between mt-3 h-[20rem] overflow-y-scroll *:pl-2 ">
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
+              {sicksData?.map((sick: ISick) => (
+                <li key={sick.id}>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-secondry flex items-center justify-center rounded-lg size-[2.5rem] text-white">
+                      <User />
+                    </div>
+                    <div>
+                      <p>{sick.nameFamily || "بدون نام"}</p>
+                      <p className="text-[.8rem] text-zinc-500">
+                        شماره : {sick.phone} - کدملی : {sick.meli_code}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
+                  <p className="text-zinc-500 text-[.8rem] ">
+                    {new Intl.DateTimeFormat("fa-IR").format(
+                      new Date(sick.created_at)
+                    )}
+                  </p>
+                </li>
+              ))}
             </ul>
           </div>
           {/*doctors*/}
@@ -249,139 +179,40 @@ export default function UserInfo() {
               </Link>
             </div>
             <ul className="*:mb-3 *:flex *:items-end *:justify-between mt-3 h-[20rem] overflow-y-scroll *:pl-2 ">
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
+              {doctorsData?.map((doctor: IDoctor) => (
+                <li key={doctor.id}>
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={doctor.image}
+                      alt=""
+                      className="size-[2.5rem] rounded-lg object-cover"
+                    />
+                    <div>
+                      <p>{doctor.nameFamily}</p>
+                      <p className="text-[.8rem] text-zinc-500">
+                        تخصص :{" "}
+                        {
+                          expertisiesData?.find(
+                            (exp: IExpertisies) =>
+                              exp.id === doctor.expertise_id
+                          ).name
+                        }{" "}
+                        - شماره تلفن : {doctor.phone}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
-              <li>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/img.png"
-                    alt=""
-                    className="size-[2.5rem] rounded-lg object-cover"
-                  />
-                  <div>
-                    <p>mohammad</p>
-                    <p className="text-[.8rem] text-zinc-500">
-                      maminpour37@gmail.com
-                    </p>
-                  </div>
-                </div>
-                <p className="text-zinc-500 text-[.8rem] ">13 مهر 1404</p>
-              </li>
+                  <p className="text-zinc-500 text-[.8rem] ">
+                    {new Intl.DateTimeFormat("fa-IR").format(
+                      new Date(doctor.created_at)
+                    )}
+                  </p>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
         {/*activities*/}
-        <div className="mt-5 grid grid-cols-1 gap-5">
+        {/* <div className="mt-5 grid grid-cols-1 gap-5">
           <div className="p-3 rounded-lg shadow-xl shadow-zinc-200 border-1 border-zinc-200">
             <div className="flex items-center justify-between">
               <p>فعالیت های اخیر</p>
@@ -397,7 +228,9 @@ export default function UserInfo() {
                 <div className="flex items-center gap-2">
                   <HiOutlineShieldCheck className="bg-red-500 size-[2rem] p-2 rounded-md text-white " />
                   <div className="flex items-center gap-1">
-                    <p className="text-[.9rem] md:text-[1rem] ">محمد امین پور</p>
+                    <p className="text-[.9rem] md:text-[1rem] ">
+                      محمد امین پور
+                    </p>
                     <p>:</p>
                     <p className="text-[.9rem] md:text-[1rem] text-zinc-500">
                       ادمین جدیدی اضافه کرد
@@ -415,8 +248,6 @@ export default function UserInfo() {
                 <div className="flex items-center gap-2">
                   <PiFaceMask className="bg-secondry size-[2rem] p-2 rounded-md text-white " />
                   <div className="flex items-center gap-1">
-                    {/* <p>علی سعیدی</p>
-                    <p>:</p> */}
                     <p className="text-[.9rem] text-zinc-500">
                       بیمار جدید عضو شد
                     </p>
@@ -451,8 +282,6 @@ export default function UserInfo() {
                 <div className="flex items-center gap-2">
                   <PiFaceMask className="bg-secondry size-[2rem] p-2 rounded-md text-white " />
                   <div className="flex items-center gap-1">
-                    {/* <p>علی سعیدی</p>
-                    <p>:</p> */}
                     <p className="text-[.9rem] text-zinc-500">
                       بیمار جدید عضو شد
                     </p>
@@ -519,8 +348,6 @@ export default function UserInfo() {
                 <div className="flex items-center gap-2">
                   <PiFaceMask className="bg-secondry size-[2rem] p-2 rounded-md text-white " />
                   <div className="flex items-center gap-1">
-                    {/* <p>علی سعیدی</p>
-                    <p>:</p> */}
                     <p className="text-[.9rem] text-zinc-500">
                       بیمار جدید عضو شد
                     </p>
@@ -537,8 +364,6 @@ export default function UserInfo() {
                 <div className="flex items-center gap-2">
                   <PiFaceMask className="bg-secondry size-[2rem] p-2 rounded-md text-white " />
                   <div className="flex items-center gap-1">
-                    {/* <p>علی سعیدی</p>
-                    <p>:</p> */}
                     <p className="text-[.9rem] text-zinc-500">
                       بیمار جدید عضو شد
                     </p>
@@ -553,7 +378,7 @@ export default function UserInfo() {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

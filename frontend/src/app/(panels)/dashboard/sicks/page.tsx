@@ -8,10 +8,10 @@ import { Trash2 } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
 import { PiFaceMask } from "react-icons/pi";
 import { HiOutlineNewspaper } from "react-icons/hi";
-import { ISick } from "@/app/api/sicks/route";
 import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { getSicks } from "@/hooks/useSicks";
+import { ISick } from "@/app/api/(auth)/sickRegister/route";
 
 export default function page() {
   const { data, isPending } = useQuery({
@@ -44,17 +44,13 @@ export default function page() {
             a.nameFamily,
             a.phone,
             a.meli_code,
-            a.insurance,
-            a.birth_date,
             a.id,
           ])}
           columns={[
             "ردیف",
             "نام و نام خانوادگی",
             "شماره تلفن",
-            "کدملی",
-            "بیمه",
-            "تاریخ تولد",
+            "کدملی",  
             {
               name: "عملیات",
               formatter: (_, row) => {

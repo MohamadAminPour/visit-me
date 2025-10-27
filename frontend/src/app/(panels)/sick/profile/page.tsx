@@ -37,6 +37,7 @@ export default function Page() {
         meli_code: data.user.meli_code || "",
       });
     }
+    console.log(data)
   }, [data]);
 
   async function handleCompleteProfile(e: any) {
@@ -67,7 +68,7 @@ export default function Page() {
     if (res.ok) {
       Toast.fire({
         icon: "success",
-        title: "پروفایل با موفقیت تکمیل شد !",
+        title: `پروفایل با موفقیت ${data?.user.complete_profile?"ویرایش":"تکمیل"} شد !`,
       });
 
       // ✅ آپدیت بدون رفرش

@@ -13,7 +13,7 @@ export default function Page() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const t = localStorage.getItem("tokan"); // ✅ اصلاح شد
+    const t = localStorage.getItem("tokan"); 
     setToken(t);
   }, []);
 
@@ -32,12 +32,15 @@ export default function Page() {
   useEffect(() => {
     if (data?.user) {
       setFormData({
-        nameFamily: data.user.nameFamily || "",
-        phone: data.user.phone || "",
-        meli_code: data.user.meli_code || "",
+        nameFamily: data?.user?.nameFamily || "",
+        phone: data?.user?.phone || "",
+        meli_code: data?.user?.meli_code || "",
       });
     }
+    console.log(data)
   }, [data]);
+
+  console.log(data)
 
   async function handleCompleteProfile(e: any) {
     e.preventDefault();
@@ -63,11 +66,12 @@ export default function Page() {
     });
 
     const result = await res.json();
+    console.log(res)
 
     if (res.ok) {
       Toast.fire({
         icon: "success",
-        title: "پروفایل با موفقیت تکمیل شد !",
+        title: `پروفایل با موفقیت ویرایش شد !`,
       });
 
       // ✅ آپدیت بدون رفرش
@@ -77,6 +81,7 @@ export default function Page() {
           ...old.user,
           nameFamily: formData.nameFamily,
           meli_code: formData.meli_code,
+          complete_profile: true,
         },
       }));
     } else {
@@ -86,8 +91,6 @@ export default function Page() {
       });
     }
   }
-
-  console.log(data)
 
   if (isPending) return <Loader />;
 

@@ -49,8 +49,13 @@ export default function page() {
     queryFn: () => getSickVisits(profileData?.user?.id),
     enabled: !!token,
   });
-  
-  if (!sickVisitsData||profileDataIsPending || sickVisitsIsPending || doctorIsPending) {
+
+  if (
+    !sickVisitsData ||
+    profileDataIsPending ||
+    sickVisitsIsPending ||
+    doctorIsPending
+  ) {
     return <Loader />;
   }
   console.log("sickVisitsData : ", sickVisitsData);
@@ -82,9 +87,7 @@ export default function page() {
                 s.time,
                 s.status,
                 s.status_text,
-                new Intl.DateTimeFormat("fa-IR").format(
-                    new Date(s.created_at)
-                  ),
+                new Intl.DateTimeFormat("fa-IR").format(new Date(s.created_at)),
               ])}
               columns={[
                 {
@@ -117,7 +120,12 @@ export default function page() {
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-yellow-500";
                         break;
                       case 2:
-                        text = "ویزیت شده";
+                        text = "پیش دکتر";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-primary";
+                        break;
+                      case 3:
+                        text = "تایید";
                         bg =
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-green-500";
                         break;
