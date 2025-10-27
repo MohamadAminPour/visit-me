@@ -4,7 +4,7 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 
 import { HiOutlineNewspaper } from "react-icons/hi";
 import Link from "next/link";
@@ -19,6 +19,9 @@ import { IDoctor } from "@/app/api/doctors/route";
 import { IVisits } from "@/app/api/visits/route";
 import { getVisits } from "@/hooks/useVisits";
 import { getSicks } from "@/hooks/useSicks";
+import { LiaUserNurseSolid } from "react-icons/lia";
+import { Toast } from "@/components/Toast";
+import { queryClient } from "@/lib/queryClient";
 
 export default function page() {
   const renderIcon = (Icon: any) =>
@@ -37,12 +40,10 @@ export default function page() {
     queryFn: getDoctors,
   });
 
-
-    const { data: sicksData, isPending: sicksIsPending } = useQuery({
+  const { data: sicksData, isPending: sicksIsPending } = useQuery({
     queryKey: ["sicks"],
     queryFn: getSicks,
   });
-
 
   //getSickVisits
   const { data: visitsData, isPending: VisitsIsPending } = useQuery({
@@ -50,12 +51,41 @@ export default function page() {
     queryFn: getVisits,
   });
 
-  if (
-    !visitsData ||
-    sicksIsPending||
-    doctorIsPending ||
-    VisitsIsPending 
-  ) {
+
+  //handleConfirmVisit
+  async function handleConfirmVisit(id: number) {
+    try {
+      await fetch(`http://localhost:3000/api/visits/confirm/${id}`, {
+        method: "PUT",
+      });
+      Toast.fire({
+        icon: "success",
+        title: "نوبت با موفقیت تایید شد",
+      });
+      await queryClient.invalidateQueries({ queryKey: ["visits"] });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  //handleRejectVisit
+  async function handleRejectVisit(id: number) {
+    try {
+      await fetch(`http://localhost:3000/api/visits/reject/${id}`, {
+        method: "PUT",
+      });
+      Toast.fire({
+        icon: "success",
+        title: "نوبت با موفقیت رد شد",
+      });
+      await queryClient.invalidateQueries({ queryKey: ["visits"] });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  if (!visitsData || sicksIsPending || doctorIsPending || VisitsIsPending) {
     return <Loader />;
   }
 
@@ -87,6 +117,8 @@ export default function page() {
                 s.time,
                 s.status,
                 s.status_text,
+                s.created_at,
+                s.id,
                 new Intl.DateTimeFormat("fa-IR").format(new Date(s.created_at)),
               ])}
               columns={[
@@ -100,7 +132,7 @@ export default function page() {
                     return h("span", {}, sickName); // مقدار رشته‌ای
                   },
                 },
-                 {
+                {
                   name: "نام دکتر",
                   formatter: (_, row) => {
                     const doctor_id = Number(row.cells[0].data);
@@ -120,7 +152,7 @@ export default function page() {
 
                     switch (cell) {
                       case 0:
-                        text = "رد شده";
+                        text = "رد";
                         bg =
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-red-500";
                         break;
@@ -130,7 +162,7 @@ export default function page() {
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-yellow-500";
                         break;
                       case 2:
-                        text = "ویزیت شده";
+                        text = "تایید";
                         bg =
                           "px-2 py-1 rounded-sm text-white text-[.8rem] bg-green-500";
                         break;
@@ -145,6 +177,42 @@ export default function page() {
                 },
                 "علت وضعیت",
                 "تاریخ ویزیت",
+                {
+                  name: "عملیات",
+                  formatter: (_, row) => {
+                    const id = row.cells[7].data as number; // ستون id برای عملیات
+                    return h("div", { className: "flex gap-2" }, [
+                      h(
+                        "button",
+                        {
+                          className:
+                            "p-2 rounded cursor-pointer text-[.8rem] bg-primary/80 text-white hover:bg-primary",
+                          onClick: () => handleConfirmVisit(id),
+                          title: "تایید",
+                        },
+                        h("span", {
+                          dangerouslySetInnerHTML: {
+                            __html: renderIcon(LiaUserNurseSolid),
+                          },
+                        })
+                      ),
+                      h(
+                        "button",
+                        {
+                          className:
+                            "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
+                          onClick: () => handleRejectVisit(id),
+                          title: "رد",
+                        },
+                        h("span", {
+                          dangerouslySetInnerHTML: {
+                            __html: renderIcon(X),
+                          },
+                        })
+                      ),
+                    ]);
+                  },
+                },
               ]}
               search={true}
               pagination={{ limit: 5 }}

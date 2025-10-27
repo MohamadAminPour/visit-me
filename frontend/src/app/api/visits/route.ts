@@ -19,7 +19,7 @@ export let visits: IVisits[] = [
     week: "شنبه",
     time: "12:15",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
   {
@@ -29,7 +29,7 @@ export let visits: IVisits[] = [
     week: "شنبه",
     time: "12:00",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
   {
@@ -39,7 +39,7 @@ export let visits: IVisits[] = [
     week: "شنبه",
     time: "12:15",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
   {
@@ -49,7 +49,7 @@ export let visits: IVisits[] = [
     week: "شنبه",
     time: "12:30",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
   {
@@ -59,7 +59,7 @@ export let visits: IVisits[] = [
     week: "شنبه",
     time: "12:45",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
   {
@@ -69,7 +69,7 @@ export let visits: IVisits[] = [
     week: "یک شنبه",
     time: "12:00",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
   {
@@ -79,7 +79,7 @@ export let visits: IVisits[] = [
     week: "یک شنبه",
     time: "12:15",
     status:1,
-    status_text: "",
+    status_text: "هنوز نیامدند",
     created_at: "1404/07/25",
   },
 ];
@@ -116,6 +116,7 @@ export async function POST(req: NextRequest) {
     return Response.json({ message: "Server error" }, { status: 500 });
   }
 }
+
 
 export async function DELETE(req: NextRequest) {
   try {
