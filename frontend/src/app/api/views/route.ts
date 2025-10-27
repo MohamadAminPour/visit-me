@@ -1,32 +1,32 @@
-import dayjs from "dayjs";
 import { NextRequest, NextResponse } from "next/server";
 
-import "dayjs/locale/fa";
-import JalaliDate from "@/components/JalaliDate";
-
-interface IActivities {
+export interface IViews {
   id: number;
-  created_at: any;
+  created_at: string | Date;
 }
 
-const activities: IActivities[] = [
+export const views: IViews[] = [
   {
     id: 1,
-    created_at: "1404/07/25",
+    created_at: "Mon Oct 26 2024 18:06:06 GMT+0330",
   },
   {
     id: 2,
-    created_at: "1404/07/25",
+    created_at: "Mon Oct 26 2025 18:06:06 GMT+0330",
   },
   {
     id: 3,
-    created_at: "1404/07/25",
+    created_at: "Mon Oct 27 2025 18:06:06 GMT+0330",
+  },
+   {
+    id: 4,
+    created_at: "Mon Oct 27 2025 18:06:06 GMT+0330",
   },
 ];
 
 export async function GET() {
   try {
-    return NextResponse.json(activities, { status: 200 });
+    return NextResponse.json(views, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
@@ -34,20 +34,17 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const body: IActivities = await req.json();
-    const { id } = body;
-
-    const date = new Date().getTime() 
-    console.log(date)
+    const date = new Date();
+    console.log(date);
 
     let newView = {
-      id: id,
-      created_at:JalaliDate(date)
+      id: views.length + 1,
+      created_at: date,
     };
 
-    activities.push(newView);
+    views.push(newView);
 
-     return NextResponse.json(activities, { status: 200 });
+    return NextResponse.json(views, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }

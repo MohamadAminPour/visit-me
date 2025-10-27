@@ -1,14 +1,16 @@
 import Link from "next/link";
 import AnimatedContainer from "../components/AnimatedContainer";
+import { useEffect } from "react";
 
 export default async function Home() {
-
   const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const res = await fetch(`${API}/views`);
-  const views = await res.json()
-
-  console.log(views)
+  const res = await fetch(`${API}/views`,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    }
+  });
 
   return (
     <AnimatedContainer>
