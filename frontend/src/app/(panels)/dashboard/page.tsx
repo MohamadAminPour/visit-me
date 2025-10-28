@@ -3,11 +3,13 @@
 import { ISick } from "@/app/api/(auth)/sickRegister/route";
 import { IDoctor } from "@/app/api/doctors/route";
 import { IExpertisies } from "@/app/api/expertisies/route";
+import { IViews } from "@/app/api/views/route";
 import Loader from "@/components/Loader";
 import { getDoctors } from "@/hooks/useDoctors";
 import { getuseExpertise } from "@/hooks/useExpertise";
 import { getSecrataries } from "@/hooks/useSecrataries";
 import { getSicks } from "@/hooks/useSicks";
+import { getViews } from "@/hooks/useViews";
 import { useQuery } from "@tanstack/react-query";
 import { Trash, User } from "lucide-react";
 import Link from "next/link";
@@ -40,12 +42,27 @@ export default function UserInfo() {
     queryKey: ["expertisies"],
     queryFn: getuseExpertise,
   });
+//ViewsData
+  const { data: ViewsData, isPending: ViewsIsPending } = useQuery({
+    queryKey: ["views"],
+    queryFn: getViews,
+  });
+
+  // بازدیدهای امروز
+  const now = new Date();
+  const todayISO = now.toISOString().split("T")[0];
+  const todayViews =
+    ViewsData?.filter((d: IViews) => {
+      const date = new Date(d.created_at);
+      return date.toISOString().split("T")[0] === todayISO;
+    }).length || 0;
 
   if (
     doctorsIsPending ||
     sicksIsPending ||
     secratariesIsPending ||
-    expertisiesIsPending
+    expertisiesIsPending ||
+    ViewsIsPending
   ) {
     return <Loader />;
   }
@@ -117,7 +134,7 @@ export default function UserInfo() {
             <div>
               <p className="text-[1rem] lg:text-[1.1rem]">بازدید امروز</p>
               <p className="text-[1rem] lg:text-[1.2rem]">
-                14,200{" "}
+              {todayViews}{" "}
                 <span className="text-zinc-500 text-[.8rem] lg:text-[1rem] ">
                   تا
                 </span>
