@@ -10,27 +10,20 @@ import { TbEyeShare, TbNurse, TbUserShield } from "react-icons/tb";
 
 export const ownerLinks: ILinks[] = [
   { id: 1, title: "داشبورد", link: "/dashboard", icon: <CiGrid41 /> },
-  { id: 2, title: "پروفایل من", link: "/dashboard/profile", icon: <PiUser /> },
   {
-    id: 3,
+    id: 2,
     title: "دکتر ها",
     link: "/dashboard/doctors",
     icon: <LiaUserNurseSolid />,
   },
-  { id: 4, title: "بیماران", link: "/dashboard/sicks", icon: <PiFaceMask /> },
+  { id: 3, title: "بیماران", link: "/dashboard/sicks", icon: <PiFaceMask /> },
   {
-    id: 6,
+    id: 4,
     title: "منشی ها",
     link: "/dashboard/secrataries",
     icon: <TbNurse  />,
   },
-  { id: 7, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare /> },
-  // {
-  //   id: 8,
-  //   title: "فعالیت ها",
-  //   link: "/dashboard/activities",
-  //   icon: <FaRegChartBar />,
-  // },
+  { id: 5, title: "بازدید ها", link: "/dashboard/views", icon: <TbEyeShare /> },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

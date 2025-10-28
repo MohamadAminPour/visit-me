@@ -1,43 +1,44 @@
-"use client"
+"use client";
 
-import secretaryLoginAction from "@/actions/secretaryLoginAction";
+import secretaryLoginAction, {
+  LoginState,
+} from "@/actions/secretaryLoginAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { Toast } from "@/components/Toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { BiArrowBack } from "react-icons/bi";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
-  const [state, formAction] = useActionState(secretaryLoginAction, {
-    status: 0,
-    token: "",
-  });
+  const [state, formAction] = useActionState<LoginState, FormData>(
+    secretaryLoginAction,
+    { status: 0, token: "" }
+  );
 
   useEffect(() => {
-     if (state?.status === 200) {
-       Toast.fire({
-         icon: "success",
-         title: "ورود موفقیت آمیز بود !",
-       });
-       router.push("/secratary/visits");
-       localStorage.setItem("tokan", state.token);
-     }
-     if (state?.status === 409) {
-       Toast.fire({
-         icon: "error",
-         title: "لطفا یک شماره تلفن صحیح وارد کنید !",
-       });
-     }
-     if (state?.status === 404) {
-       Toast.fire({
-         icon: "error",
-         title: "همچین شماره تلفنی ورود ندارد !",
-       });
-     }
-   }, [state]);
+    if (state?.status === 200) {
+      Toast.fire({
+        icon: "success",
+        title: "ورود موفقیت آمیز بود !",
+      });
+      router.push("/secratary/visits");
+      localStorage.setItem("tokan", state?.token ?? "");
+    }
+    if (state?.status === 409) {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا یک شماره تلفن صحیح وارد کنید !",
+      });
+    }
+    if (state?.status === 404) {
+      Toast.fire({
+        icon: "error",
+        title: "همچین شماره تلفنی ورود ندارد !",
+      });
+    }
+  }, [state]);
   return (
     <>
       <svg
@@ -64,7 +65,9 @@ export default function page() {
             className="rounded-2xl py-8 px-5 sm:px-10 w-[90%] sm:w-[27rem] border-1 border-zinc-200 shadow-xl shadow-zinc-200 z-20 bg-white"
           >
             <div className="text-center w-full">
-              <h2 className="text-[1.5rem] sm:text-[2rem] Morabba">ورود به ویزیت می</h2>
+              <h2 className="text-[1.5rem] sm:text-[2rem] Morabba">
+                ورود به ویزیت می
+              </h2>
               <p className="text-zinc-500 text-[.8rem] sm:text-[.9rem]">
                 دکتر این مجموعه هستید؟
                 <Link href="/drLogin" className="text-primary mr-1">
@@ -90,8 +93,14 @@ export default function page() {
                 <p className="w-full h-[.1rem] bg-zinc-200"></p>
               </div>
               <button className="w-full flex items-center justify-center gap-3 border-1 border-zinc-200 cursor-pointer py-2 hover:bg-zinc-200 mt-3 rounded-sm duration-300 ">
-                <p className="text-[.8rem] sm:text-[.9rem]">ورود با حساب گوگل</p>
-                <img src="/images/Google.png" alt="" className="w-[1.3rem] sm:w-[1.8rem]" />
+                <p className="text-[.8rem] sm:text-[.9rem]">
+                  ورود با حساب گوگل
+                </p>
+                <img
+                  src="/images/Google.png"
+                  alt=""
+                  className="w-[1.3rem] sm:w-[1.8rem]"
+                />
               </button>
             </div>
           </form>
@@ -131,5 +140,3 @@ export function Button() {
     </>
   );
 }
-
-

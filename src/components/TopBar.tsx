@@ -1,14 +1,22 @@
 "use client";
 
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiMenu } from "react-icons/hi";
 import { useQuery } from "@tanstack/react-query";
 import { getMyProfile } from "@/hooks/useMyProfile";
+import Image from "next/image";
 
 export interface ISideBarProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const roles: Record<string, string> = {
+  admin: "ادمین",
+  doctor: "دکتر",
+  secratary: "منشی",
+  sick: "بیمار",
+};
 
 export default function TopBar({ isOpen, setIsOpen }: ISideBarProps) {
   const [token, setToken] = useState<string | null>(null);
@@ -20,7 +28,7 @@ export default function TopBar({ isOpen, setIsOpen }: ISideBarProps) {
   }, []);
 
   // ✅ واکشی پروفایل فقط وقتی توکن آماده است
-  const { data, isPending, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["profile"],
     queryFn: () => getMyProfile(token as string),
     enabled: !!token, // اجرا فقط وقتی توکن موجود است
@@ -33,8 +41,8 @@ export default function TopBar({ isOpen, setIsOpen }: ISideBarProps) {
 
   console.log(data);
 
-  if (isPending) {
-    return;
+  if (isLoading) {
+    return <></>;
   }
 
   return (
@@ -45,10 +53,14 @@ export default function TopBar({ isOpen, setIsOpen }: ISideBarProps) {
       />
       <div className="flex items-center gap-3 ">
         {data?.user?.image ? (
-          <img
-            src={`${data?.user?.image}`}
-            className="size-[3.5rem] rounded-full object-cover "
-          />
+          <div className="w-13 h-13 relative rounded-full overflow-hidden">
+            <Image
+              src={data?.user?.image || "/images/images.png"}
+              alt="Profile"
+              fill
+              className="object-cover"
+            />
+          </div>
         ) : (
           <img
             src={`/images/images.png`}
@@ -62,16 +74,7 @@ export default function TopBar({ isOpen, setIsOpen }: ISideBarProps) {
             </p>
           </div>
           <p className="text-[.8rem] text-zinc-500 ">
-            نقش شما :{" "}
-            {data?.user?.role === "admin"
-              ? "ادمین"
-              : data?.user?.role === "doctor"
-              ? "دکتر"
-              : data?.user?.role === "secratary"
-              ? "منشی"
-              : data?.user?.role === "sick"
-              ? "بیمار"
-              : ""}
+            نقش شما : {roles[data?.user?.role ?? ""] ?? ""}
           </p>
         </div>
       </div>

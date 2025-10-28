@@ -16,7 +16,6 @@ export default function RootLayout({
           <ReactQueryProvider>
             {children}
             <CrispChatWithStatus websiteId="c1cc9cc8-ac2d-4850-a0b7-d447d8605da9" />
-            <ReactQueryDevtools />
           </ReactQueryProvider>
         </>
       </body>

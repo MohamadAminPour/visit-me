@@ -100,7 +100,7 @@ export default function Page() {
       });
 
       queryClient.setQueryData<IProfile>(["profile"], (old) => {
-        if (!old) return undefined; // در صورت undefined بودن old
+        if (!old) return 
         return {
           ...old,
           user: {

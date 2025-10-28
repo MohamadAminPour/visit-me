@@ -1,9 +1,15 @@
 "use server";
 
+export type StatusType = 200 | 201 | 404 | 409 | 0;
+export interface LoginState {
+  status?: StatusType;
+  token?: string;
+}
+
 export default async function sickRegisterAction(
-  prevState: any,
+  prevState: LoginState,
   formData: FormData
-) {
+): Promise<LoginState> {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const phone = formData.get("phone");
 
@@ -22,11 +28,9 @@ export default async function sickRegisterAction(
   }
   if (res.status === 404) {
     return {
-      status: 404
-    };
-  } else {
-    return {
-      status: 409,
+      status: 404,
+      token: "",
     };
   }
+  return { status: 0, token: "" };
 }

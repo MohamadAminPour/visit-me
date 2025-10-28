@@ -1,20 +1,20 @@
 "use client";
 
-import doctorLoginAction from "@/actions/doctorLoginAction";
+import doctorLoginAction, { LoginState } from "@/actions/doctorLoginAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { Toast } from "@/components/Toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { BiArrowBack } from "react-icons/bi";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
-  const [state, formAction] = useActionState(doctorLoginAction, {
-    status: 0,
-    token: "",
-  });
+  const [state, formAction] = useActionState<LoginState, FormData>(
+    doctorLoginAction,
+    { status: 0, token: "" }
+  );
+
 
   useEffect(() => {
     if (state?.status === 200) {
@@ -23,7 +23,7 @@ export default function page() {
         title: "ورود موفقیت آمیز بود !",
       });
       router.push("/doctor/profile");
-      localStorage.setItem("tokan", state.token);
+      localStorage.setItem("tokan", state?.token??"");
     }
     if (state?.status === 409) {
       Toast.fire({

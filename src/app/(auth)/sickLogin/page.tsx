@@ -1,16 +1,15 @@
 "use client";
-import sickLoginAction from "@/actions/sickLoginAction";
+import sickLoginAction, { LoginState } from "@/actions/sickLoginAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { Toast } from "@/components/Toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { BiArrowBack } from "react-icons/bi";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
-  const [state, formAction] = useActionState(sickLoginAction, {
+  const [state, formAction] = useActionState<LoginState, FormData>(sickLoginAction, {
     status: 0,
     token: "",
   });
@@ -22,7 +21,7 @@ export default function page() {
         title: "ورود موفقیت آمیز بود !",
       });
       router.push("/sick/profile");
-      localStorage.setItem("tokan", state.token);
+      localStorage.setItem("tokan", state?.token??"");
     }
     if (state?.status === 409) {
       Toast.fire({

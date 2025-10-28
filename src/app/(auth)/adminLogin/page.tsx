@@ -1,19 +1,18 @@
 "use client";
 
-import adminLoginAction from "@/actions/adminLoginAction";
+import adminLoginAction, { LoginState } from "@/actions/adminLoginAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { Toast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { BiArrowBack } from "react-icons/bi";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
-  const [state, formAction] = useActionState(adminLoginAction, {
-    status: 0,
-    token: "",
-  });
+  const [state, formAction] = useActionState<LoginState, FormData>(
+    adminLoginAction,
+    { status: 0, token: "" }
+  );
 
   useEffect(() => {
     if (state?.status === 200) {
@@ -22,7 +21,7 @@ export default function page() {
         title: "ورود موفقیت آمیز بود !",
       });
       router.push("/dashboard");
-      localStorage.setItem("tokan", state.token);
+      localStorage.setItem("tokan", state?.token ?? "");
     }
     if (state?.status === 409) {
       Toast.fire({
@@ -107,7 +106,10 @@ export function Button() {
   return (
     <>
       {pending ? (
-        <button disabled className="w-full flex items-center justify-center gap-2 hover:bg-[#6c757d] hover:text-white bg-[#adb5bd] cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+        <button
+          disabled
+          className="w-full flex items-center justify-center gap-2 hover:bg-[#6c757d] hover:text-white bg-[#adb5bd] cursor-pointer py-2 mt-3 rounded-sm duration-300 "
+        >
           <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
         </button>
       ) : (

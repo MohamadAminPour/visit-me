@@ -17,6 +17,7 @@ import { IDoctorVisits } from "@/app/api/doctorVisits/route";
 import { getExpertise } from "@/hooks/useExpertise";
 import { getVisits } from "@/hooks/useVisits";
 import { IVisits } from "@/app/api/visits/route";
+import Image from "next/image";
 
 const weeksName = [
   "شنبه",
@@ -194,11 +195,15 @@ export default function Page() {
         <div className="mx-auto min-h-screen">
           {/* Doctor Info */}
           <div className="bg-white shadow-xl shadow-zinc-200/30 border-1 border-zinc-200  rounded-2xl p-6 flex flex-col md:flex-row items-start gap-6">
-            <img
-              src={doctorData?.image}
-              alt={doctorData?.nameFamily}
-              className="w-32 h-32 rounded-full object-cover border-4 border-blue-100"
-            />
+            <div className="w-[7rem] h-[7rem] relative rounded-full overflow-hidden border-blue-100 border-[.2rem]">
+              <Image
+                fill
+                src={doctorData?.image || "/images/images.png"}
+                alt={doctorData?.nameFamily || "Doctor"}
+                className="object-cover"
+              />
+            </div>
+
             <div className="flex-1 text-right">
               <h1 className="text-2xl font-bold text-slate-800">
                 {doctorData?.nameFamily}

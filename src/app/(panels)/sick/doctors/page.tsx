@@ -9,6 +9,7 @@ import { IDoctor } from "@/app/api/doctors/route";
 import Loader from "@/components/Loader";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { getExpertise } from "@/hooks/useExpertise";
+import Image from "next/image";
 
 export default function Page() {
   const [search, setSearch] = useState("");
@@ -79,15 +80,19 @@ export default function Page() {
               key={doctor.id}
               className="bg-white rounded-2xl shadow-xl shadow-zinc-200/30 border-1 border-zinc-200 transition p-5 flex flex-col items-center text-center"
             >
-              <img
-                src={doctor.image}
-                alt={doctor.nameFamily}
-                className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-blue-100"
-              />
+              <div className="w-[7rem] h-[7rem] relative rounded-full overflow-hidden border-blue-100 border-[.2rem] mb-3">
+                <Image
+                  fill
+                  src={doctor?.image}
+                  alt={doctor?.nameFamily}
+                  className="object-cover"
+                />
+              </div>
               <h2 className="text-lg font-semibold text-slate-800">
                 {doctor.nameFamily}
               </h2>
-              <p className="text-sm text-slate-500 mt-1">تخصص : {/* */}
+              <p className="text-sm text-slate-500 mt-1">
+                تخصص : {/* */}
                 {
                   expertiseData?.find(
                     (exp: IExpertisies) => exp.id === doctor.expertise_id

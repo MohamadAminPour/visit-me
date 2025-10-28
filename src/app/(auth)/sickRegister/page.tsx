@@ -1,29 +1,28 @@
 "use client";
 
-import sickRegisterAction from "@/actions/sickRegisterAction";
+import sickRegisterAction, { LoginState } from "@/actions/sickRegisterAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { Toast } from "@/components/Toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { BiArrowBack } from "react-icons/bi";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
-  const [state, formAction] = useActionState(sickRegisterAction, {
+  const [state, formAction] = useActionState<LoginState, FormData>(sickRegisterAction, {
     status: 0,
     token: "",
   });
 
   useEffect(() => {
-    if (state.status === 201) {
+    if (state?.status === 201) {
       Toast.fire({
         icon: "success",
         title: "ثبت نام موفقیت آمیز بود !",
       });
       router.push("/sick/profile");
-      localStorage.setItem("tokan",state.token)
+      localStorage.setItem("tokan",state?.token??"")
     }
     if (state.status === 404) {
       Toast.fire({

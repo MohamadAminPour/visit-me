@@ -12,6 +12,7 @@ import { getSicks } from "@/hooks/useSicks";
 import { getViews } from "@/hooks/useViews";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { CiGrid41 } from "react-icons/ci";
 import { FiEye } from "react-icons/fi";
@@ -40,7 +41,7 @@ export default function Page() {
     queryKey: ["expertisies"],
     queryFn: getExpertise,
   });
-//ViewsData
+  //ViewsData
   const { data: ViewsData, isPending: ViewsIsPending } = useQuery({
     queryKey: ["views"],
     queryFn: getViews,
@@ -132,7 +133,7 @@ export default function Page() {
             <div>
               <p className="text-[1rem] lg:text-[1.1rem]">بازدید امروز</p>
               <p className="text-[1rem] lg:text-[1.2rem]">
-              {todayViews}{" "}
+                {todayViews}{" "}
                 <span className="text-zinc-500 text-[.8rem] lg:text-[1rem] ">
                   تا
                 </span>
@@ -197,11 +198,14 @@ export default function Page() {
               {doctorsData?.map((doctor: IDoctor) => (
                 <li key={doctor.id}>
                   <div className="flex items-center gap-2">
-                    <img
-                      src={doctor.image}
-                      alt=""
-                      className="size-[2.5rem] rounded-lg object-cover"
-                    />
+                    <div className="w-[2.9rem] h-[2.9em] relative rounded-md overflow-hidden border-blue-200">
+                      <Image
+                        fill
+                        src={doctor?.image}
+                        alt={doctor?.nameFamily || "Doctor"}
+                        className="object-cover"
+                      />
+                    </div>
                     <div>
                       <p>{doctor.nameFamily}</p>
                       <p className="text-[.8rem] text-zinc-500">
