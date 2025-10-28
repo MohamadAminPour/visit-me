@@ -1,7 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 
-export default function AnimatedContainer({ children }: any) {
+export default function AnimatedContainer({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <motion.div
       initial={{ opacity: 0,  }}

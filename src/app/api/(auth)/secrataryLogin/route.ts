@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import { ISecratary, secrataries } from "../../secrataries/route";
+import { secrataries } from "../../secrataries/route";
 
 
 

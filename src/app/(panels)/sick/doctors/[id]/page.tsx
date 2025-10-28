@@ -16,6 +16,7 @@ import { getDoctorVisits } from "@/hooks/useDoctorVisit";
 import { IDoctorVisits } from "@/app/api/doctorVisits/route";
 import { getExpertise } from "@/hooks/useExpertise";
 import { getVisits } from "@/hooks/useVisits";
+import { IVisits } from "@/app/api/visits/route";
 
 const weeksName = [
   "شنبه",
@@ -27,7 +28,7 @@ const weeksName = [
   "جمعه",
 ];
 
-export default function DoctorDetailsPage() {
+export default function Page() {
   const id = useParams().id as string;
   const API = process.env.NEXT_PUBLIC_API_URL;
   const [token, setToken] = useState<string | null>(null);
@@ -83,7 +84,7 @@ export default function DoctorDetailsPage() {
     day: "",
   });
 
-  async function handleChangeTime(e: any) {
+  async function handleChangeTime(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     if (!selectedTime.day || !selectedTime.time) {
@@ -146,7 +147,6 @@ export default function DoctorDetailsPage() {
     // invalidate query بعد از ثبت
     await queryClient.invalidateQueries({ queryKey: ["doctorVisits"] });
     await queryClient.invalidateQueries({ queryKey: ["visits"] });
-
 
     if (!response.ok) {
       Toast.fire({
@@ -241,7 +241,7 @@ export default function DoctorDetailsPage() {
                 // ✅ حذف نوبت‌هایی که قبلاً در visitsData رزرو شده‌اند
                 const availableTimes = times.filter((time: string) => {
                   const reserved = visitsData?.some(
-                    (v: any) =>
+                    (v: IVisits) =>
                       v.doctor_id === Number(id) &&
                       v.week === week &&
                       v.time === time
@@ -281,35 +281,6 @@ export default function DoctorDetailsPage() {
                 );
               })}
             </div>
-
-            {/* 
-            <div className="space-y-5">
-              {doctorData?.schedules?.map((schedule: any, i: number) => (
-                <div key={i}>
-                  <p className="font-medium text-slate-700 mb-2">
-                    {schedule.day}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {schedule.times.map((time: any) => (
-                      <button
-                        key={time}
-                        onClick={() =>
-                          setSelectedTime({ time, day: schedule.day })
-                        }
-                        className={`px-4 py-2 cursor-pointer rounded-md border flex items-center justify-center gap-1 text-sm transition ${
-                          selectedTime?.time === time
-                            ? "bg-primary text-white border-primary"
-                            : "bg-gray-50 hover:bg-blue-50 text-gray-700 border-gray-200"
-                        }`}
-                      >
-                        <Clock className="w-4 h-4" />
-                        {time}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div> */}
 
             {/* Price and Reserve */}
             <div className="mt-8 flex flex-col md:flex-row justify-between items-center border-t border-t-zinc-200 pt-4 gap-4">

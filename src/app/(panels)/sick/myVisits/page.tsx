@@ -4,13 +4,12 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { HiOutlineNewspaper } from "react-icons/hi";
 import Link from "next/link";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { getDoctors } from "@/hooks/useDoctors";
-import { getDoctorVisits } from "@/hooks/useDoctorVisit";
 import { getSickVisits } from "@/hooks/useSickVisits";
 import { useQuery } from "@tanstack/react-query";
 import { getMyProfile } from "@/hooks/useMyProfile";
@@ -18,10 +17,7 @@ import Loader from "@/components/Loader";
 import { IDoctor } from "@/app/api/doctors/route";
 import { IVisits } from "@/app/api/visits/route";
 
-export default function page() {
-  const renderIcon = (Icon: any) =>
-    ReactDOMServer.renderToString(<Icon size={18} />);
-
+export default function Page() {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {

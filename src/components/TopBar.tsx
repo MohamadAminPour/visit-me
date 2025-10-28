@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { HiMenu } from "react-icons/hi";
-import { LuBadgeCheck } from "react-icons/lu";
-import { ISideBarProps } from "./SideBar";
 import { useQuery } from "@tanstack/react-query";
 import { getMyProfile } from "@/hooks/useMyProfile";
-// import { IsLoginContext } from "../context/IsLoginContext";
 
-export default function TopBar({ isOpen, setIsOpen }: any) {
-  const API_PATH = "http://127.0.0.1:8000";
+export interface ISideBarProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export default function TopBar({ isOpen, setIsOpen }: ISideBarProps) {
   const [token, setToken] = useState<string | null>(null);
 
   // ✅ گرفتن توکن از localStorage فقط یک بار

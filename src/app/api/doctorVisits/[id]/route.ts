@@ -1,4 +1,3 @@
-// api/doctorVisits/[id]/route.ts
 import { doctorVisits, IDoctorVisits } from "../route";
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import Loader from "@/components/Loader";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { getExpertise } from "@/hooks/useExpertise";
 
-export default function DoctorsList() {
+export default function Page() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("0");
 

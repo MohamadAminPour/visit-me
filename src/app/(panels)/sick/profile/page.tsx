@@ -8,7 +8,26 @@ import Loader from "@/components/Loader";
 import { LiaUserSolid } from "react-icons/lia";
 import { Toast } from "@/components/Toast";
 
+interface IUser {
+  nameFamily: string;
+  phone: string;
+  meli_code: string;
+  complete_profile: boolean;
+}
+
+interface IProfile {
+  user: IUser;
+}
+
+interface IFormData {
+  nameFamily: string;
+  phone: string;
+  meli_code: string;
+}
+
 export default function Page() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const [token, setToken] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
@@ -30,7 +49,7 @@ export default function Page() {
     if (token) refetch();
   }, [token, refetch]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IFormData>({
     nameFamily: "",
     phone: "",
     meli_code: "",
@@ -47,7 +66,7 @@ export default function Page() {
     }
   }, [data]);
 
-  async function handleCompleteProfile(e: any) {
+  async function handleCompleteProfile(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!formData.nameFamily || !formData.meli_code) {
@@ -58,7 +77,7 @@ export default function Page() {
       return;
     }
 
-    const res = await fetch("http://localhost:3000/api/me", {
+    const res = await fetch(`${API}/me`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,18 +96,21 @@ export default function Page() {
         icon: "success",
         title: `پروفایل با موفقیت ${
           data?.user.complete_profile ? "ویرایش" : "تکمیل"
-        } شد !`,
+        } شد`,
       });
 
-      queryClient.setQueryData(["profile"], (old: any) => ({
-        ...old,
-        user: {
-          ...old.user,
-          nameFamily: formData.nameFamily,
-          meli_code: formData.meli_code,
-          complete_profile: true,
-        },
-      }));
+      queryClient.setQueryData<IProfile>(["profile"], (old) => {
+        if (!old) return undefined; // در صورت undefined بودن old
+        return {
+          ...old,
+          user: {
+            ...old.user,
+            nameFamily: formData.nameFamily,
+            meli_code: formData.meli_code,
+            complete_profile: true,
+          },
+        };
+      });
     } else {
       Toast.fire({
         icon: "error",

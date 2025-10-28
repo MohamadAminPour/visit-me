@@ -42,13 +42,8 @@ export const secrataryLinks: ILinks[] = [
   },
 ];
 
-export default function UserInfo({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const [isOpen, setIsOpen] = useState(1);
-  const [profile, setProfile] = useState(null);
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState<boolean>(true); 
 
   return (
     <div className="flex bg-white">

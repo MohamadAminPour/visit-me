@@ -5,7 +5,7 @@ import TopBar from "@/components/TopBar";
 import { useState } from "react";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { LiaUserNurseSolid } from "react-icons/lia";
-import { PiFaceMask, PiUser } from "react-icons/pi";
+import { PiUser } from "react-icons/pi";
 
 export const sickLinks: ILinks[] = [
   { id: 1, title: "پروفایل من", link: "/sick/profile", icon: <PiUser /> },
@@ -23,13 +23,8 @@ export const sickLinks: ILinks[] = [
   },
 ];
 
-export default function UserInfo({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const [isOpen, setIsOpen] = useState(1);
-  const [profile, setProfile] = useState(null);
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState<boolean>(true); 
 
   return (
     <div className="flex bg-white">

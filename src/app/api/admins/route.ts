@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { admins, IAdmin } from "../(auth)/adminLogin/route";
+import { admins } from "../(auth)/adminLogin/route";
 
 
 export async function GET() {

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 // types/crisp.d.ts
 declare global {
   interface Window {
-    $crisp: any[];
+    $crisp: null[];
     CRISP_WEBSITE_ID: string;
   }
 }

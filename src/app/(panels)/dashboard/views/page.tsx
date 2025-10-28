@@ -8,13 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import jalaali from "jalaali-js";
 
-const stats = [
-  { id: 1, views: 542, description: "بازدید امروز", date: "دوشنبه" },
-  { id: 2, views: 12450, description: "بازدید این ماه", date: "مهر ماه" },
-  { id: 3, views: 152300, description: "بازدید کل", date: "سال 1404" },
-];
-
-export default function page() {
+export default function Page() {
   const { data, isPending } = useQuery({
     queryKey: ["views"],
     queryFn: getViews,
@@ -73,7 +67,7 @@ export default function page() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const filtered = data.filter((d: any) => {
+    const filtered = data.filter((d: IViews) => {
       const jDate = jalaali.toJalaali(new Date(d.created_at));
       const jMonthName = months[jDate.jm - 1]; // مثل "آبان"
 

@@ -4,26 +4,24 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Check, Plus, X } from "lucide-react";
-
+import { Check} from "lucide-react";
 import { HiOutlineNewspaper } from "react-icons/hi";
-import Link from "next/link";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { getDoctors } from "@/hooks/useDoctors";
 import { useQuery } from "@tanstack/react-query";
-import Loader from "@/components/Loader";
-import { IDoctor } from "@/app/api/doctors/route";
+import Loader from "@/components/Loader"
 import { IVisits } from "@/app/api/visits/route";
 import { getVisits } from "@/hooks/useVisits";
 import { getSicks } from "@/hooks/useSicks";
-import { LiaUserNurseSolid } from "react-icons/lia";
 import { Toast } from "@/components/Toast";
 import { queryClient } from "@/lib/queryClient";
 import { getMyProfile } from "@/hooks/useMyProfile";
 import { ISick } from "@/app/api/(auth)/sickRegister/route";
+import { IconType } from "react-icons";
 
-export default function page() {
-  const renderIcon = (Icon: any) =>
+export default function Page() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   const [token, setToken] = useState<string | null>(null);
@@ -33,12 +31,7 @@ export default function page() {
     setToken(t);
   }, []);
 
-  //doctorData
-  const { data: doctorData, isPending: doctorIsPending } = useQuery({
-    queryKey: ["doctors"],
-    queryFn: getDoctors,
-  });
-
+  //sickData
   const { data: sicksData, isPending: sicksIsPending } = useQuery({
     queryKey: ["sicks"],
     queryFn: getSicks,
@@ -60,7 +53,7 @@ export default function page() {
   //handleConfirmVisit
   async function handleConfirmVisit(id: number) {
     try {
-      await fetch(`http://localhost:3000/api/visits/confirm/${id}`, {
+      await fetch(`${API}/visits/confirm/${id}`, {
         method: "PUT",
       });
       Toast.fire({
@@ -73,7 +66,7 @@ export default function page() {
     }
   }
 
-  if (!visitsData || sicksIsPending || doctorIsPending || VisitsIsPending) {
+  if (!visitsData || sicksIsPending || VisitsIsPending) {
     return <Loader />;
   }
 

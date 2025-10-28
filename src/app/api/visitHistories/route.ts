@@ -1,5 +1,3 @@
-import { NextRequest } from "next/server";
-
 interface IVisitHistories {
   id: number;
   nameFamily: string;

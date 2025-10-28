@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 import { sicks } from "../(auth)/sickRegister/route";
 
 export async function GET() {

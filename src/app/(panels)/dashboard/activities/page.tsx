@@ -6,6 +6,9 @@ import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
 import { Trash2 } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
+import { HiOutlineNewspaper } from "react-icons/hi";
+import { FaRegChartBar } from "react-icons/fa";
+import { IconType } from "react-icons";
 
 const activities = [
   {
@@ -17,16 +20,14 @@ const activities = [
   {
     id: 2,
     doer: "محسن محمدی",
-    activity: "بیمار جدید عضو شد    ",
+    activity: "بیمار جدید عضو شد",
     who: "",
   },
 ];
 
-import { HiOutlineNewspaper } from "react-icons/hi";
-import { FaRegChartBar } from "react-icons/fa";
 
-export default function page() {
-  const renderIcon = (Icon: any) =>
+export default function Page() {
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {

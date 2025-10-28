@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { JSX } from "react";
-import { LuLogOut, LuUserRound } from "react-icons/lu";
+import { LuLogOut } from "react-icons/lu";
 
 export interface ISideBarProps {
-  isOpen: number;
-  setIsOpen: any;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   links: ILinks[];
 }
 

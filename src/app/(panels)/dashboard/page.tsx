@@ -11,17 +11,15 @@ import { getSecrataries } from "@/hooks/useSecrataries";
 import { getSicks } from "@/hooks/useSicks";
 import { getViews } from "@/hooks/useViews";
 import { useQuery } from "@tanstack/react-query";
-import { Trash, User } from "lucide-react";
+import { User } from "lucide-react";
 import Link from "next/link";
 import { CiGrid41 } from "react-icons/ci";
 import { FiEye } from "react-icons/fi";
-import { GoShieldCheck } from "react-icons/go";
-import { HiOutlineShieldCheck } from "react-icons/hi";
 import { LiaUserNurseSolid } from "react-icons/lia";
 import { PiFaceMask } from "react-icons/pi";
 import { TbNurse } from "react-icons/tb";
 
-export default function UserInfo() {
+export default function Page() {
   //doctorData
   const { data: doctorsData, isPending: doctorsIsPending } = useQuery({
     queryKey: ["doctors"],

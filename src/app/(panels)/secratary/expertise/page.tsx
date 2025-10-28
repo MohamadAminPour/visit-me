@@ -12,12 +12,15 @@ import { queryClient } from "@/lib/queryClient";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { getExpertise } from "@/hooks/useExpertise";
 import { Toast } from "@/components/Toast";
+import { IconType } from "react-icons";
 
-export default function page() {
+export default function Page() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const [addExpertise, setAddExpertise] = useState(false);
   const [expertiseName, setExpertiseName] = useState("");
 
-  const renderIcon = (Icon: any) =>
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   const { data, isPending } = useQuery({
@@ -26,7 +29,7 @@ export default function page() {
   });
 
   //handleAddExpertise
-  async function handleAddExpertise(e: any) {
+  async function handleAddExpertise(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (expertiseName) {
@@ -34,7 +37,7 @@ export default function page() {
         icon: "success",
         title: "تخصص با موفقیت ایجاد شد",
       });
-      await fetch(`http://localhost:3000/api/expertisies`, {
+      await fetch(`${API}/expertisies`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
@@ -54,7 +57,7 @@ export default function page() {
 
   //handleDeleteExpertisies
   async function handleDeleteExpertisies(id: number) {
-    await fetch(`http://localhost:3000/api/expertisies`, {
+    await fetch(`${API}/expertisies`, {
       method: "DELETE",
       headers: {
         "Content-Type": "Application/json",

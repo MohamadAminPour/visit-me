@@ -11,14 +11,15 @@ import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { getSicks } from "@/hooks/useSicks";
 import { ISick } from "@/app/api/(auth)/sickRegister/route";
+import { IconType } from "react-icons";
 
-export default function page() {
+export default function Page() {
   const { data, isPending } = useQuery({
     queryKey: ["sicks"],
     queryFn: getSicks
   });
 
-  const renderIcon = (Icon: any) =>
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   function handleShowVisits(id: number) {

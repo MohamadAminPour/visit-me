@@ -6,7 +6,6 @@ import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
 import { Trash2, Eye, Plus, X } from "lucide-react";
 import { TbEditCircle } from "react-icons/tb";
-
 import { LiaUserNurseSolid } from "react-icons/lia";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/Loader";
@@ -16,8 +15,9 @@ import { queryClient } from "@/lib/queryClient";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { Toast } from "@/components/Toast";
 import { getExpertise } from "@/hooks/useExpertise";
+import { IconType } from "react-icons";
 
-export default function page() {
+export default function Page() {
   const [addDoctor, setAddDoctor] = useState(false);
   const [formData, setFormData] = useState({
     nameFamily: "",
@@ -31,7 +31,7 @@ export default function page() {
     about: "",
   });
 
-  const renderIcon = (Icon: any) =>
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   //getDoctors
@@ -51,7 +51,7 @@ export default function page() {
   });
 
   //handleAddDoctor
-  async function handleAddDoctor(e: any) {
+  async function handleAddDoctor(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const fd = new FormData();
@@ -337,8 +337,9 @@ export default function page() {
                 formatter: (_, row) => {
                   const expertisy_id = Number(row.cells[4].data);
                   const expertisyName =
-                    expertiseData?.find((e: IExpertisies) => e.id === expertisy_id)
-                      ?.name ?? "ناشناس";
+                    expertiseData?.find(
+                      (e: IExpertisies) => e.id === expertisy_id
+                    )?.name ?? "ناشناس";
                   return h("span", {}, expertisyName); // مقدار رشته‌ای
                 },
               },

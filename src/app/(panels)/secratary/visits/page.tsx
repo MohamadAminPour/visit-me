@@ -19,9 +19,12 @@ import { getSicks } from "@/hooks/useSicks";
 import { LiaUserNurseSolid } from "react-icons/lia";
 import { Toast } from "@/components/Toast";
 import { queryClient } from "@/lib/queryClient";
+import { IconType } from "react-icons";
 
-export default function page() {
-  const renderIcon = (Icon: any) =>
+export default function Page() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   const [token, setToken] = useState<string | null>(null);
@@ -48,11 +51,10 @@ export default function page() {
     queryFn: getVisits,
   });
 
-
   //handleConfirmVisit
   async function handleWentDoctor(id: number) {
     try {
-      await fetch(`http://localhost:3000/api/visits/doctor/${id}`, {
+      await fetch(`${API}/visits/doctor/${id}`, {
         method: "PUT",
       });
       Toast.fire({
@@ -65,11 +67,10 @@ export default function page() {
     }
   }
 
-
   //handleRejectVisit
   async function handleRejectVisit(id: number) {
     try {
-      await fetch(`http://localhost:3000/api/visits/reject/${id}`, {
+      await fetch(`${API}/visits/reject/${id}`, {
         method: "PUT",
       });
       Toast.fire({
@@ -99,16 +100,20 @@ export default function page() {
 
           <div className="text-right">
             <Grid
-              data={visitsData?.filter((v:IVisits)=>v.status===1||v.status===2).map((s: IVisits) => [
-                s.user_id,
-                s.doctor_id,
-                s.week,
-                s.time,
-                s.status,
-                s.created_at,
-                s.id,
-                new Intl.DateTimeFormat("fa-IR").format(new Date(s.created_at)),
-              ])}
+              data={visitsData
+                ?.filter((v: IVisits) => v.status === 1 || v.status === 2)
+                .map((s: IVisits) => [
+                  s.user_id,
+                  s.doctor_id,
+                  s.week,
+                  s.time,
+                  s.status,
+                  s.created_at,
+                  s.id,
+                  new Intl.DateTimeFormat("fa-IR").format(
+                    new Date(s.created_at)
+                  ),
+                ])}
               columns={[
                 {
                   name: "نام بیمار",

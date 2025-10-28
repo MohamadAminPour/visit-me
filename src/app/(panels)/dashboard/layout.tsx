@@ -2,13 +2,9 @@
 
 import SideBar, { ILinks } from "@/components/SideBar";
 import TopBar from "@/components/TopBar";
-import { Eye } from "lucide-react";
 import { useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
-import { FaRegChartBar } from "react-icons/fa";
-import { GoShieldCheck } from "react-icons/go";
-import { HiOutlineShieldCheck } from "react-icons/hi";
-import { LiaUserNurseSolid, LiaUserSolid } from "react-icons/lia";
+import { LiaUserNurseSolid } from "react-icons/lia";
 import { PiFaceMask, PiUser } from "react-icons/pi";
 import { TbEyeShare, TbNurse, TbUserShield } from "react-icons/tb";
 
@@ -37,13 +33,8 @@ export const ownerLinks: ILinks[] = [
   // },
 ];
 
-export default function UserInfo({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const [isOpen, setIsOpen] = useState(1);
-  const [profile, setProfile] = useState(null);
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState<boolean>(true); 
 
   return (
     <div className="flex bg-white">

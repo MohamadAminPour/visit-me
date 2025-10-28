@@ -12,8 +12,9 @@ import { getSecrataries } from "@/hooks/useSecrataries";
 import { ISecratary } from "@/app/api/secrataries/route";
 import { Toast } from "@/components/Toast";
 import { queryClient } from "@/lib/queryClient";
+import { IconType } from "react-icons";
 
-export default function page() {
+export default function Page() {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const [addSecratary, setAddSecratary] = useState(false);
@@ -24,7 +25,7 @@ export default function page() {
     queryFn: getSecrataries,
   });
 
-  async function handleAddSecratary(e: any) {
+  async function handleAddSecratary(e:  React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const res = await fetch(`${API}/secrataries`, {
       method: "POST",
@@ -60,7 +61,7 @@ export default function page() {
       });
     }
   }
-  const renderIcon = (Icon: any) =>
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   async function handleDeleteSecratary(id: number) {

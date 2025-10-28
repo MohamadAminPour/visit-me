@@ -1,13 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Plus, X } from "lucide-react";
-
 import { HiOutlineNewspaper } from "react-icons/hi";
-import Link from "next/link";
 import AnimatedContainer from "@/components/AnimatedContainer";
 import { getDoctors } from "@/hooks/useDoctors";
 import { useQuery } from "@tanstack/react-query";
@@ -16,12 +13,10 @@ import { IDoctor } from "@/app/api/doctors/route";
 import { IVisits } from "@/app/api/visits/route";
 import { getVisits } from "@/hooks/useVisits";
 import { getSicks } from "@/hooks/useSicks";
-import { LiaUserNurseSolid } from "react-icons/lia";
-import { Toast } from "@/components/Toast";
-import { queryClient } from "@/lib/queryClient";
+import { IconType } from "react-icons";
 
-export default function page() {
-  const renderIcon = (Icon: any) =>
+export default function Page() {
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   //doctorData

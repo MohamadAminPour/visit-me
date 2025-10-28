@@ -12,8 +12,9 @@ import { Toast } from "@/components/Toast";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
 import { HiOutlineNewspaper } from "react-icons/hi";
-import {  IDoctorVisits } from "@/app/api/doctorVisits/route";
+import { IDoctorVisits } from "@/app/api/doctorVisits/route";
 import { getDoctorVisits } from "@/hooks/useDoctorVisit";
+import { IconType } from "react-icons";
 
 const weeksName = [
   "شنبه",
@@ -25,7 +26,8 @@ const weeksName = [
   "جمعه",
 ];
 
-export default function page() {
+export default function Page() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const [addExpertise, setAddExpertise] = useState(false);
   const [showVisits, setShowVisits] = useState(0);
   const [formData, setFormData] = useState({
@@ -34,7 +36,7 @@ export default function page() {
     time: "",
   });
 
-  const renderIcon = (Icon: any) =>
+  const renderIcon = (Icon: IconType) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
   //doctorData
@@ -44,14 +46,14 @@ export default function page() {
   });
 
   //handleAddVisit
-  async function handleAddVisit(e: any) {
+  async function handleAddVisit(e:  React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(formData);
 
     //check inputs
     const allFilled = Object.values(formData).every((value) => value);
     if (allFilled) {
-      await fetch(`http://localhost:3000/api/doctorVisits`, {
+      await fetch(`${API}/doctorVisits`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
@@ -78,13 +80,13 @@ export default function page() {
     {
       queryKey: ["doctorVisits", showVisits],
       queryFn: () => getDoctorVisits(showVisits),
-      enabled: !!showVisits, 
+      enabled: !!showVisits,
     }
   );
 
   //handleDeleteDoctorVisits
   async function handleDeleteDoctorVisits(id: number) {
-    await fetch(`http://localhost:3000/api/doctorVisits`, {
+    await fetch(`${API}/doctorVisits`, {
       method: "DELETE",
       headers: {
         "Content-Type": "Application/json",
@@ -98,7 +100,6 @@ export default function page() {
     });
     await queryClient.invalidateQueries({ queryKey: ["doctorVisits"] });
   }
-
 
   if (doctorIsPending) {
     return <Loader />;
@@ -182,7 +183,7 @@ export default function page() {
                       {
                         className:
                           "p-2 rounded cursor-pointer text-[.8rem] bg-red-500 text-white hover:bg-red-600",
-                         onClick: () => handleDeleteDoctorVisits(id),
+                        onClick: () => handleDeleteDoctorVisits(id),
                         title: "حذف",
                       },
                       h("span", {
