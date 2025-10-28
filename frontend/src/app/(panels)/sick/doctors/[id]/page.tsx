@@ -7,7 +7,6 @@ import { getDoctor } from "@/hooks/useDoctor";
 import Loader from "@/components/Loader";
 import { useParams, useRouter } from "next/navigation";
 import AnimatedContainer from "@/components/AnimatedContainer";
-import { getuseExpertise } from "@/hooks/useExpertise";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { Toast } from "@/components/Toast";
 import { getMyProfile } from "@/hooks/useMyProfile";
@@ -15,6 +14,8 @@ import { queryClient } from "@/lib/queryClient";
 import Swal from "sweetalert2";
 import { getDoctorVisits } from "@/hooks/useDoctorVisit";
 import { IDoctorVisits } from "@/app/api/doctorVisits/route";
+import { getExpertise } from "@/hooks/useExpertise";
+import { getVisits } from "@/hooks/useVisits";
 
 const weeksName = [
   "شنبه",
@@ -51,10 +52,17 @@ export default function DoctorDetailsPage() {
     enabled: !!token,
   });
 
+  //getMyProfile
+  const { data: visitsData, isPending: visitsDataIsPending } = useQuery({
+    queryKey: ["visits"],
+    queryFn: getVisits,
+    enabled: !!token,
+  });
+
   //getuseExpertise
   const { data: expertiseData, isPending: expertisePending } = useQuery({
     queryKey: ["expertise"],
-    queryFn: getuseExpertise,
+    queryFn: getExpertise,
   });
 
   const { data: doctorVisitsData, isPending: doctorVisitsPending } = useQuery({
@@ -82,6 +90,13 @@ export default function DoctorDetailsPage() {
       Toast.fire({
         icon: "error",
         title: "لطفا یک نوبت را انتخاب کنید",
+      });
+      return;
+    }
+    if (!profileData?.user?.complete_profile) {
+      Toast.fire({
+        icon: "error",
+        title: "لطفا اول پروفایل خود را تکمیل کنید",
       });
       return;
     }
@@ -130,6 +145,8 @@ export default function DoctorDetailsPage() {
 
     // invalidate query بعد از ثبت
     await queryClient.invalidateQueries({ queryKey: ["doctorVisits"] });
+    await queryClient.invalidateQueries({ queryKey: ["visits"] });
+
 
     if (!response.ok) {
       Toast.fire({
@@ -216,9 +233,21 @@ export default function DoctorDetailsPage() {
 
             <div className="space-y-5">
               {uniqueWeeks.map((week: string) => {
+                // همه‌ی تایم‌های آن هفته برای دکتر
                 const times = doctorVisits
                   .filter((v: IDoctorVisits) => v.week === week)
                   .map((v: IDoctorVisits) => v.time);
+
+                // ✅ حذف نوبت‌هایی که قبلاً در visitsData رزرو شده‌اند
+                const availableTimes = times.filter((time: string) => {
+                  const reserved = visitsData?.some(
+                    (v: any) =>
+                      v.doctor_id === Number(id) &&
+                      v.week === week &&
+                      v.time === time
+                  );
+                  return !reserved; // فقط تایم‌هایی که رزرو نشده‌اند
+                });
 
                 return (
                   <div key={`week-${week}`}>
@@ -226,21 +255,27 @@ export default function DoctorDetailsPage() {
                       {String(week)}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {times.map((time: string) => (
-                        <button
-                          key={`${week}-${time}`}
-                          onClick={() => setSelectedTime({ time, day: week })}
-                          className={`px-4 py-2 cursor-pointer rounded-md border flex items-center justify-center gap-1 text-sm transition ${
-                            selectedTime.day === week &&
-                            selectedTime.time === time
-                              ? "bg-primary text-white border-primary"
-                              : "bg-gray-50 hover:bg-blue-50 text-gray-700 border-gray-200"
-                          }`}
-                        >
-                          <Clock className="w-4 h-4" />
-                          {String(time)}
-                        </button>
-                      ))}
+                      {availableTimes.length > 0 ? (
+                        availableTimes.map((time: string) => (
+                          <button
+                            key={`${week}-${time}`}
+                            onClick={() => setSelectedTime({ time, day: week })}
+                            className={`px-4 py-2 cursor-pointer rounded-md border flex items-center justify-center gap-1 text-sm transition ${
+                              selectedTime.day === week &&
+                              selectedTime.time === time
+                                ? "bg-primary text-white border-primary"
+                                : "bg-gray-50 hover:bg-blue-50 text-gray-700 border-gray-200"
+                            }`}
+                          >
+                            <Clock className="w-4 h-4" />
+                            {String(time)}
+                          </button>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-400">
+                          در این روز نوبت خالی وجود ندارد
+                        </p>
+                      )}
                     </div>
                   </div>
                 );

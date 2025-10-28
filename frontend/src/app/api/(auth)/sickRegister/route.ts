@@ -8,7 +8,7 @@ export interface ISick {
   role: string;
   meli_code: string | null;
   complete_profile: boolean;
-  created_at: Date;
+  created_at: string | Date;
 }
 
 export const sicks: ISick[] = [
@@ -18,8 +18,8 @@ export const sicks: ISick[] = [
     phone: "09026024562",
     meli_code: "0926511451",
     role: "sick",
-    complete_profile: false,
-    created_at: new Date(),
+    complete_profile: true,
+    created_at: "1404/12/10",
   },
   {
     id: 2,
@@ -27,8 +27,8 @@ export const sicks: ISick[] = [
     phone: "09159875066",
     meli_code: "0928871665",
     role: "sick",
-    complete_profile: false,
-    created_at: new Date(),
+    complete_profile: true,
+    created_at: "1404/12/10",
   },
 ];
 
@@ -38,19 +38,25 @@ export async function POST(req: NextRequest) {
     const jwtKey = process.env.SECRET_JWT_TOKEN as string;
 
     if (!phone || phone.length !== 11) {
-      return Response.json({ message: "شماره موبایل معتبر نیست" }, { status: 400 });
+      return Response.json(
+        { message: "شماره موبایل معتبر نیست" },
+        { status: 400 }
+      );
     }
 
     const mainSick = sicks.find((s) => s.phone === phone);
 
     if (mainSick) {
-      return Response.json({ message: "این شماره قبلاً ثبت شده است" }, { status: 409 });
+      return Response.json(
+        { message: "این شماره قبلاً ثبت شده است" },
+        { status: 409 }
+      );
     }
 
     const newSick: ISick = {
       id: sicks.length + 1,
       nameFamily: null,
-      phone,
+      phone: phone,
       meli_code: null,
       role: "sick",
       complete_profile: false,
@@ -59,9 +65,14 @@ export async function POST(req: NextRequest) {
 
     sicks.push(newSick);
 
-    const token = jwt.sign({ id: newSick.id, phone }, jwtKey, { expiresIn: "1d" });
+    const token = jwt.sign({ id: newSick.id, phone:newSick.phone, role: newSick.role }, jwtKey, {
+      expiresIn: "1d",
+    });
 
-    return Response.json({ message: "ثبت‌نام با موفقیت انجام شد", sick: newSick, token }, { status: 201 });
+    return Response.json(
+      { message: "ثبت‌ نام با موفقیت انجام شد", sick: newSick, token },
+      { status: 201 }
+    );
   } catch (error) {
     return Response.json({ message: "خطای سرور" }, { status: 500 });
   }

@@ -5,7 +5,7 @@ import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
 import { Trash2, Plus, X } from "lucide-react";
-import { TbEditCircle, TbNurse } from "react-icons/tb";
+import {  TbNurse } from "react-icons/tb";
 import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { getSecrataries } from "@/hooks/useSecrataries";

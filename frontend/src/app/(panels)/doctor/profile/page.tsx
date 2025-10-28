@@ -12,16 +12,23 @@ export default function Page() {
   const [token, setToken] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
+  // ✅ گرفتن توکن از localStorage فقط یک بار
   useEffect(() => {
-    const t = localStorage.getItem("tokan"); 
-    setToken(t);
+    const t = localStorage.getItem("tokan");
+    if (t) setToken(t);
   }, []);
 
-  const { data, isPending } = useQuery({
+  // ✅ واکشی پروفایل فقط وقتی توکن آماده است
+  const { data, isPending, refetch } = useQuery({
     queryKey: ["profile"],
     queryFn: () => getMyProfile(token as string),
-    enabled: !!token,
+    enabled: !!token, // اجرا فقط وقتی توکن موجود است
   });
+
+  // ✅ اگر توکن بعد از mount آماده شد، مجدداً refetch کن
+  useEffect(() => {
+    if (token) refetch();
+  }, [token, refetch]);
 
   const [formData, setFormData] = useState({
     nameFamily: "",
@@ -37,16 +44,16 @@ export default function Page() {
         meli_code: data?.user?.meli_code || "",
       });
     }
-    console.log(data)
+    console.log(data);
   }, [data]);
 
-  console.log(data)
+  console.log(data);
 
   async function handleCompleteProfile(e: any) {
     e.preventDefault();
 
     if (!formData.nameFamily || !formData.meli_code) {
-     Toast.fire({
+      Toast.fire({
         icon: "error",
         title: "لطفا نام و کد ملی را وارد کنید",
       });
@@ -66,12 +73,12 @@ export default function Page() {
     });
 
     const result = await res.json();
-    console.log(res)
+    console.log(res);
 
     if (res.ok) {
       Toast.fire({
         icon: "success",
-        title: `پروفایل با موفقیت ویرایش شد !`,
+        title: `پروفایل با موفقیت ویرایش شد`,
       });
 
       // ✅ آپدیت بدون رفرش
@@ -85,7 +92,7 @@ export default function Page() {
         },
       }));
     } else {
-        Toast.fire({
+      Toast.fire({
         icon: "error",
         title: "لطفا نام و کد ملی را وارد کنید",
       });
@@ -135,20 +142,20 @@ export default function Page() {
                 onChange={(e) =>
                   setFormData({ ...formData, meli_code: e.target.value })
                 }
-                style={{direction:"rtl"}}
+                style={{ direction: "rtl" }}
                 className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.9rem] "
-                placeholder="کد ملی خود را وارد کنید..." 
+                placeholder="کد ملی خود را وارد کنید..."
               />
             </div>
           </div>
 
           <div className="flex items-center gap-1">
-              <button
-                type="submit"
-                className="bg-yellow-500/80 cursor-pointer hover:bg-yellow-500 p-2 duration-300 px-5 rounded-lg text-white text-[.9rem] mt-5"
-              >
-                ویرایش
-              </button>
+            <button
+              type="submit"
+              className="bg-yellow-500/80 cursor-pointer hover:bg-yellow-500 p-2 duration-300 px-5 rounded-lg text-white text-[.9rem] mt-5"
+            >
+              ویرایش
+            </button>
           </div>
         </form>
       </div>

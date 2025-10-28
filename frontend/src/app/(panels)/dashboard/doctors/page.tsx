@@ -13,9 +13,9 @@ import Loader from "@/components/Loader";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
 import { queryClient } from "@/lib/queryClient";
-import { getuseExpertise } from "@/hooks/useExpertise";
 import { IExpertisies } from "@/app/api/expertisies/route";
 import { Toast } from "@/components/Toast";
+import { getExpertise } from "@/hooks/useExpertise";
 
 export default function page() {
   const [addDoctor, setAddDoctor] = useState(false);
@@ -47,7 +47,7 @@ export default function page() {
   //getuseExpertise
   const { data: expertiseData, isPending: ExpertisePending } = useQuery({
     queryKey: ["expertise"],
-    queryFn: getuseExpertise,
+    queryFn: getExpertise,
   });
 
   //handleAddDoctor

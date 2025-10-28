@@ -12,16 +12,23 @@ export default function Page() {
   const [token, setToken] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
+  // ✅ گرفتن توکن از localStorage فقط یک بار
   useEffect(() => {
-    const t = localStorage.getItem("tokan"); // ✅ اصلاح شد
-    setToken(t);
+    const t = localStorage.getItem("tokan");
+    if (t) setToken(t);
   }, []);
 
-  const { data, isPending } = useQuery({
+  // ✅ واکشی پروفایل فقط وقتی توکن آماده است
+  const { data, isPending, refetch } = useQuery({
     queryKey: ["profile"],
     queryFn: () => getMyProfile(token as string),
-    enabled: !!token,
+    enabled: !!token, // اجرا فقط وقتی توکن موجود است
   });
+
+  // ✅ اگر توکن بعد از mount آماده شد، مجدداً refetch کن
+  useEffect(() => {
+    if (token) refetch();
+  }, [token, refetch]);
 
   const [formData, setFormData] = useState({
     nameFamily: "",
@@ -29,6 +36,7 @@ export default function Page() {
     meli_code: "",
   });
 
+  // ✅ ست کردن اطلاعات وقتی پروفایل آماده شد
   useEffect(() => {
     if (data?.user) {
       setFormData({
@@ -37,14 +45,13 @@ export default function Page() {
         meli_code: data.user.meli_code || "",
       });
     }
-    console.log(data)
   }, [data]);
 
   async function handleCompleteProfile(e: any) {
     e.preventDefault();
 
     if (!formData.nameFamily || !formData.meli_code) {
-     Toast.fire({
+      Toast.fire({
         icon: "error",
         title: "لطفا نام و کد ملی را وارد کنید",
       });
@@ -68,10 +75,11 @@ export default function Page() {
     if (res.ok) {
       Toast.fire({
         icon: "success",
-        title: `پروفایل با موفقیت ${data?.user.complete_profile?"ویرایش":"تکمیل"} شد !`,
+        title: `پروفایل با موفقیت ${
+          data?.user.complete_profile ? "ویرایش" : "تکمیل"
+        } شد !`,
       });
 
-      // ✅ آپدیت بدون رفرش
       queryClient.setQueryData(["profile"], (old: any) => ({
         ...old,
         user: {
@@ -82,9 +90,9 @@ export default function Page() {
         },
       }));
     } else {
-        Toast.fire({
+      Toast.fire({
         icon: "error",
-        title: "لطفا نام و کد ملی را وارد کنید",
+        title: "خطا در بروزرسانی اطلاعات",
       });
     }
   }
@@ -132,9 +140,9 @@ export default function Page() {
                 onChange={(e) =>
                   setFormData({ ...formData, meli_code: e.target.value })
                 }
-                style={{direction:"rtl"}}
+                style={{ direction: "rtl" }}
                 className="border w-full mt-2 text-right outline-0 border-zinc-200 px-2 py-2 rounded-sm placeholder:text-[.9rem] "
-                placeholder="کد ملی خود را وارد کنید..." 
+                placeholder="کد ملی خود را وارد کنید..."
               />
             </div>
           </div>

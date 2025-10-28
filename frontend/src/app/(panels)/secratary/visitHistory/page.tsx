@@ -4,115 +4,151 @@ import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
-import { Check, Eye, X } from "lucide-react";
-
-const visitHistory = [
-  {
-    id: 1,
-    nameFamily: "علی کریمانی",
-    visit_number: "40901010",
-    doctor: "1",
-    reason: "ویزیت شده",
-    status: "1",
-    create_at: "1404/07/23",
-  },
-  {
-    id: 2,
-    nameFamily: "زهرا رضوی",
-    visit_number: "40901011",
-    doctor: "2",
-    reason: "ویزیت شده",
-    status: "1",
-    create_at: "1404/07/24",
-  },
-  {
-    id: 3,
-    nameFamily: "بهرام نعیمی",
-    visit_number: "40901012",
-    doctor: "2",
-    reason: "حضور نداشتند",
-    status: "0",
-    create_at: "1404/06/24",
-  },
-];
+import { Plus, X } from "lucide-react";
 
 import { HiOutlineNewspaper } from "react-icons/hi";
+import Link from "next/link";
+import AnimatedContainer from "@/components/AnimatedContainer";
+import { getDoctors } from "@/hooks/useDoctors";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "@/components/Loader";
+import { IDoctor } from "@/app/api/doctors/route";
+import { IVisits } from "@/app/api/visits/route";
+import { getVisits } from "@/hooks/useVisits";
+import { getSicks } from "@/hooks/useSicks";
+import { LiaUserNurseSolid } from "react-icons/lia";
+import { Toast } from "@/components/Toast";
+import { queryClient } from "@/lib/queryClient";
 
 export default function page() {
   const renderIcon = (Icon: any) =>
     ReactDOMServer.renderToString(<Icon size={18} />);
 
-  function handleShowVisits(id: number) {
-    alert(id);
+  //doctorData
+  const { data: doctorData, isPending: doctorIsPending } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getDoctors,
+  });
+
+  const { data: sicksData, isPending: sicksIsPending } = useQuery({
+    queryKey: ["sicks"],
+    queryFn: getSicks,
+  });
+
+  //getSickVisits
+  const { data: visitsData, isPending: VisitsIsPending } = useQuery({
+    queryKey: ["visits"],
+    queryFn: getVisits,
+  });
+
+
+  if (!visitsData || sicksIsPending || doctorIsPending || VisitsIsPending) {
+    return <Loader />;
   }
 
   return (
-    <div className="flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-[0_11px_50px_1px_rgba(0,0,0,0.1)]">
-      <div className="flex items-center gap-1">
-        <HiOutlineNewspaper className="size-7" />
-        <p className="font-IranYekanBold text-[1rem]">
-          تاریخچه نوبت های مجموعه
-        </p>
-      </div>
+    <AnimatedContainer>
+      <div className="w-full">
+        <div className="flex flex-col bg-white py-6 px-5 gap-2 rounded-xl shadow-xl shadow-zinc-200/30 border-1 border-zinc-200 ">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <HiOutlineNewspaper className="size-7" />
+              <p className="font-IranYekanBold text-[1rem]">نوبت های من</p>
+            </div>
+          </div>
 
-      <div className="text-right">
-        <Grid
-          data={visitHistory.map((a) => [
-            a.nameFamily,
-            a.visit_number,
-            a.doctor,
-            a.status,
-            new Intl.DateTimeFormat("fa-IR").format(new Date(a.create_at)),
-            a.id,
-          ])}
-          columns={[
-            "نام و نام خانوادگی",
-            "شماره نوبت",
-            "نام دکتر",
-            "وضعیت",
-            "تاریخ نوبت",
-            {
-              name: "عملیات",
-              formatter: (_, row) => {
-                const id = row.cells[5].data as number; // ستون id برای عملیات
-                return h("div", { className: "flex gap-2" }, [
-                  h(
-                    "button",
-                    {
-                      className:
-                        "p-2 rounded cursor-pointer text-[.8rem] bg-primary/80 text-white hover:bg-primary",
-                      //    onClick: () => handleUpdateArticle(id),
-                      onClick: () => alert(visitHistory[id - 1].reason),
-                      title: "نمایش وضعیت",
-                    },
-                    h("span", {
-                      dangerouslySetInnerHTML: {
-                        __html: renderIcon(Eye),
-                      },
-                    })
-                  ),
-                ]);
-              },
-            },
-          ]}
-          search={true}
-          pagination={{ limit: 5 }}
-          sort={true}
-          language={{
-            search: {
-              placeholder: "جستجو...",
-            },
-            pagination: {
-              previous: "قبلی",
-              to: "تا",
-              of: "از",
-              next: "بعدی",
-              showing: "نمایش",
-              results: () => "رکورد",
-            },
-          }}
-        />
+          <div className="text-right">
+            <Grid
+              data={visitsData?.filter((v:IVisits)=>v.status===3||v.status===0).map((s: IVisits) => [
+                s.user_id,
+                s.doctor_id,
+                s.week,
+                s.time,
+                s.status,
+                s.status_text,
+                s.created_at,
+                new Intl.DateTimeFormat("fa-IR").format(new Date(s.created_at)),
+              ])}
+              columns={[
+                {
+                  name: "نام بیمار",
+                  formatter: (_, row) => {
+                    const sick_id = Number(row.cells[0].data);
+                    const sickName =
+                      sicksData?.find((d: IDoctor) => d.id === sick_id)
+                        ?.nameFamily ?? "ناشناس";
+                    return h("span", {}, sickName); // مقدار رشته‌ای
+                  },
+                },
+                {
+                  name: "نام دکتر",
+                  formatter: (_, row) => {
+                    const doctor_id = Number(row.cells[1].data);
+                    const doctorName =
+                      doctorData?.find((d: IDoctor) => d.id === doctor_id)
+                        ?.nameFamily ?? "ناشناس";
+                    return h("span", {}, doctorName); // مقدار رشته‌ای
+                  },
+                },
+                "روز هفته",
+                "ساعت",
+                {
+                  name: "وضعیت",
+                  formatter: (cell) => {
+                    let text = "";
+                    let bg = "";
+
+                    switch (cell) {
+                      case 0:
+                        text = "رد";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-red-500";
+                        break;
+                      case 1:
+                        text = "در انتظار";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-yellow-500";
+                        break;
+                      case 2:
+                        text = "پیش دکتر";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-primary";
+                        break;
+                      case 3:
+                        text = "تایید";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-green-500";
+                        break;
+                      default:
+                        text = "نامشخص";
+                        bg =
+                          "px-2 py-1 rounded-sm text-white text-[.8rem] bg-gray-500";
+                    }
+
+                    return h("span", { className: bg }, text);
+                  },
+                },
+                "علت وضعیت",
+                "تاریخ",
+              ]}
+              search={true}
+              pagination={{ limit: 5 }}
+              sort={true}
+              language={{
+                search: { placeholder: "جستجو..." },
+                pagination: {
+                  previous: "قبلی",
+                  to: "تا",
+                  of: "از",
+                  next: "بعدی",
+                  showing: "نمایش",
+                  results: () => "رکورد",
+                },
+              }}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+    </AnimatedContainer>
   );
 }

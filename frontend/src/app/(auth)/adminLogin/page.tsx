@@ -72,7 +72,7 @@ export default function page() {
                   placeholder="شماره تلفن خود را وارد کنید..."
                 />
               </div>
-               <div className="flex items-start flex-col mt-5">
+              <div className="flex items-start flex-col mt-5">
                 <label htmlFor="">گذرواژه</label>
                 <input
                   type="password"
@@ -105,15 +105,16 @@ export default function page() {
 export function Button() {
   const { pending } = useFormStatus();
   return (
-    <button className="w-full flex items-center justify-center gap-2 hover:bg-[#6c757d] hover:text-white bg-[#adb5bd] cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+    <>
       {pending ? (
-        <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
+        <button disabled className="w-full flex items-center justify-center gap-2 hover:bg-[#6c757d] hover:text-white bg-[#adb5bd] cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+          <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
+        </button>
       ) : (
-        <>
+        <button className="w-full flex items-center justify-center gap-2 hover:bg-[#6c757d] hover:text-white bg-[#adb5bd] cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
           <p className="text-[.8rem] sm:text-[.9rem]">ورود ادمین</p>
-          <BiArrowBack className="mt-[.1rem]" />
-        </>
+        </button>
       )}
-    </button>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-export async function getuseExpertise() {
+export async function getExpertise() {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const res = await fetch(`${API}/expertisies`);

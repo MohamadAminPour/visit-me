@@ -2,7 +2,7 @@ export async function getVisits() {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const res = await fetch(`${API}/visits`);
-  if (!res.ok) throw new Error("Error fetching posts");
+  if (!res.ok) throw new Error("Error fetching visits");
   return res.json();
 }
   

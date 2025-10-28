@@ -2,7 +2,7 @@ export async function getSecrataries() {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const res = await fetch(`${API}/secrataries`);
-  if (!res.ok) throw new Error("Error fetching posts");
+  if (!res.ok) throw new Error("Error fetching secrataries");
   return res.json();
 }
   

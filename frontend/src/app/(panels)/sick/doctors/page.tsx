@@ -7,8 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
 import Loader from "@/components/Loader";
-import { getuseExpertise } from "@/hooks/useExpertise";
 import { IExpertisies } from "@/app/api/expertisies/route";
+import { getExpertise } from "@/hooks/useExpertise";
 
 export default function DoctorsList() {
   const [search, setSearch] = useState("");
@@ -22,7 +22,7 @@ export default function DoctorsList() {
   //getuseExpertise
   const { data: expertiseData, isPending: ExpertisePending } = useQuery({
     queryKey: ["expertise"],
-    queryFn: getuseExpertise,
+    queryFn: getExpertise,
   });
 
   const filteredDoctors = doctorData?.filter((doctor: IDoctor) => {

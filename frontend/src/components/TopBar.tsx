@@ -1,15 +1,41 @@
-"use client"
+"use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { HiMenu } from "react-icons/hi";
 import { LuBadgeCheck } from "react-icons/lu";
 import { ISideBarProps } from "./SideBar";
+import { useQuery } from "@tanstack/react-query";
+import { getMyProfile } from "@/hooks/useMyProfile";
 // import { IsLoginContext } from "../context/IsLoginContext";
 
-export default function TopBar({ isOpen, setIsOpen }:any) {
-  const profile = "" as any
-
+export default function TopBar({ isOpen, setIsOpen }: any) {
   const API_PATH = "http://127.0.0.1:8000";
+
+  const [token, setToken] = useState<string | null>(null);
+
+  // ✅ گرفتن توکن از localStorage فقط یک بار
+  useEffect(() => {
+    const t = localStorage.getItem("tokan");
+    if (t) setToken(t);
+  }, []);
+
+  // ✅ واکشی پروفایل فقط وقتی توکن آماده است
+  const { data, isPending, refetch } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () => getMyProfile(token as string),
+    enabled: !!token, // اجرا فقط وقتی توکن موجود است
+  });
+
+  // ✅ اگر توکن بعد از mount آماده شد، مجدداً refetch کن
+  useEffect(() => {
+    if (token) refetch();
+  }, [token, refetch]);
+
+  console.log(data);
+
+  if (isPending) {
+    return;
+  }
 
   return (
     <div className="h-[6rem] flex items-center gap-5 p-5">
@@ -18,9 +44,9 @@ export default function TopBar({ isOpen, setIsOpen }:any) {
         className="bg-zinc-200 p-1 rounded-lg text-[2rem] cursor-pointer hover:scale-110 duration-150 "
       />
       <div className="flex items-center gap-3 ">
-        {profile.profile_photo_url ? (
+        {data?.user?.image ? (
           <img
-            src={`${API_PATH}/storage/${profile.profile_photo_url}`}
+            src={`${data?.user?.image}`}
             className="size-[3.5rem] rounded-full object-cover "
           />
         ) : (
@@ -32,24 +58,21 @@ export default function TopBar({ isOpen, setIsOpen }:any) {
         <div>
           <div className="flex items-center gap-2 ">
             <p className="text-[1.1rem]">
-             mohammad
+              {data?.user?.nameFamily || "بدون نام"}
             </p>
-            {/* <div className="flex items-center gap-1 bg-primary/20 rounded-lg px-3 p-1">
-              <LuBadgeCheck className="text-[.9rem] text-primary" />
-              <p className="text-[.7rem] text-primary">
-                {profile.role === "supervisor"
-                  ? "مالک"
-                  : profile.role === "admin"
-                  ? "ادمین"
-                  : profile.role === "developer"
-                  ? "توسعه دهنده"
-                  : profile.role === "user"
-                  ? "کاربر"
-                  : ""}
-              </p>
-            </div> */}
           </div>
-          <p className="text-[.8rem] text-zinc-500 ">maminpour37@gmail.com</p>
+          <p className="text-[.8rem] text-zinc-500 ">
+            نقش شما :{" "}
+            {data?.user?.role === "admin"
+              ? "ادمین"
+              : data?.user?.role === "doctor"
+              ? "دکتر"
+              : data?.user?.role === "secratary"
+              ? "منشی"
+              : data?.user?.role === "sick"
+              ? "بیمار"
+              : ""}
+          </p>
         </div>
       </div>
     </div>

@@ -1,21 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
 import { Trash2, Plus, X, Timer } from "lucide-react";
-import { ImLab } from "react-icons/im";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/Loader";
 import { queryClient } from "@/lib/queryClient";
-import { IExpertisies } from "@/app/api/expertisies/route";
-import { getuseExpertise } from "@/hooks/useExpertise";
 import { Toast } from "@/components/Toast";
 import { getDoctors } from "@/hooks/useDoctors";
 import { IDoctor } from "@/app/api/doctors/route";
 import { HiOutlineNewspaper } from "react-icons/hi";
-import { doctorVisits, IDoctorVisits } from "@/app/api/doctorVisits/route";
+import {  IDoctorVisits } from "@/app/api/doctorVisits/route";
 import { getDoctorVisits } from "@/hooks/useDoctorVisit";
 
 const weeksName = [

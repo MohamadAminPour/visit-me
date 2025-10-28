@@ -9,7 +9,7 @@ export interface IAdmin {
   role: string;
 }
 
-export const secrataries: IAdmin[] = [
+export const admins: IAdmin[] = [
   {
     id: "1",
     nameFamily: "محمد امین پور",
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     const jswKey = process.env.SECRET_JWT_TOKEN as string;
 
-    const mainAdmin = secrataries.find(
+    const mainAdmin = admins.find(
       (admin) => admin.phone === phone && admin.password === password
     );
     const token = jwt.sign(

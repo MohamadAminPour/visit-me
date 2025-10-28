@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import { sicks, ISick } from "../sickRegister/route";
 import { doctors, IDoctor } from "../../doctors/route";
-import { secrataries, ISecratary } from "../../secrataries/route";
+import { ISecratary, secrataries } from "../../secrataries/route";
+import { admins, IAdmin } from "../adminLogin/route";
 
 export async function GET(req: NextRequest) {
   try {
@@ -32,6 +33,11 @@ export async function GET(req: NextRequest) {
       case "secratary":
         user = secrataries.find(
           (u: ISecratary) => String(u.id) === String(decoded.id)
+        );
+        break;
+      case "admin":
+        user = admins.find(
+          (u: IAdmin) => String(u.id) === String(decoded.id)
         );
         break;
     }
@@ -87,6 +93,9 @@ export async function POST(req: NextRequest) {
         break;
       case "secratary":
         list = secrataries;
+        break;
+         case "admin":
+        list = admins;
         break;
     }
 

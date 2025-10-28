@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Grid } from "gridjs-react";
 import { h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import ReactDOMServer from "react-dom/server";
 import { Trash2 } from "lucide-react";
-import { TbEditCircle } from "react-icons/tb";
 import { PiFaceMask } from "react-icons/pi";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import Loader from "@/components/Loader";

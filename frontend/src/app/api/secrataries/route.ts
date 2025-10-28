@@ -1,20 +1,23 @@
 import { NextRequest } from "next/server";
 
+export let secrataries: ISecratary[] = [
+   {
+    id: 1,
+    nameFamily: "زهرا ملکی",
+    phone: "09159764310",
+    role: "secratary",
+    created_at: "1404/07/25",
+  },
+];
+
+
 export interface ISecratary {
   id: number;
   nameFamily: string;
   phone: string;
+  role: string;
   created_at: string | Date;
 }
-
-export let secrataries: ISecratary[] = [
-  {
-    id: 1,
-    nameFamily: "زهرا ملکی",
-    phone: "09159764310",
-    created_at: "1404/07/25",
-  },
-];
 
 export async function GET() {
   try {
@@ -29,7 +32,9 @@ export async function POST(req: NextRequest) {
     const { nameFamily, phone } = await req.json();
     const date = new Date();
 
-    let mainSecrataries = secrataries.find((exp) => exp.phone === phone);
+    let mainSecrataries = secrataries.find(
+      (exp: ISecratary) => exp.phone === phone
+    );
     if (mainSecrataries) {
       return Response.json(
         { message: `منشی ای با این شماره ${phone} وجود دارد` },
@@ -40,6 +45,7 @@ export async function POST(req: NextRequest) {
         id: secrataries.length + 1,
         nameFamily,
         phone,
+        role: "secratary",
         created_at: date,
       });
       return Response.json(secrataries, { status: 200 });
@@ -49,12 +55,11 @@ export async function POST(req: NextRequest) {
   }
 }
 
-
 export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json();
 
-    secrataries = secrataries.filter((exp: ISecratary) => exp.id !== id);
+    secrataries=secrataries.filter((exp: ISecratary) => exp.id !== id);
 
     return Response.json(secrataries, { status: 200 });
   } catch (error) {

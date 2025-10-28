@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/Loader";
 import { queryClient } from "@/lib/queryClient";
 import { IExpertisies } from "@/app/api/expertisies/route";
-import { getuseExpertise } from "@/hooks/useExpertise";
+import { getExpertise } from "@/hooks/useExpertise";
 import { Toast } from "@/components/Toast";
 
 export default function page() {
@@ -22,7 +22,7 @@ export default function page() {
 
   const { data, isPending } = useQuery({
     queryKey: ["expertisies"],
-    queryFn: getuseExpertise,
+    queryFn: getExpertise,
   });
 
   //handleAddExpertise
@@ -34,6 +34,13 @@ export default function page() {
         icon: "success",
         title: "تخصص با موفقیت ایجاد شد",
       });
+      await fetch(`http://localhost:3000/api/expertisies`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/json",
+        },
+        body: JSON.stringify({ name: expertiseName }),
+      });
       await queryClient.invalidateQueries({ queryKey: ["expertisies"] });
       setAddExpertise(false);
     } else {
@@ -43,14 +50,6 @@ export default function page() {
       });
       return;
     }
-
-    await fetch(`http://localhost:3000/api/expertisies`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "Application/json",
-      },
-      body: JSON.stringify({ name: expertiseName }),
-    });
   }
 
   //handleDeleteExpertisies

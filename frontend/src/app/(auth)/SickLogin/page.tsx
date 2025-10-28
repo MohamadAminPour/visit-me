@@ -114,15 +114,19 @@ export default function page() {
 export function Button() {
   const { pending } = useFormStatus();
   return (
-    <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+    <>
       {pending ? (
-        <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
+        <button
+          disabled
+          className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 "
+        >
+          <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
+        </button>
       ) : (
-        <>
+        <button className="w-full flex items-center justify-center gap-2 hover:bg-secondry hover:text-white bg-secondryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
           <p className="text-[.8rem] sm:text-[.9rem]">ورود بیمار</p>
-          <BiArrowBack className="mt-[.1rem]" />
-        </>
+        </button>
       )}
-    </button>
+    </>
   );
 }

@@ -6,7 +6,7 @@ import { IExpertisies } from "@/app/api/expertisies/route";
 import { IViews } from "@/app/api/views/route";
 import Loader from "@/components/Loader";
 import { getDoctors } from "@/hooks/useDoctors";
-import { getuseExpertise } from "@/hooks/useExpertise";
+import { getExpertise } from "@/hooks/useExpertise";
 import { getSecrataries } from "@/hooks/useSecrataries";
 import { getSicks } from "@/hooks/useSicks";
 import { getViews } from "@/hooks/useViews";
@@ -40,7 +40,7 @@ export default function UserInfo() {
   //expertisiesData
   const { data: expertisiesData, isPending: expertisiesIsPending } = useQuery({
     queryKey: ["expertisies"],
-    queryFn: getuseExpertise,
+    queryFn: getExpertise,
   });
 //ViewsData
   const { data: ViewsData, isPending: ViewsIsPending } = useQuery({

@@ -1,16 +1,8 @@
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { ISecratary, secrataries } from "../../secrataries/route";
 
-interface ISecratary {
-  id: string;
-  phone: string;
-  role: string;
-}
 
-const secrataries: ISecratary[] = [
-  { id: "1", phone: "09155555555", role: "secratary" },
-  { id: "2", phone: "09156666666", role: "secratary" },
-];
 
 export async function POST(req: NextRequest) {
   try {

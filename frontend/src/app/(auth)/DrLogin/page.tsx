@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import doctorLoginAction from "@/actions/doctorLoginAction";
 import AnimatedContainer from "@/components/AnimatedContainer";
@@ -59,9 +59,14 @@ export default function page() {
       </Link>
       <AnimatedContainer>
         <div className="h-screen flex items-center justify-center flex-col w-full">
-          <form action={formAction} className="rounded-2xl py-8 px-5 sm:px-10 w-[90%] sm:w-[27rem] border-1 border-zinc-200 shadow-xl shadow-zinc-200 z-20 bg-white">
+          <form
+            action={formAction}
+            className="rounded-2xl py-8 px-5 sm:px-10 w-[90%] sm:w-[27rem] border-1 border-zinc-200 shadow-xl shadow-zinc-200 z-20 bg-white"
+          >
             <div className="text-center w-full">
-              <h2 className="text-[1.5rem] sm:text-[2rem] Morabba">ورود به ویزیت می</h2>
+              <h2 className="text-[1.5rem] sm:text-[2rem] Morabba">
+                ورود به ویزیت می
+              </h2>
               <p className="text-zinc-500 text-[.8rem] sm:text-[.9rem]">
                 منشی این مجموعه هستید؟
                 <Link href="/secrataryLogin" className="text-primary mr-1">
@@ -87,8 +92,14 @@ export default function page() {
                 <p className="w-full h-[.1rem] bg-zinc-200"></p>
               </div>
               <button className="w-full flex items-center justify-center gap-3 border-1 border-zinc-200 cursor-pointer py-2 hover:bg-zinc-200 mt-3 rounded-sm duration-300 ">
-                <p className="text-[.8rem] sm:text-[.9rem]">ورود با حساب گوگل</p>
-                <img src="/images/Google.png" alt="" className="w-[1.3rem] sm:w-[1.8rem]" />
+                <p className="text-[.8rem] sm:text-[.9rem]">
+                  ورود با حساب گوگل
+                </p>
+                <img
+                  src="/images/Google.png"
+                  alt=""
+                  className="w-[1.3rem] sm:w-[1.8rem]"
+                />
               </button>
             </div>
           </form>
@@ -112,15 +123,19 @@ export default function page() {
 export function Button() {
   const { pending } = useFormStatus();
   return (
-    <button className="w-full flex items-center justify-center gap-2 hover:bg-primary hover:text-white bg-primaryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
+    <>
       {pending ? (
-        <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
+        <button
+          disabled
+          className="w-full flex items-center justify-center gap-2 hover:bg-primary hover:text-white bg-primaryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 "
+        >
+          <p className="text-[.8rem] sm:text-[.9rem]">صبر کنید...</p>
+        </button>
       ) : (
-        <>
+        <button className="w-full flex items-center justify-center gap-2 hover:bg-primary hover:text-white bg-primaryLight cursor-pointer py-2 mt-3 rounded-sm duration-300 ">
           <p className="text-[.8rem] sm:text-[.9rem]">ورود دکتر</p>
-          <BiArrowBack className="mt-[.1rem]" />
-        </>
+        </button>
       )}
-    </button>
+    </>
   );
 }

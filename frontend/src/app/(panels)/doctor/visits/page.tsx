@@ -92,7 +92,6 @@ export default function page() {
             <Grid
               data={visitsData
                 ?.filter((visit: IVisits) => {
-                  // فقط نوبت های دکتر لاگین شده
                   return (
                     visit.doctor_id === profileData?.user?.id
                   );

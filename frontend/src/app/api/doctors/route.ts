@@ -19,6 +19,7 @@ export interface IDoctor {
   image: string;
   about: string;
   schedules: ISelectedTime[];
+  role: string;
   created_at: string;
 }
 
@@ -43,6 +44,7 @@ export const doctors: IDoctor[] = [
       { day: "یکشنبه", times: ["14:00", "14:30", "15:00", "15:30"] },
       { day: "سه‌ شنبه", times: ["16:00", "16:30", "17:00"] },
     ],
+    role: "doctor",
     created_at: "1404/07/25",
   },
   {
@@ -65,6 +67,7 @@ export const doctors: IDoctor[] = [
       { day: "یکشنبه", times: ["14:00", "14:30", "15:00", "15:30"] },
       { day: "پنج شنبه", times: ["16:00", "16:30", "17:00"] },
     ],
+    role: "doctor",
     created_at: "1404/07/25",
   },
   {
@@ -87,6 +90,7 @@ export const doctors: IDoctor[] = [
       { day: "یکشنبه", times: ["14:00", "14:30", "15:00", "15:30"] },
       { day: "سه‌ شنبه", times: ["16:00", "16:30", "17:00"] },
     ],
+    role: "doctor",
     created_at: "1404/07/25",
   },
 ];
@@ -150,6 +154,7 @@ export async function POST(req: NextRequest) {
       image: imagePath,
       about,
       schedules: [],
+      role:"doctor",
       created_at: new Date().toLocaleDateString("fa-IR"),
     };
 

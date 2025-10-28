@@ -95,25 +95,16 @@ export default function page() {
               <HiOutlineNewspaper className="size-7" />
               <p className="font-IranYekanBold text-[1rem]">نوبت های من</p>
             </div>
-
-            <Link
-              href="/sick/doctors"
-              className="flex items-center justify-center gap-2 text-[.8rem] bg-primary cursor-pointer duration-300 p-2 px-4 rounded-lg text-white"
-            >
-              نوبت جدید
-              <Plus className="size-[1rem]" />
-            </Link>
           </div>
 
           <div className="text-right">
             <Grid
-              data={visitsData?.map((s: IVisits) => [
+              data={visitsData?.filter((v:IVisits)=>v.status===1||v.status===2).map((s: IVisits) => [
                 s.user_id,
                 s.doctor_id,
                 s.week,
                 s.time,
                 s.status,
-                s.status_text,
                 s.created_at,
                 s.id,
                 new Intl.DateTimeFormat("fa-IR").format(new Date(s.created_at)),
@@ -177,12 +168,11 @@ export default function page() {
                     return h("span", { className: bg }, text);
                   },
                 },
-                "علت وضعیت",
                 "تاریخ ویزیت",
                 {
                   name: "عملیات",
                   formatter: (_, row) => {
-                    const id = row.cells[7].data as number; // ستون id برای عملیات
+                    const id = row.cells[6].data as number; // ستون id برای عملیات
                     return h("div", { className: "flex gap-2" }, [
                       h(
                         "button",
