@@ -11,6 +11,7 @@ export default async function secretaryLoginAction(
   formData: FormData
 ): Promise<LoginState> {
   const API = process.env.API_URL;
+  if (!API) throw new Error("API_URL is not defined!");
   const phone = formData.get("phone");
 
   const res = await fetch(`${API}/secrataryLogin`, {
