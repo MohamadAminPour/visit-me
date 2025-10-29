@@ -13,7 +13,8 @@ export default async function sickRegisterAction(
   const API = process.env.NEXT_PUBLIC_API_URL;
   const phone = formData.get("phone");
 
-  const res = await fetch(`${API}/sickRegister`, {
+  const res = await fetch(`/api/sickRegister`, {
+    cache:"no-store",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ phone }),

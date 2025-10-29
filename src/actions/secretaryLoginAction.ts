@@ -13,7 +13,8 @@ export default async function secretaryLoginAction(
   const API = process.env.NEXT_PUBLIC_API_URL;
   const phone = formData.get("phone");
 
-  const res = await fetch(`${API}/secrataryLogin`, {
+  const res = await fetch(`/api/secrataryLogin`, {
+    cache:"no-store",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ phone }),

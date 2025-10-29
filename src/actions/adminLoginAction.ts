@@ -14,7 +14,8 @@ export default async function adminLoginAction(
   const phone = formData.get("phone");
   const password = formData.get("password");
 
-  const res = await fetch(`${API}/adminLogin`, {
+  const res = await fetch(`/api/adminLogin`, {
+    cache:"no-store",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ phone, password }),
