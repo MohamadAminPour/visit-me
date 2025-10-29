@@ -10,11 +10,11 @@ export default async function adminLoginAction(
   prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const API = process.env.API_URL
   const phone = formData.get("phone");
   const password = formData.get("password");
 
-  const res = await fetch(`/api/adminLogin`, {
+  const res = await fetch(`${API}/adminLogin`, {
     cache:"no-store",
     method: "POST",
     headers: { "Content-Type": "application/json" },

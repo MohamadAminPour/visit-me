@@ -10,10 +10,10 @@ export default async function sickLoginAction(
   prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const API = process.env.API_URL;
   const phone = formData.get("phone");
 
-  const res = await fetch(`/api/sickLogin`, {
+  const res = await fetch(`${API}/sickLogin`, {
     cache:"no-store",
     method: "POST",
     headers: { "Content-Type": "application/json" },

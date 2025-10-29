@@ -10,10 +10,10 @@ export default async function secretaryLoginAction(
   prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const API = process.env.API_URL;
   const phone = formData.get("phone");
 
-  const res = await fetch(`/api/secrataryLogin`, {
+  const res = await fetch(`${API}/secrataryLogin`, {
     cache:"no-store",
     method: "POST",
     headers: { "Content-Type": "application/json" },
