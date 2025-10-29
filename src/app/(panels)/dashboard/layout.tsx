@@ -5,8 +5,8 @@ import TopBar from "@/components/TopBar";
 import { useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { LiaUserNurseSolid } from "react-icons/lia";
-import { PiFaceMask, PiUser } from "react-icons/pi";
-import { TbEyeShare, TbNurse, TbUserShield } from "react-icons/tb";
+import { PiFaceMask, } from "react-icons/pi";
+import { TbEyeShare, TbNurse } from "react-icons/tb";
 
 export const ownerLinks: ILinks[] = [
   { id: 1, title: "داشبورد", link: "/dashboard", icon: <CiGrid41 /> },
